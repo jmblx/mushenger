@@ -5,7 +5,7 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QLineEdit>
-#include <qbytearray.h>
+#include <QByteArray>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Client; }

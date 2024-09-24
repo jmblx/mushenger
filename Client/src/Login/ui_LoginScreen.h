@@ -1,20 +1,18 @@
 /********************************************************************************
-** Form generated from reading UI file 'client.ui'
+** Form generated from reading UI file 'LoginScreen.ui'
 **
-** Created by: Qt User Interface Compiler version 6.2.4
+** Created by: Qt User Interface Compiler version 6.7.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef UI_CLIENT_H
-#define UI_CLIENT_H
+#ifndef UI_LOGINSCREEN_H
+#define UI_LOGINSCREEN_H
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -22,144 +20,92 @@ QT_BEGIN_NAMESPACE
 class Ui_Client
 {
 public:
-    QLineEdit *ip;
-    QLineEdit *port;
-    QPushButton *connectButton;
-    QTextEdit *receive;
-    QPushButton *sendButton;
-    QLineEdit *nameEdit;
-    QLineEdit *send;
-    QLabel *label;
-    QLabel *label_2;
+    QLineEdit *lineEdit;
+    QLineEdit *lineEdit_2;
+    QPushButton *LoginButton;
 
     void setupUi(QWidget *Client)
     {
         if (Client->objectName().isEmpty())
-            Client->setObjectName(QString::fromUtf8("Client"));
-        Client->resize(380, 400);
-        Client->setMinimumSize(QSize(380, 400));
-        Client->setMaximumSize(QSize(380, 400));
+            Client->setObjectName("Client");
+        Client->setEnabled(true);
+        Client->resize(1920, 1080);
+        Client->setMinimumSize(QSize(1920, 1080));
+        Client->setMaximumSize(QSize(1920, 1080));
         Client->setStyleSheet(QString::fromUtf8("QWidget{\n"
 "border: none;\n"
+"	  background-image: url(:/images/images/auth_screen.png);\n"
+"      background-repeat: no-repeat;\n"
+"      background-position: center;\n"
 "}\n"
 "QLineEdit {\n"
 "      border: 0.5px solid rgb(147, 150, 154);\n"
 "      border-radius: 6px;\n"
-"      background-color: rgba(40, 44, 52,150);\n"
+"\n"
 "      min-width: 80px;\n"
 "	  font-family: \"Microsoft YaHei\";\n"
 "	  font-size:11pt;\n"
 "	  font-weight: bold;\n"
 "	  color:rgb(147, 150, 154);\n"
 "  }"));
-        ip = new QLineEdit(Client);
-        ip->setObjectName(QString::fromUtf8("ip"));
-        ip->setGeometry(QRect(10, 10, 151, 31));
-        QFont font;
-        font.setFamilies({QString::fromUtf8("Microsoft YaHei")});
-        font.setPointSize(11);
-        font.setBold(true);
-        ip->setFont(font);
-        ip->setStyleSheet(QString::fromUtf8(""));
-        port = new QLineEdit(Client);
-        port->setObjectName(QString::fromUtf8("port"));
-        port->setGeometry(QRect(170, 10, 121, 31));
-        port->setStyleSheet(QString::fromUtf8(""));
-        connectButton = new QPushButton(Client);
-        connectButton->setObjectName(QString::fromUtf8("connectButton"));
-        connectButton->setGeometry(QRect(300, 10, 62, 31));
-        connectButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"      border: 0.5px solid white;\n"
-"      border-radius: 6px;\n"
-"      background-color: rgb(90,194,198);\n"
-"      min-width: 60px;\n"
-"	  font-family: \"Microsoft YaHei\";\n"
-"	  font-size:10pt;\n"
-"	  font-weight: bold;\n"
-"	  color:white;\n"
-"  }\n"
-" QPushButton:hover {\n"
-"	border: 0.5px solid white;\n"
-"      border-radius: 6px;\n"
-"      background-color: #1fab89;\n"
-"      min-width: 60px;\n"
-"	  font-family: \"Microsoft YaHei\";\n"
-"	  font-size:9pt;\n"
-"	  font-weight: bold;\n"
-"	  color:white;\n"
-" }"));
-        receive = new QTextEdit(Client);
-        receive->setObjectName(QString::fromUtf8("receive"));
-        receive->setGeometry(QRect(10, 90, 361, 241));
-        receive->setStyleSheet(QString::fromUtf8("QTextEdit {\n"
-"      border: 0.5px solid rgb(147, 150, 154);\n"
-"      border-radius: 6px;\n"
-"      background-color: rgba(40, 44, 52, 150);\n"
-"      min-width: 80px;\n"
-"	  font-family: \"Microsoft YaHei\";\n"
-"	  font-size:11pt;\n"
-"	  font-weight: bold;\n"
-"	  color:rgb(215, 215, 215);\n"
-"  }"));
-        receive->setLineWidth(2);
-        receive->setReadOnly(true);
-        sendButton = new QPushButton(Client);
-        sendButton->setObjectName(QString::fromUtf8("sendButton"));
-        sendButton->setGeometry(QRect(290, 340, 81, 51));
-        sendButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"      border: 0.5px solid white;\n"
-"      border-radius: 6px;\n"
-"      background-color: rgb(90,194,198);\n"
-"      min-width: 50px;\n"
-"	  font-family: \"Microsoft YaHei\";\n"
-"	  font-size:11pt;\n"
-"	  font-weight: bold;\n"
-"	  color:white;\n"
-"  }\n"
-" QPushButton:hover {\n"
-"	border: 0.5px solid white;\n"
-"      border-radius: 6px;\n"
-"      background-color: #1fab89;\n"
-"      min-width: 50px;\n"
-"	  font-family: \"Microsoft YaHei\";\n"
-"	  font-size:10pt;\n"
-"	  font-weight: bold;\n"
-"	  color:white;\n"
-" }"));
-        nameEdit = new QLineEdit(Client);
-        nameEdit->setObjectName(QString::fromUtf8("nameEdit"));
-        nameEdit->setGeometry(QRect(10, 50, 151, 31));
-        nameEdit->setStyleSheet(QString::fromUtf8(""));
-        send = new QLineEdit(Client);
-        send->setObjectName(QString::fromUtf8("send"));
-        send->setGeometry(QRect(10, 340, 271, 51));
-        send->setStyleSheet(QString::fromUtf8("QLineEdit\n"
-"{\n"
-"color:rgb(215, 215, 215);\n"
-"}"));
-        label = new QLabel(Client);
-        label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(0, 0, 381, 401));
-        label->setStyleSheet(QString::fromUtf8("QLabel\n"
-"{\n"
-"	border-image: url(:/Images/duckl.png);\n"
-"}"));
-        label_2 = new QLabel(Client);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(170, 70, 231, 16));
-        label_2->setStyleSheet(QString::fromUtf8("QLabel\n"
-"{\n"
-"color:rgb(147, 150, 154);\n"
-"}"));
-        label->raise();
-        ip->raise();
-        port->raise();
-        connectButton->raise();
-        receive->raise();
-        sendButton->raise();
-        nameEdit->raise();
-        send->raise();
-        label_2->raise();
+        lineEdit = new QLineEdit(Client);
+        lineEdit->setObjectName("lineEdit");
+        lineEdit->setGeometry(QRect(960, 530, 600, 70));
+        lineEdit->setMinimumSize(QSize(104, 70));
+        lineEdit->setBaseSize(QSize(600, 70));
+        lineEdit->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
+"    border: 2px solid #0D1321;     /* \320\246\320\262\320\265\321\202 \320\276\320\261\320\262\320\276\320\264\320\272\320\270 */\n"
+"    border-radius: 10px;           /* \320\241\320\272\321\200\321\203\320\263\320\273\320\265\320\275\320\270\320\265 \321\203\320\263\320\273\320\276\320\262 */\n"
+"    padding: 10px;                 /* \320\236\321\202\321\201\321\202\321\203\320\277 \320\262\320\275\321\203\321\202\321\200\320\270 \320\277\320\276\320\273\321\217 */\n"
+"    font-size: 20px;               /* \320\240\320\260\320\267\320\274\320\265\321\200 \321\202\320\265\320\272\321\201\321\202\320\260 \320\264\320\273\321\217 \320\276\321\201\320\275\320\276\320\262\320\275\320\276\320\263\320\276 \321\202\320\265\320\272\321\201\321\202\320\260 \320\270 \320\277\320\273\320\265\320\271\321\201\321\205\320\276\320\273\320\264\320\265\321\200\320\260 */\n"
+"    color: #0D1321;                /* \320\246\320\262\320\265\321\202 \320\276\321\201\320\275\320\276\320\262\320\275\320\276\320\263"
+                        "\320\276 \321\202\320\265\320\272\321\201\321\202\320\260 */\n"
+"    background: transparent;       /* \320\237\321\200\320\276\320\267\321\200\320\260\321\207\320\275\321\213\320\271 \321\204\320\276\320\275 */\n"
+"}\n"
+"\n"
+"QLineEdit::placeholder {\n"
+"    color: #0D1321;                /* \320\246\320\262\320\265\321\202 \321\202\320\265\320\272\321\201\321\202\320\260 \320\277\320\273\320\265\320\271\321\201\321\205\320\276\320\273\320\264\320\265\321\200\320\260 */\n"
+"    background: transparent;       /* \320\237\321\200\320\276\320\267\321\200\320\260\321\207\320\275\321\213\320\271 \321\204\320\276\320\275 \320\264\320\273\321\217 \320\277\320\273\320\265\320\271\321\201\321\205\320\276\320\273\320\264\320\265\321\200\320\260 */\n"
+"}\n"
+""));
+        lineEdit_2 = new QLineEdit(Client);
+        lineEdit_2->setObjectName("lineEdit_2");
+        lineEdit_2->setGeometry(QRect(960, 620, 600, 70));
+        lineEdit_2->setMinimumSize(QSize(104, 70));
+        lineEdit_2->setBaseSize(QSize(600, 70));
+        lineEdit_2->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
+"    border: 2px solid #0D1321;     /* \320\246\320\262\320\265\321\202 \320\276\320\261\320\262\320\276\320\264\320\272\320\270 */\n"
+"    border-radius: 10px;           /* \320\241\320\272\321\200\321\203\320\263\320\273\320\265\320\275\320\270\320\265 \321\203\320\263\320\273\320\276\320\262 */\n"
+"    padding: 10px;                 /* \320\236\321\202\321\201\321\202\321\203\320\277 \320\262\320\275\321\203\321\202\321\200\320\270 \320\277\320\276\320\273\321\217 */\n"
+"    font-size: 20px;               /* \320\240\320\260\320\267\320\274\320\265\321\200 \321\202\320\265\320\272\321\201\321\202\320\260 \320\264\320\273\321\217 \320\276\321\201\320\275\320\276\320\262\320\275\320\276\320\263\320\276 \321\202\320\265\320\272\321\201\321\202\320\260 \320\270 \320\277\320\273\320\265\320\271\321\201\321\205\320\276\320\273\320\264\320\265\321\200\320\260 */\n"
+"    color: #0D1321;                /* \320\246\320\262\320\265\321\202 \320\276\321\201\320\275\320\276\320\262\320\275\320\276\320\263"
+                        "\320\276 \321\202\320\265\320\272\321\201\321\202\320\260 */\n"
+"    background: transparent;       /* \320\237\321\200\320\276\320\267\321\200\320\260\321\207\320\275\321\213\320\271 \321\204\320\276\320\275 */\n"
+"}\n"
+"\n"
+"QLineEdit::placeholder {\n"
+"    color: #0D1321;                /* \320\246\320\262\320\265\321\202 \321\202\320\265\320\272\321\201\321\202\320\260 \320\277\320\273\320\265\320\271\321\201\321\205\320\276\320\273\320\264\320\265\321\200\320\260 */\n"
+"    background: transparent;       /* \320\237\321\200\320\276\320\267\321\200\320\260\321\207\320\275\321\213\320\271 \321\204\320\276\320\275 \320\264\320\273\321\217 \320\277\320\273\320\265\320\271\321\201\321\205\320\276\320\273\320\264\320\265\321\200\320\260 */\n"
+"}\n"
+""));
+        LoginButton = new QPushButton(Client);
+        LoginButton->setObjectName("LoginButton");
+        LoginButton->setGeometry(QRect(1120, 760, 231, 81));
+        LoginButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #C21B1B;  /* \320\246\320\262\320\265\321\202 \321\204\320\276\320\275\320\260 */\n"
+"    color: white;        /* \320\246\320\262\320\265\321\202 \321\202\320\265\320\272\321\201\321\202\320\260 */\n"
+"    font-size: 24px;            /* \320\240\320\260\320\267\320\274\320\265\321\200 \321\210\321\200\320\270\321\204\321\202\320\260 */\n"
+"    border-radius: 30px;        /* \320\227\320\260\320\272\321\200\321\203\320\263\320\273\320\265\320\275\320\275\321\213\320\265 \321\203\320\263\320\273\321\213 */\n"
+"    padding: 10px 20px;         /* \320\222\320\275\321\203\321\202\321\200\320\265\320\275\320\275\320\270\320\265 \320\276\321\202\321\201\321\202\321\203\320\277\321\213 */\n"
+"    background: transparent;       /* \320\237\321\200\320\276\320\267\321\200\320\260\321\207\320\275\321\213\320\271 \321\204\320\276\320\275 */\n"
+"    background-color: #C21B1B; \n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #A51A1A;  /* \320\230\320\267\320\274\320\265\320"
+                        "\275\320\265\320\275\320\270\320\265 \321\206\320\262\320\265\321\202\320\260 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\270\320\270 */\n"
+"}\n"
+""));
 
         retranslateUi(Client);
 
@@ -169,13 +115,10 @@ public:
     void retranslateUi(QWidget *Client)
     {
         Client->setWindowTitle(QCoreApplication::translate("Client", "Client", nullptr));
-        ip->setPlaceholderText(QCoreApplication::translate("Client", "IP\345\234\260\345\235\200", nullptr));
-        port->setPlaceholderText(QCoreApplication::translate("Client", "Port\347\253\257\345\217\243", nullptr));
-        connectButton->setText(QCoreApplication::translate("Client", "Connect", nullptr));
-        sendButton->setText(QCoreApplication::translate("Client", "Send", nullptr));
-        nameEdit->setPlaceholderText(QCoreApplication::translate("Client", "\346\230\276\347\244\272\345\220\215\347\247\260", nullptr));
-        label->setText(QString());
-        label_2->setText(QCoreApplication::translate("Client", "\345\274\200\345\217\221\350\200\205:Kevinwu  Github:kevinwu06", nullptr));
+        lineEdit->setText(QString());
+        lineEdit->setPlaceholderText(QCoreApplication::translate("Client", "\320\233\320\276\320\263\320\270\320\275", nullptr));
+        lineEdit_2->setPlaceholderText(QCoreApplication::translate("Client", "\320\237\320\260\321\200\320\276\320\273\321\214", nullptr));
+        LoginButton->setText(QCoreApplication::translate("Client", "\320\222\320\276\320\271\321\202\320\270", nullptr));
     } // retranslateUi
 
 };
@@ -186,4 +129,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // UI_CLIENT_H
+#endif // UI_LOGINSCREEN_H

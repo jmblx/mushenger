@@ -9,7 +9,8 @@ SOURCES += \
 
 # Указываем заголовочные файлы
 HEADERS += \
-    src/Login/LoginScreen.h
+    src/Login/LoginScreen.h \
+    src/Login/ui_LoginScreen.h
 
 # Указываем файлы форм
 FORMS += \
@@ -20,7 +21,6 @@ RESOURCES += \
     Resources.qrc
 
 # Указание файла ресурсов для иконки
-RC_FILE = images/img_icon.rc
 
 # Указываем целевое имя приложения
 TARGET = mushenger
