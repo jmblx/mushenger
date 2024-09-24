@@ -1,4 +1,5 @@
-#include "client.h"
+#include "src/Login/LoginScreen.h"
+
 
 #include <QApplication>
 

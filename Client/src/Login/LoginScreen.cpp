@@ -1,6 +1,6 @@
 //made by kevinwu06
-#include "client.h"
-#include "ui_client.h"
+#include "src/Login/LoginScreen.h"
+#include "src/Login/ui_LoginScreen.h"
 
 Client::Client(QWidget *parent)
     : QWidget(parent)

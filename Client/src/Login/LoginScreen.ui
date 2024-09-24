@@ -131,6 +131,35 @@ QLineEdit::placeholder {
     <string>Пароль</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>1060</x>
+     <y>730</y>
+     <width>231</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: #C21B1B;  /* Цвет фона */
+    color: white;        /* Цвет текста */
+    font-size: 24px;            /* Размер шрифта */
+    border-radius: 30px;        /* Закругленные углы */
+    padding: 10px 20px;         /* Внутренние отступы */
+    background: transparent;       /* Прозрачный фон */
+    background-color: #C21B1B; 
+}
+
+QPushButton:hover {
+    background-color: #A51A1A;  /* Изменение цвета при наведении */
+}
+</string>
+   </property>
+   <property name="text">
+    <string>PushButton</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

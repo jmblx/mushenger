@@ -25,6 +25,9 @@ RC_FILE = images/img_icon.rc
 # Указываем целевое имя приложения
 TARGET = mushenger
 
+INCLUDEPATH += src/Client
+
+
 # Правила для установки (по умолчанию оставим без изменений)
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
