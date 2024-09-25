@@ -1,4 +1,3 @@
-//made by kevinwu06
 #include "src/Login/LoginScreen.h"
 #include "src/Login/ui_LoginScreen.h"
 #include <QDebug>

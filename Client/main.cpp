@@ -2,6 +2,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QDebug>
+#include "src/Profile/ProfileScreen.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,7 +17,9 @@ int main(int argc, char *argv[])
     }
 
 
-    Client w;
-    w.show();
+    // Client w;
+    // w.show();
+    ProfileScreen profileScreen; // Создаем объект окна профиля
+    profileScreen.show(); // Показываем окно профиля
     return a.exec();
 }

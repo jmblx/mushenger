@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="/images">
     <file alias="auth_screen.png">images/auth_screen.png</file>
+    <file alias="profile_screen.png">images/profile_screen.png</file>
+    <file alias="door.png">images/door.png</file>
+    <file alias="out_pointer.png">images/out_pointer.png</file>
   </qresource>
 </RCC>
