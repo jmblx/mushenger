@@ -1,14 +1,14 @@
 //made by kevinwu06
 #include "src/Login/LoginScreen.h"
 #include "src/Login/ui_LoginScreen.h"
+#include <QDebug>
 
 Client::Client(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Client)
 {
     ui->setupUi(this);
-    this->setWindowTitle("DuckChat客户端");
-    // Заглушка без выполнения действий
+
 }
 
 void Client::receiveData()

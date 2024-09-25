@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/images">  <!-- Измененный префикс -->
-        <file>images/auth_screen.png</file>
-    </qresource>
+  <qresource prefix="/images">
+    <file alias="auth_screen.png">images/auth_screen.png</file>
+  </qresource>
 </RCC>

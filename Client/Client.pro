@@ -17,8 +17,8 @@ FORMS += \
     src/Login/LoginScreen.ui
 
 # Файл ресурсов
-RESOURCES += \
-    Resources.qrc
+RESOURCES += Resources.qrc
+
 
 # Указание файла ресурсов для иконки
 
