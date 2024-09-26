@@ -29,48 +29,43 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-    background-image: url(:/images/profile_screen.png);
-    background-repeat: no-repeat;
-    background-position: center;
-   }
+   <string notr="true">
+    QFrame#profilePanel {
+      border: 2px solid black;
+      border-radius: 10px;
+      background-color: transparent;
+    }
+    * {
+      font-family: 'Inter';
+    }
    </string>
   </property>
   <widget class="QFrame" name="profilePanel">
    <property name="geometry">
     <rect>
-     <x>480</x>
-     <y>130</y>
-     <width>320</width>
-     <height>220</height>
+     <x>200</x>
+     <y>50</y>
+     <width>408</width>
+     <height>342</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string>
-     QFrame {
-      border: 2px solid black;
-      border-radius: 10px;
-      background-color: transparent;
-     }
-    </string>
-   </property>
    <property name="frameShape">
-    <enum>QFrame::Shape::StyledPanel</enum>
+    <enum>QFrame::Shape::NoFrame</enum>
    </property>
    <property name="frameShadow">
-    <enum>QFrame::Shadow::Raised</enum>
+    <enum>QFrame::Shadow::Plain</enum>
    </property>
    <widget class="QLabel" name="profileIcon">
     <property name="geometry">
      <rect>
-      <x>110</x>
-      <y>20</y>
-      <width>100</width>
-      <height>100</height>
+      <x>130</x>
+      <y>40</y>
+      <width>161</width>
+      <height>151</height>
      </rect>
     </property>
     <property name="pixmap">
-     <pixmap>:/images/profile_icon.png</pixmap>
+     <pixmap resource="../../Resources.qrc">:/images/profile-circled.svg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -79,39 +74,75 @@
    <widget class="QLabel" name="loginLabel">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>130</y>
-      <width>200</width>
-      <height>50</height>
+      <x>54</x>
+      <y>180</y>
+      <width>300</width>
+      <height>131</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string>color: #0D1321; font-size: 48px;</string>
+    </property>
     <property name="text">
-     <string>login</string>
+     <string>{username}</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignmentFlag::AlignCenter</set>
     </property>
-    <property name="styleSheet">
-     <string>color: #0D1321;</string>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="logoutButton">
+   <widget class="QWidget" name="logoutWidget">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>10</y>
-      <width>30</width>
-      <height>30</height>
+      <x>350</x>
+      <y>20</y>
+      <width>40</width>
+      <height>53</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Выйти</string>
-    </property>
-    <property name="icon">
-     <iconset resource="../../Resources.qrc">
-      <normaloff>:images/door.png</normaloff>
-     </iconset>
-    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>5</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="logoutButtonIcon">
+       <property name="styleSheet">
+        <string>
+         QPushButton {
+          border: none;
+          background: none;
+          padding: 0px;
+         }
+        </string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:images/door.svg</normaloff>:images/door.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="logoutText">
+       <property name="styleSheet">
+        <string>color: #0D1321; font-size: 12px;</string>
+       </property>
+       <property name="text">
+        <string>Выйти</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QLabel" name="mushroomMessage">
@@ -119,8 +150,8 @@
     <rect>
      <x>700</x>
      <y>650</y>
-     <width>220</width>
-     <height>60</height>
+     <width>339</width>
+     <height>160</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -129,40 +160,86 @@
       background-color: #D8DCE4;
       border-radius: 10px;
       color: #0D1321;
+      font-size: 33px;
      }
     </string>
    </property>
    <property name="text">
-    <string>Слишком короткий ник</string>
+    <string>{message}</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="fontSizeLabel">
    <property name="geometry">
     <rect>
-     <x>980</x>
-     <y>200</y>
-     <width>140</width>
-     <height>30</height>
+     <x>770</x>
+     <y>80</y>
+     <width>181</width>
+     <height>111</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #0D1321; font-size: 46px;</string>
    </property>
    <property name="text">
     <string>Размер шрифта:</string>
    </property>
-   <property name="styleSheet">
-    <string>color: #0D1321;</string>
+   <property name="wordWrap">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QSpinBox" name="fontSizeSpinBox">
    <property name="geometry">
     <rect>
-     <x>1130</x>
-     <y>200</y>
-     <width>70</width>
-     <height>35</height>
+     <x>1000</x>
+     <y>80</y>
+     <width>263</width>
+     <height>105</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string>
+     QSpinBox {
+      color: #0D1321;
+      background-color: #E5E5E5;
+      font-size: 48px;
+      border: none;
+      padding-right: 90px;
+      padding-left: 10px;
+     }
+     QSpinBox::up-button {
+      subcontrol-origin: padding;
+      subcontrol-position: right;
+      width: 50px;
+      height: 105px;
+      background-color: #FFFFFF;
+      border: none;
+     }
+     QSpinBox::down-button {
+      subcontrol-origin: padding;
+      subcontrol-position: right;
+      right: 55px;
+      width: 50px;
+      height: 105px;
+      background-color: #FFFFFF;
+      border: none;
+     }
+     QSpinBox::up-arrow {
+      image: url(:/images/plus_icon.svg);
+      width: 20px;
+      height: 20px;
+     }
+     QSpinBox::down-arrow {
+      image: url(:/images/minus_icon.svg);
+      width: 20px;
+      height: 20px;
+     }
+    </string>
    </property>
    <property name="minimum">
     <number>10</number>
@@ -173,42 +250,97 @@
    <property name="value">
     <number>128</number>
    </property>
-   <property name="styleSheet">
-    <string>color: #0D1321;</string>
-   </property>
   </widget>
   <widget class="QLabel" name="fontLabel">
    <property name="geometry">
     <rect>
-     <x>980</x>
-     <y>250</y>
-     <width>140</width>
-     <height>30</height>
+     <x>770</x>
+     <y>240</y>
+     <width>171</width>
+     <height>105</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string>color: #0D1321; font-size: 48px;</string>
    </property>
    <property name="text">
     <string>Шрифт:</string>
-   </property>
-   <property name="styleSheet">
-    <string>color: #0D1321;</string>
    </property>
   </widget>
   <widget class="QComboBox" name="fontComboBox">
    <property name="geometry">
     <rect>
-     <x>1130</x>
-     <y>250</y>
-     <width>130</width>
-     <height>35</height>
+     <x>1000</x>
+     <y>220</y>
+     <width>261</width>
+     <height>105</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string>
+     QComboBox {
+      color: #0D1321;
+      background-color: #E5E5E5;
+      font-size: 48px;
+      padding-left: 10px;
+      padding-right: 50px;
+      border: none;
+     }
+     QComboBox::drop-down {
+      subcontrol-origin: padding;
+      subcontrol-position: right;
+      width: 50px;
+      background-color: #FFFFFF;
+      border: none;
+     }
+     QComboBox::down-arrow {
+      image: url(:/images/down_arrow_icon.svg);
+      width: 20px;
+      height: 20px;
+     }
+    QComboBox QAbstractItemView {
+      color: #0D1321;
+      background-color: #E5E5E5;
+      font-size: 48px;
+      selection-background-color: #D3D3D3;
+     }
+    </string>
    </property>
    <item>
     <property name="text">
      <string>Inter</string>
     </property>
    </item>
+  </widget>
+  <widget class="QPushButton" name="backButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>22</width>
+     <height>22</height>
+    </rect>
+   </property>
    <property name="styleSheet">
-    <string>color: #0D1321;</string>
+    <string>
+     QPushButton {
+      border: none;
+      background: none;
+     }
+     QPushButton::hover {
+      background: none;
+     }
+    </string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:images/out_pointer.svg</normaloff>:images/out_pointer.svg</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>22</width>
+     <height>22</height>
+    </size>
    </property>
   </widget>
   <widget class="QLabel" name="background">
@@ -231,12 +363,13 @@
    </property>
   </widget>
   <zorder>background</zorder>
-  <zorder>profilePanel</zorder>
-  <zorder>mushroomMessage</zorder>
+  <zorder>backButton</zorder>
   <zorder>fontSizeLabel</zorder>
   <zorder>fontSizeSpinBox</zorder>
   <zorder>fontLabel</zorder>
   <zorder>fontComboBox</zorder>
+  <zorder>profilePanel</zorder>
+  <zorder>mushroomMessage</zorder>
  </widget>
  <resources>
   <include location="../../Resources.qrc"/>
