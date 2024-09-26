@@ -1,4 +1,6 @@
 QT       += core gui network
+QT += core gui widgets
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
@@ -10,7 +12,7 @@ SOURCES += \
 # Указываем заголовочные файлы
 HEADERS += \
     src/Login/LoginScreen.h \
-    src/Login/ui_LoginScreen.h
+    build/6_7_2_mingw_shared-Debug/build/6_7_2_mingw_shared-Debug/ui_LoginScreen.h
 
 # Указываем файлы форм
 FORMS += \
@@ -19,7 +21,7 @@ FORMS += \
 # Файл ресурсов
 RESOURCES += Resources.qrc
 
-
+RC_FILE=images/mushenger.rc
 # Указание файла ресурсов для иконки
 
 # Указываем целевое имя приложения
