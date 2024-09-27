@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QJsonObject>
@@ -8,6 +7,8 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include <QDir>
+#include <QCoreApplication>
+#include "server.h"
 
 
 class UserServer : public QTcpServer
@@ -126,23 +127,9 @@ private:
 
 int main(int argc, char *argv[])
 {
-    qDebug() << "Current working directory:" << QDir::currentPath();
-
-    QCoreApplication a(argc, argv);
-
-    UserServer server;
-    server.startServer();
-
-=======
-#include <QCoreApplication>
-#include "server.h"
-
-int main(int argc, char *argv[])
-{
     QCoreApplication a(argc, argv);
     Server server;
     server.Connect(12345);
->>>>>>> 74a2d6819100c786a3a5d6e7d1b4219e138984e2
     return a.exec();
 }
 
