@@ -2,6 +2,7 @@
   <qresource prefix="/images">
     <file alias="auth_screen.png">images/auth_screen.png</file>
     <file alias="profile_screen.png">images/profile_screen.png</file>
+    <file alias="account_exit_dialog_screen.png">images/account_exit_dialog_screen.png</file>
 
     <file alias="door.svg">images/door.svg</file>
     <file alias="out_pointer.svg">images/out_pointer.svg</file>
