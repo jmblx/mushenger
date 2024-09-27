@@ -99,7 +99,7 @@
       <x>350</x>
       <y>20</y>
       <width>40</width>
-      <height>53</height>
+      <height>72</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -143,6 +143,30 @@
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QPushButton" name="overlayButton">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>20</y>
+      <width>40</width>
+      <height>72</height>
+     </rect>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::FocusPolicy::NoFocus</enum>
+    </property>
+    <property name="styleSheet">
+     <string>
+      QPushButton {
+       background: transparent;
+       border: none;
+      }
+     </string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
   </widget>
   <widget class="QLabel" name="mushroomMessage">

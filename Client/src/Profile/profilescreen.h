@@ -4,7 +4,7 @@
 #include <QWidget>
 
 namespace Ui {
-    class ProfileScreen;
+class ProfileScreen;
 }
 
 class ProfileScreen : public QWidget
@@ -14,10 +14,11 @@ public:
     explicit ProfileScreen(QWidget *parent = nullptr);
     ~ProfileScreen();
 
+private slots:
+    void onOverlayButtonClicked();
+
 private:
     Ui::ProfileScreen *ui;
-
-signals:
 };
 
 #endif // PROFILESCREEN_H

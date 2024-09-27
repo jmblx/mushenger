@@ -16,7 +16,8 @@ HEADERS += \
     src/Login/ui_LoginScreen.h \
     src/Profile/ProfileScreen.h \
     build/6_7_2_mingw_shared-Debug/build/6_7_2_mingw_shared-Debug/ui_ProfileScreen.h \
-    build/6_7_2_mingw_shared-Debug/build/6_7_2_mingw_shared-Debug/ui_LoginScreen.h
+    build/6_7_2_mingw_shared-Debug/build/6_7_2_mingw_shared-Debug/ui_LoginScreen.h \
+    build\6_7_2_mingw64_shared-Debug\ui_AccountExitDialog.h
 
 FORMS += \
     src/AccountExitDialog/AccountExitDialog.ui \

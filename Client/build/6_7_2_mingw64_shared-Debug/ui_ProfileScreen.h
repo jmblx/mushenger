@@ -32,6 +32,7 @@ public:
     QVBoxLayout *verticalLayout;
     QPushButton *logoutButtonIcon;
     QLabel *logoutText;
+    QPushButton *overlayButton;
     QLabel *mushroomMessage;
     QLabel *fontSizeLabel;
     QSpinBox *fontSizeSpinBox;
@@ -75,7 +76,7 @@ public:
         loginLabel->setWordWrap(true);
         logoutWidget = new QWidget(profilePanel);
         logoutWidget->setObjectName("logoutWidget");
-        logoutWidget->setGeometry(QRect(350, 20, 40, 53));
+        logoutWidget->setGeometry(QRect(350, 20, 40, 72));
         verticalLayout = new QVBoxLayout(logoutWidget);
         verticalLayout->setSpacing(5);
         verticalLayout->setObjectName("verticalLayout");
@@ -95,6 +96,10 @@ public:
 
         verticalLayout->addWidget(logoutText);
 
+        overlayButton = new QPushButton(profilePanel);
+        overlayButton->setObjectName("overlayButton");
+        overlayButton->setGeometry(QRect(350, 20, 40, 72));
+        overlayButton->setFocusPolicy(Qt::FocusPolicy::NoFocus);
         mushroomMessage = new QLabel(ProfileScreen);
         mushroomMessage->setObjectName("mushroomMessage");
         mushroomMessage->setGeometry(QRect(700, 650, 339, 160));
@@ -158,6 +163,13 @@ public:
 "        ", nullptr));
         logoutText->setStyleSheet(QCoreApplication::translate("ProfileScreen", "color: #0D1321; font-size: 12px;", nullptr));
         logoutText->setText(QCoreApplication::translate("ProfileScreen", "\320\222\321\213\320\271\321\202\320\270", nullptr));
+        overlayButton->setStyleSheet(QCoreApplication::translate("ProfileScreen", "\n"
+"      QPushButton {\n"
+"       background: transparent;\n"
+"       border: none;\n"
+"      }\n"
+"     ", nullptr));
+        overlayButton->setText(QString());
         mushroomMessage->setStyleSheet(QCoreApplication::translate("ProfileScreen", "\n"
 "     QLabel {\n"
 "      background-color: #D8DCE4;\n"
