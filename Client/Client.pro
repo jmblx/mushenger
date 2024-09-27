@@ -1,4 +1,6 @@
 QT       += core gui network
+QT += core gui widgets
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
@@ -11,7 +13,8 @@ HEADERS += \
     src/Login/LoginScreen.h \
     src/Login/ui_LoginScreen.h \
     src/Profile/ProfileScreen.h \
-    src/Profile/ui_ProfileScreen.h
+    build/6_7_2_mingw_shared-Debug/build/6_7_2_mingw_shared-Debug/ui_ProfileScreen.h \
+    build/6_7_2_mingw_shared-Debug/build/6_7_2_mingw_shared-Debug/ui_LoginScreen.h
 
 FORMS += \
     src/Login/LoginScreen.ui \
@@ -19,6 +22,7 @@ FORMS += \
 
 RESOURCES += Resources.qrc
 
+RC_FILE=images/mushenger.rc
 
 TARGET = mushenger
 

@@ -1,64 +1,116 @@
 #include "server.h"
+#include <QDebug>
+#include <QJsonDocument>
+#include <QUuid>
+#include <QFile>
 
-Server::Server(QObject *parent)
-    : QTcpServer{parent}
+Server::Server(QObject *parent) : QTcpServer(parent)
 {
+    loadUserData();
 }
 
 void Server::Connect(int port)
 {
-    listen(QHostAddress::Any, port); // Начинаем прослушивать входящие подключения
+    if (this->listen(QHostAddress::Any, port)) {
+        qDebug() << "Server started on port" << port;
+    } else {
+        qDebug() << "Failed to start server on port" << port << ":" << this->errorString();
+    }
 }
 
 void Server::incomingConnection(qintptr handle)
 {
-    QTcpSocket *clientSocket = new QTcpSocket(this); // Создаем новый сокет для каждого клиента
-    clientSocket->setSocketDescriptor(handle); // Настраиваем сокет на управление новым соединением
-
-    clients.insert(handle, clientSocket); // Добавляем сокет в контейнер клиентов
+    QTcpSocket *clientSocket = new QTcpSocket(this);
+    clientSocket->setSocketDescriptor(handle);
+    clients[handle] = clientSocket;
 
     connect(clientSocket, &QTcpSocket::readyRead, this, &Server::receiveData);
     connect(clientSocket, &QTcpSocket::disconnected, this, &Server::clientDisconnected);
 
-    emit playerConnected(); // Сигнал о подключении нового клиента
+    qDebug() << "New client connected with handle" << handle;
 }
 
 void Server::receiveData()
 {
-    QTcpSocket *senderSocket = qobject_cast<QTcpSocket*>(sender()); // Определяем, от какого клиента пришли данные
-    if (!senderSocket) return;
+    QTcpSocket *clientSocket = qobject_cast<QTcpSocket *>(sender());
+    if (!clientSocket) return;
 
-    QByteArray message = senderSocket->readAll();
-    str = message.data(); // Сохраняем последнее полученное сообщение
-
-    emit getMessage(); // Испускаем сигнал о получении сообщения
-
-    // Рассылаем сообщение всем клиентам
-    for (QTcpSocket *clientSocket : clients) {
-        if (clientSocket != senderSocket) { // Исключаем отправку сообщения отправителю
-            clientSocket->write(message); // Отправляем сообщение остальным клиентам
-        }
+    QByteArray data = clientSocket->readAll();
+    QJsonDocument requestDoc = QJsonDocument::fromJson(data);
+    if (!requestDoc.isObject()) {
+        clientSocket->write("Invalid JSON format.");
+        return;
     }
+
+    QJsonObject request = requestDoc.object();
+    QString login = request.value("login").toString();
+    QString password = request.value("password").toString();
+    QString sessionID = request.value("sessionID").toString();
+
+    QJsonObject response;
+
+    // Проверка сессии
+    if (!sessionID.isEmpty() && sessionData.contains(sessionID)) {
+        QString storedLogin = sessionData[sessionID];
+        response["status"] = "success";
+        response["message"] = "Session valid.";
+        response["user"] = storedLogin;
+        clientSocket->write(QJsonDocument(response).toJson());
+        return;
+    }
+
+    // Регистрация и авторизация
+    if (userData.contains(login)) {
+        if (userData[login] == password) {
+            QString newSessionID = QUuid::createUuid().toString(QUuid::WithoutBraces);
+            sessionData[newSessionID] = login;
+            response["status"] = "success";
+            response["message"] = "Login successful.";
+            response["sessionID"] = newSessionID;
+        } else {
+            response["status"] = "error";
+            response["message"] = "Incorrect password.";
+        }
+    } else {
+        userData[login] = password;
+        saveUserData();
+        QString newSessionID = QUuid::createUuid().toString(QUuid::WithoutBraces);
+        sessionData[newSessionID] = login;
+        response["status"] = "success";
+        response["message"] = "Registration successful.";
+        response["sessionID"] = newSessionID;
+    }
+
+    clientSocket->write(QJsonDocument(response).toJson());
 }
 
 void Server::clientDisconnected()
 {
-    QTcpSocket *clientSocket = qobject_cast<QTcpSocket*>(sender()); // Определяем, какой клиент отключился
-    if (!clientSocket) return;
-
-    clients.remove(clientSocket->socketDescriptor()); // Удаляем сокет из контейнера
-    clientSocket->deleteLater(); // Удаляем сокет после завершения всех его операций
-}
-
-void Server::sendData(QString text)
-{
-    // Отправка данных всем клиентам
-    for (QTcpSocket *clientSocket : clients) {
-        clientSocket->write(text.toUtf8());
+    QTcpSocket *clientSocket = qobject_cast<QTcpSocket *>(sender());
+    if (clientSocket) {
+        qDebug() << "Client disconnected";
+        clients.remove(clientSocket->socketDescriptor());
+        clientSocket->deleteLater();
     }
 }
 
-QString Server::getContent()
+void Server::loadUserData()
 {
-    return str; // Возвращает последнее полученное сообщение
+    QFile file("users.json");
+    if (file.open(QIODevice::ReadOnly)) {
+        QByteArray jsonData = file.readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(jsonData);
+        if (doc.isObject()) {
+            userData = doc.object();
+        }
+    }
+}
+
+void Server::saveUserData()
+{
+    QFile file("users.json");
+    if (file.open(QIODevice::WriteOnly)) {
+        QJsonDocument doc(userData);
+        file.write(doc.toJson());
+    }
 }

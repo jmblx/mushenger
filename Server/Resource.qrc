@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>Images/duckl.png</file>
+        <file>images/mushenger.ico</file>
     </qresource>
 </RCC>

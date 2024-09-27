@@ -29,7 +29,7 @@
    <string>Client</string>
   </property>
   <property name="autoFillBackground">
-   <bool>true</bool>
+   <bool>false</bool>
   </property>
   <property name="styleSheet">
    <string notr="true">#Client {
@@ -49,11 +49,11 @@ QLineEdit {
 	  color:rgb(147, 150, 154);
   }</string>
   </property>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="LoginInput">
    <property name="geometry">
     <rect>
      <x>720</x>
-     <y>490</y>
+     <y>500</y>
      <width>600</width>
      <height>70</height>
     </rect>
@@ -93,7 +93,7 @@ QLineEdit::placeholder {
     <string>Логин</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_2">
+  <widget class="QLineEdit" name="PwdInput">
    <property name="geometry">
     <rect>
      <x>720</x>
@@ -180,8 +180,8 @@ QPushButton:hover {
    </property>
   </widget>
   <zorder>label</zorder>
-  <zorder>lineEdit</zorder>
-  <zorder>lineEdit_2</zorder>
+  <zorder>LoginInput</zorder>
+  <zorder>PwdInput</zorder>
   <zorder>LoginButton</zorder>
  </widget>
  <resources>

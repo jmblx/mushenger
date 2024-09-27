@@ -1,31 +1,35 @@
-#ifndef CLIENT_H
-#define CLIENT_H
+#ifndef LOGINSCREEN_H
+#define LOGINSCREEN_H
 
 #include <QWidget>
-#include <QObject>
 #include <QTcpSocket>
-#include <QLineEdit>
-#include <QByteArray>
+#include <QJsonObject>
+#include <QJsonDocument>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class Client; }
-QT_END_NAMESPACE
+namespace Ui {
+class Client;
+}
 
-class Client : public QWidget
+class LoginScreen : public QWidget
 {
     Q_OBJECT
 
 public:
-    Client(QWidget *parent = nullptr);
-    void Connect();
+    explicit LoginScreen(QWidget *parent = nullptr);
+    ~LoginScreen();
+
 private slots:
-    void receiveData();
-    void on_connectButton_clicked();
-    void on_sendButton_clicked();
-    void next();
+    void onLoginButtonClicked();
+    void onReadyRead();
+
 private:
-    QTcpSocket socket;
     Ui::Client *ui;
-    QString text;
+    QTcpSocket *socket;
+
+    void sendLoginRequest(const QString &login, const QString &password);
+    void saveSession(const QString &sessionID);
+    void loadSession();
+    void showLoginScreen();
 };
-#endif // CLIENT_H
+
+#endif // LOGINSCREEN_H

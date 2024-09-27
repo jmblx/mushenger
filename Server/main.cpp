@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QJsonObject>
@@ -132,6 +133,16 @@ int main(int argc, char *argv[])
     UserServer server;
     server.startServer();
 
+=======
+#include <QCoreApplication>
+#include "server.h"
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication a(argc, argv);
+    Server server;
+    server.Connect(12345);
+>>>>>>> 74a2d6819100c786a3a5d6e7d1b4219e138984e2
     return a.exec();
 }
 

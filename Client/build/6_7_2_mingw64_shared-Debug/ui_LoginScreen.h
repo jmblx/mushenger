@@ -21,8 +21,8 @@ QT_BEGIN_NAMESPACE
 class Ui_Client
 {
 public:
-    QLineEdit *lineEdit;
-    QLineEdit *lineEdit_2;
+    QLineEdit *LoginInput;
+    QLineEdit *PwdInput;
     QPushButton *LoginButton;
     QLabel *label;
 
@@ -34,7 +34,7 @@ public:
         Client->resize(1440, 1024);
         Client->setMinimumSize(QSize(1440, 1024));
         Client->setMaximumSize(QSize(1440, 1024));
-        Client->setAutoFillBackground(true);
+        Client->setAutoFillBackground(false);
         Client->setStyleSheet(QString::fromUtf8("#Client {\n"
 "    background-image: url(:/images/auth_screen.png);\n"
 "    background-repeat: no-repeat;\n"
@@ -51,12 +51,12 @@ public:
 "	  font-weight: bold;\n"
 "	  color:rgb(147, 150, 154);\n"
 "  }"));
-        lineEdit = new QLineEdit(Client);
-        lineEdit->setObjectName("lineEdit");
-        lineEdit->setGeometry(QRect(720, 490, 600, 70));
-        lineEdit->setMinimumSize(QSize(104, 70));
-        lineEdit->setBaseSize(QSize(600, 70));
-        lineEdit->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
+        LoginInput = new QLineEdit(Client);
+        LoginInput->setObjectName("LoginInput");
+        LoginInput->setGeometry(QRect(720, 500, 600, 70));
+        LoginInput->setMinimumSize(QSize(104, 70));
+        LoginInput->setBaseSize(QSize(600, 70));
+        LoginInput->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    border: 2px solid #0D1321;     /* \320\246\320\262\320\265\321\202 \320\276\320\261\320\262\320\276\320\264\320\272\320\270 */\n"
 "    border-radius: 10px;           /* \320\241\320\272\321\200\321\203\320\263\320\273\320\265\320\275\320\270\320\265 \321\203\320\263\320\273\320\276\320\262 */\n"
 "    padding: 10px;                 /* \320\236\321\202\321\201\321\202\321\203\320\277 \320\262\320\275\321\203\321\202\321\200\320\270 \320\277\320\276\320\273\321\217 */\n"
@@ -71,12 +71,12 @@ public:
 "    background: transparent;       /* \320\237\321\200\320\276\320\267\321\200\320\260\321\207\320\275\321\213\320\271 \321\204\320\276\320\275 \320\264\320\273\321\217 \320\277\320\273\320\265\320\271\321\201\321\205\320\276\320\273\320\264\320\265\321\200\320\260 */\n"
 "}\n"
 ""));
-        lineEdit_2 = new QLineEdit(Client);
-        lineEdit_2->setObjectName("lineEdit_2");
-        lineEdit_2->setGeometry(QRect(720, 590, 600, 70));
-        lineEdit_2->setMinimumSize(QSize(104, 70));
-        lineEdit_2->setBaseSize(QSize(600, 70));
-        lineEdit_2->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
+        PwdInput = new QLineEdit(Client);
+        PwdInput->setObjectName("PwdInput");
+        PwdInput->setGeometry(QRect(720, 590, 600, 70));
+        PwdInput->setMinimumSize(QSize(104, 70));
+        PwdInput->setBaseSize(QSize(600, 70));
+        PwdInput->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    border: 2px solid #0D1321;     /* \320\246\320\262\320\265\321\202 \320\276\320\261\320\262\320\276\320\264\320\272\320\270 */\n"
 "    border-radius: 10px;           /* \320\241\320\272\321\200\321\203\320\263\320\273\320\265\320\275\320\270\320\265 \321\203\320\263\320\273\320\276\320\262 */\n"
 "    padding: 10px;                 /* \320\236\321\202\321\201\321\202\321\203\320\277 \320\262\320\275\321\203\321\202\321\200\320\270 \320\277\320\276\320\273\321\217 */\n"
@@ -114,8 +114,8 @@ public:
         label->setGeometry(QRect(0, -10, 1441, 1041));
         label->setPixmap(QPixmap(QString::fromUtf8(":/images/auth_screen.png")));
         label->raise();
-        lineEdit->raise();
-        lineEdit_2->raise();
+        LoginInput->raise();
+        PwdInput->raise();
         LoginButton->raise();
 
         retranslateUi(Client);
@@ -126,9 +126,9 @@ public:
     void retranslateUi(QWidget *Client)
     {
         Client->setWindowTitle(QCoreApplication::translate("Client", "Client", nullptr));
-        lineEdit->setText(QString());
-        lineEdit->setPlaceholderText(QCoreApplication::translate("Client", "\320\233\320\276\320\263\320\270\320\275", nullptr));
-        lineEdit_2->setPlaceholderText(QCoreApplication::translate("Client", "\320\237\320\260\321\200\320\276\320\273\321\214", nullptr));
+        LoginInput->setText(QString());
+        LoginInput->setPlaceholderText(QCoreApplication::translate("Client", "\320\233\320\276\320\263\320\270\320\275", nullptr));
+        PwdInput->setPlaceholderText(QCoreApplication::translate("Client", "\320\237\320\260\321\200\320\276\320\273\321\214", nullptr));
         LoginButton->setText(QCoreApplication::translate("Client", "\320\222\320\276\320\271\321\202\320\270", nullptr));
         label->setText(QString());
     } // retranslateUi

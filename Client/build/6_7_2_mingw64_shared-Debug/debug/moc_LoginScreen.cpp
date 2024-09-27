@@ -7,7 +7,6 @@
 *****************************************************************************/
 
 #include "../../../src/Login/LoginScreen.h"
-#include <QtGui/qtextcursor.h>
 #include <QtCore/qmetatype.h>
 
 #include <QtCore/qtmochelpers.h>
@@ -34,27 +33,25 @@ QT_WARNING_DISABLE_GCC("-Wuseless-cast")
 namespace {
 
 #ifdef QT_MOC_HAS_STRINGDATA
-struct qt_meta_stringdata_CLASSClientENDCLASS_t {};
-constexpr auto qt_meta_stringdata_CLASSClientENDCLASS = QtMocHelpers::stringData(
-    "Client",
-    "receiveData",
+struct qt_meta_stringdata_CLASSLoginScreenENDCLASS_t {};
+constexpr auto qt_meta_stringdata_CLASSLoginScreenENDCLASS = QtMocHelpers::stringData(
+    "LoginScreen",
+    "onLoginButtonClicked",
     "",
-    "on_connectButton_clicked",
-    "on_sendButton_clicked",
-    "next"
+    "onReadyRead"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
 #endif // !QT_MOC_HAS_STRINGDATA
 } // unnamed namespace
 
-Q_CONSTINIT static const uint qt_meta_data_CLASSClientENDCLASS[] = {
+Q_CONSTINIT static const uint qt_meta_data_CLASSLoginScreenENDCLASS[] = {
 
  // content:
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       2,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -62,83 +59,73 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSClientENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   38,    2, 0x08,    1 /* Private */,
-       3,    0,   39,    2, 0x08,    2 /* Private */,
-       4,    0,   40,    2, 0x08,    3 /* Private */,
-       5,    0,   41,    2, 0x08,    4 /* Private */,
+       1,    0,   26,    2, 0x08,    1 /* Private */,
+       3,    0,   27,    2, 0x08,    2 /* Private */,
 
  // slots: parameters
-    QMetaType::Void,
-    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
 };
 
-Q_CONSTINIT const QMetaObject Client::staticMetaObject = { {
+Q_CONSTINIT const QMetaObject LoginScreen::staticMetaObject = { {
     QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
-    qt_meta_stringdata_CLASSClientENDCLASS.offsetsAndSizes,
-    qt_meta_data_CLASSClientENDCLASS,
+    qt_meta_stringdata_CLASSLoginScreenENDCLASS.offsetsAndSizes,
+    qt_meta_data_CLASSLoginScreenENDCLASS,
     qt_static_metacall,
     nullptr,
-    qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSClientENDCLASS_t,
+    qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSLoginScreenENDCLASS_t,
         // Q_OBJECT / Q_GADGET
-        QtPrivate::TypeAndForceComplete<Client, std::true_type>,
-        // method 'receiveData'
+        QtPrivate::TypeAndForceComplete<LoginScreen, std::true_type>,
+        // method 'onLoginButtonClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_connectButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_sendButton_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'next'
+        // method 'onReadyRead'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
 } };
 
-void Client::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void LoginScreen::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        auto *_t = static_cast<Client *>(_o);
+        auto *_t = static_cast<LoginScreen *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->receiveData(); break;
-        case 1: _t->on_connectButton_clicked(); break;
-        case 2: _t->on_sendButton_clicked(); break;
-        case 3: _t->next(); break;
+        case 0: _t->onLoginButtonClicked(); break;
+        case 1: _t->onReadyRead(); break;
         default: ;
         }
     }
     (void)_a;
 }
 
-const QMetaObject *Client::metaObject() const
+const QMetaObject *LoginScreen::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *Client::qt_metacast(const char *_clname)
+void *LoginScreen::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_CLASSClientENDCLASS.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_CLASSLoginScreenENDCLASS.stringdata0))
         return static_cast<void*>(this);
     return QWidget::qt_metacast(_clname);
 }
 
-int Client::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int LoginScreen::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 2)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 2;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 2)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 4;
+        _id -= 2;
     }
     return _id;
 }

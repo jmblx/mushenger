@@ -3,9 +3,9 @@
 
 ProfileScreen::ProfileScreen(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ProfileScreen) // создаем объект интерфейса
+    ui(new Ui::ProfileScreen)
 {
-    ui->setupUi(this); // связываем интерфейс с виджетом
+    ui->setupUi(this);
 }
 
 ProfileScreen::~ProfileScreen()
