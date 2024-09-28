@@ -6,16 +6,19 @@ CONFIG += c++17
 
 # Указываем исходные файлы, соответствующие новой структуре
 SOURCES += \
+    src/Chat/ChatScreen.cpp \
     main.cpp \
     src/Login/LoginScreen.cpp
 
 # Указываем заголовочные файлы
 HEADERS += \
+    src/Chat/ChatScreen.h \
     src/Login/LoginScreen.h \
     build/6_7_2_mingw_shared-Debug/build/6_7_2_mingw_shared-Debug/ui_LoginScreen.h
 
 # Указываем файлы форм
 FORMS += \
+    src/Chat/ChatScreen.ui \
     src/Login/LoginScreen.ui
 
 # Файл ресурсов

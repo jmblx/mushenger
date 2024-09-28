@@ -1,5 +1,9 @@
 <RCC>
   <qresource prefix="/images">
     <file alias="auth_screen.png">images/auth_screen.png</file>
+    <file alias="group_icon.png">images/group_icon.png</file>
+    <file alias="chat_screen.png">images/chat_screen.png</file>
+    <file alias="profile-circled.svg">images/profile-circled.svg</file>
+    <file alias="send_message_icon.svg">images/send_message_icon.svg</file>
   </qresource>
 </RCC>
