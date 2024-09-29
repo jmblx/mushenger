@@ -1,77 +1,233 @@
 #include "ChatScreen.h"
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QListWidgetItem>
+#include "ui_ChatScreen.h"
+#include <QInputDialog>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QJsonDocument>
+#include <QBuffer>
+#include <QImage>
 
-ChatScreen::ChatScreen(QWidget *parent) : QWidget(parent)
+ChatScreen::ChatScreen(const QString &sessionID, const QString &userLogin, QWidget *parent)
+    : QWidget(parent), ui(new Ui::ChatScreen), socket(new QTcpSocket(this)), sessionID(sessionID), currentUserLogin(userLogin)
 {
-    setupUI();
+    ui->setupUi(this);
+    connect(ui->chatsList, &QListWidget::itemClicked, this, &ChatScreen::onChatSelected);
+    connect(ui->sendButton, &QPushButton::clicked, this, &ChatScreen::onSendMessageClicked);
+    connect(socket, &QTcpSocket::readyRead, this, &ChatScreen::onReadyRead);
+    connect(ui->messageInput, &QLineEdit::returnPressed, this, &ChatScreen::onEnterPressed);
+    connect(ui->newChat, &QPushButton::clicked, this, &ChatScreen::onNewChatClicked);
+    ui->userName->setText(currentUserLogin);
+
+    connectToServer();
+    loadChats();
 }
 
-void ChatScreen::setupUI()
+ChatScreen::~ChatScreen()
 {
-    chatsList = new QListWidget(this);
-    messagesList = new QListWidget(this);
-    messageInput = new QLineEdit(this);
-    sendButton = new QPushButton("Send", this);
-
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(chatsList);
-    layout->addWidget(messagesList);
-    layout->addWidget(messageInput);
-    layout->addWidget(sendButton);
-
-    setLayout(layout);
-
-    connect(chatsList, &QListWidget::itemClicked, this, &ChatScreen::onChatSelected);
-    connect(sendButton, &QPushButton::clicked, this, &ChatScreen::onSendMessageClicked);
+    delete ui;
+    delete socket;
 }
 
-void ChatScreen::loadChats(const QJsonArray &chatsData)
+void ChatScreen::connectToServer()
 {
-    chatsList->clear();
-    for (const QJsonValue &chat : chatsData) {
-        QJsonObject chatObject = chat.toObject();
-        QListWidgetItem *item = new QListWidgetItem();
-        // Настраиваем внешний вид элемента списка чатов
-        item->setText(chatObject["chatName"].toString()); // Название чата
-        item->setData(Qt::UserRole, chatObject["chatID"].toString()); // ID чата для идентификации
-        // Если это групповой чат, добавляем иконку
-        if (chatObject["isGroup"].toBool()) {
-            item->setIcon(QIcon(":/icons/group.png")); // Замените на путь к вашей иконке
-        }
-        chatsList->addItem(item);
+    socket->connectToHost("127.0.0.1", 12345);
+    if (!socket->waitForConnected(3000)) {
+        QMessageBox::critical(this, "Ошибка", "Не удалось подключиться к серверу.");
     }
 }
 
-void ChatScreen::loadMessages(const QJsonArray &messagesData)
+void ChatScreen::loadChats()
 {
-    messagesList->clear();
-    for (const QJsonValue &message : messagesData) {
-        QJsonObject messageObject = message.toObject();
-        QListWidgetItem *item = new QListWidgetItem();
-        item->setText(messageObject["senderName"].toString() + ": " + messageObject["text"].toString());
-        item->setIcon(QIcon(":/avatars/" + messageObject["avatar"].toString())); // Путь к аватарке
-        messagesList->addItem(item);
-    }
+    QJsonObject request;
+    request["type"] = "chatList";
+    request["sessionID"] = sessionID;
+    sendRequest(request);
+}
+
+void ChatScreen::loadMessages(const QString &chatID)
+{
+    currentChatID = chatID;
+    QJsonObject request;
+    request["type"] = "loadMessages";
+    request["sessionID"] = sessionID;
+    request["chatID"] = chatID;
+    sendRequest(request);
 }
 
 void ChatScreen::onChatSelected(QListWidgetItem *item)
 {
-    currentChatID = item->data(Qt::UserRole).toString();
-    // Отправляем запрос на сервер для загрузки сообщений выбранного чата
-    // Это может быть сигнал/слот или вызов функции для взаимодействия с сервером
+    QString chatID = item->data(Qt::UserRole).toString();
+    loadMessages(chatID);
 }
 
 void ChatScreen::onSendMessageClicked()
 {
-    QString messageText = messageInput->text();
+    QString messageText = ui->messageInput->text();
     if (messageText.isEmpty()) {
-        QMessageBox::warning(this, "Warning", "Message cannot be empty");
+        QMessageBox::warning(this, "Ошибка", "Сообщение не может быть пустым.");
         return;
     }
-    // Отправка сообщения на сервер
-    // Также добавьте сообщение в список messagesList для отображения пользователю
-    messageInput->clear();
+
+    QJsonObject request;
+    request["type"] = "message";
+    request["sessionID"] = sessionID;
+    request["chatID"] = currentChatID;
+    request["message"] = messageText;
+    sendRequest(request);
+    ui->messageInput->clear();
+}
+
+void ChatScreen::sendRequest(const QJsonObject &request)
+{
+    QJsonDocument doc(request);
+    socket->write(doc.toJson());
+    socket->flush();
+}
+
+void ChatScreen::onReadyRead()
+{
+    QByteArray responseData = socket->readAll();
+    QJsonDocument responseDoc = QJsonDocument::fromJson(responseData);
+
+    if (!responseDoc.isObject()) {
+        QMessageBox::critical(this, "Ошибка", "Неверный формат ответа от сервера.");
+        return;
+    }
+
+    QJsonObject response = responseDoc.object();
+    QString status = response.value("status").toString();
+    if (status == "success") {
+        if (response.contains("chats")) {
+            QJsonArray chats = response.value("chats").toArray();
+            ui->chatsList->clear();
+            for (const QJsonValue &chat : chats) {
+                QJsonObject chatObj = chat.toObject();
+                QListWidgetItem *item = new QListWidgetItem(chatObj.value("name").toString(), ui->chatsList);
+                item->setData(Qt::UserRole, chatObj.value("id").toString());
+                ui->chatsList->addItem(item);
+            }
+        } else if (response.contains("messages")) {
+            QJsonArray messages = response.value("messages").toArray();
+            ui->messagesList->clear();
+            for (const QJsonValue &msg : messages) {
+                QJsonObject msgObj = msg.toObject();
+                QString messageText = msgObj.value("sender").toString() + ": " + msgObj.value("text").toString();
+                ui->messagesList->addItem(new QListWidgetItem(messageText));
+            }
+        }
+    } else {
+        QMessageBox::warning(this, "Ошибка", response.value("message").toString());
+    }
+}
+
+void ChatScreen::onEnterPressed()
+{
+    if (!ui->messageInput->text().isEmpty()) {
+        onSendMessageClicked();
+    }
+}
+
+void ChatScreen::onNewChatClicked()
+{
+    QString chatName = QInputDialog::getText(this, "Создание нового чата", "Введите название чата:");
+    if (chatName.isEmpty()) {
+        QMessageBox::warning(this, "Ошибка", "Название чата не может быть пустым.");
+        return;
+    }
+
+    QString avatarPath = QFileDialog::getOpenFileName(this, "Выберите аватарку", "", "Images (*.png *.jpg *.bmp)");
+    QByteArray avatarData;
+    if (!avatarPath.isEmpty()) {
+        avatarData = processAvatar(avatarPath);
+        if (avatarData.isEmpty()) {
+            return;
+        }
+    }
+
+    QStringList participants;
+    participants.append(currentUserLogin);
+
+    while (true) {
+        QString newParticipant = QInputDialog::getText(this, "Добавление участника", "Введите логин участника:");
+        if (newParticipant.isEmpty()) break;
+
+        if (!checkUserExists(newParticipant)) {
+            QMessageBox::warning(this, "Ошибка", "Пользователь не найден.");
+            continue;
+        }
+
+        participants.append(newParticipant);
+        QMessageBox::information(this, "Успех", QString("Пользователь %1 добавлен.").arg(newParticipant));
+    }
+
+    QJsonObject request;
+    request["type"] = "createChat";
+    request["sessionID"] = sessionID;
+    request["chatName"] = chatName;
+    request["hasAvatar"] = !avatarData.isEmpty();
+    request["participants"] = QJsonArray::fromStringList(participants);
+
+    sendRequest(request);
+
+    if (!avatarData.isEmpty()) {
+        sendAvatarToServer(avatarData, chatName);
+    }
+}
+
+bool ChatScreen::checkUserExists(const QString &username)
+{
+    QJsonObject request;
+    request["type"] = "checkUser";
+    request["sessionID"] = sessionID;
+    request["username"] = username;
+
+    sendRequest(request);
+
+    if (socket->waitForReadyRead(3000)) {
+        QByteArray responseData = socket->readAll();
+        QJsonDocument responseDoc = QJsonDocument::fromJson(responseData);
+
+        if (!responseDoc.isObject()) {
+            QMessageBox::critical(this, "Ошибка", "Неверный формат ответа от сервера.");
+            return false;
+        }
+
+        QJsonObject response = responseDoc.object();
+        QString status = response.value("status").toString();
+        return status == "success";
+    } else {
+        QMessageBox::warning(this, "Ошибка", "Не удалось получить ответ от сервера.");
+        return false;
+    }
+}
+
+QByteArray ChatScreen::processAvatar(const QString &filePath)
+{
+    QImage image(filePath);
+    if (image.isNull()) {
+        QMessageBox::warning(this, "Ошибка", "Не удалось загрузить изображение.");
+        return QByteArray();
+    }
+
+    QImage scaledImage = image.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+    QByteArray imageData;
+    QBuffer buffer(&imageData);
+    buffer.open(QIODevice::WriteOnly);
+    scaledImage.save(&buffer, "PNG");
+
+    return imageData;
+}
+
+void ChatScreen::sendAvatarToServer(const QByteArray &avatarData, const QString &chatName)
+{
+    QJsonObject avatarRequest;
+    avatarRequest["type"] = "uploadAvatar";
+    avatarRequest["sessionID"] = sessionID;
+    avatarRequest["chatName"] = chatName;
+
+    QJsonDocument doc(avatarRequest);
+    socket->write(doc.toJson());
+    socket->write(avatarData);
+    socket->flush();
 }

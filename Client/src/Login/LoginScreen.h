@@ -30,6 +30,9 @@ private:
     void saveSession(const QString &sessionID);
     void loadSession();
     void showLoginScreen();
+    void getUserData(const QString &sessionID);
+    void openChatScreen(const QString &sessionID, const QString &userLogin);
+    void connectToServer();
 };
 
 #endif // LOGINSCREEN_H

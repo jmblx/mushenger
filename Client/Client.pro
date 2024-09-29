@@ -14,7 +14,6 @@ SOURCES += \
 HEADERS += \
     src/Chat/ChatScreen.h \
     src/Login/LoginScreen.h \
-    build/6_7_2_mingw_shared-Debug/build/6_7_2_mingw_shared-Debug/ui_LoginScreen.h
 
 # Указываем файлы форм
 FORMS += \

@@ -2,7 +2,10 @@
 #include "ui_LoginScreen.h"
 #include <QMessageBox>
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
+#include "src/Chat/ChatScreen.h"
+#include <QDebug> // Подключаем для отладки
 
 LoginScreen::LoginScreen(QWidget *parent) :
     QWidget(parent),
@@ -14,6 +17,7 @@ LoginScreen::LoginScreen(QWidget *parent) :
     connect(ui->LoginButton, &QPushButton::clicked, this, &LoginScreen::onLoginButtonClicked);
     connect(socket, &QTcpSocket::readyRead, this, &LoginScreen::onReadyRead);
 
+    qDebug() << "Загрузка сессии при запуске...";
     loadSession();
 }
 
@@ -33,58 +37,30 @@ void LoginScreen::onLoginButtonClicked()
         return;
     }
 
+    qDebug() << "Нажата кнопка входа с логином:" << login;
     sendLoginRequest(login, password);
 }
 
 void LoginScreen::sendLoginRequest(const QString &login, const QString &password)
 {
-    socket->connectToHost("127.0.0.1", 12345);
+    qDebug() << "Отправка запроса на вход на сервер...";
+    connectToServer();
 
-    if (!socket->waitForConnected(3000)) {
-        QMessageBox::critical(this, "Ошибка", "Не удалось подключиться к серверу.");
+    if (!socket->isOpen()) {
+        qDebug() << "Сокет не открыт, не удалось подключиться к серверу.";
         return;
     }
 
     QJsonObject request;
+    request["type"] = "login";
     request["login"] = login;
     request["password"] = password;
 
     QJsonDocument doc(request);
     socket->write(doc.toJson());
-}
+    socket->flush();
 
-void LoginScreen::onReadyRead()
-{
-    QByteArray response_data = socket->readAll();
-    QJsonDocument responseDoc = QJsonDocument::fromJson(response_data);
-
-    if (!responseDoc.isObject()) {
-        QMessageBox::critical(this, "Ошибка", "Неверный формат ответа от сервера.");
-        return;
-    }
-
-    QJsonObject response = responseDoc.object();
-    QString status = response.value("status").toString();
-    QString message = response.value("message").toString();
-    QString sessionID = response.value("sessionID").toString();
-
-    if (status == "success") {
-        QMessageBox::information(this, "Успех", message);
-        if (!sessionID.isEmpty()) {
-            saveSession(sessionID);
-        }
-    } else {
-        QMessageBox::warning(this, "Ошибка", message);
-    }
-}
-
-void LoginScreen::saveSession(const QString &sessionID)
-{
-    QFile file("session.txt");
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QTextStream out(&file);
-        out << sessionID;
-    }
+    qDebug() << "Запрос на вход отправлен:" << request;
 }
 
 void LoginScreen::loadSession()
@@ -94,27 +70,114 @@ void LoginScreen::loadSession()
         QTextStream in(&file);
         QString sessionID = in.readLine();
         if (!sessionID.isEmpty()) {
-            // Отправляем запрос на сервер для проверки сессии
-            QJsonObject request;
-            request["sessionID"] = sessionID;
-            QJsonDocument doc(request);
-
-            socket->connectToHost("127.0.0.1", 12345);
-            if (socket->waitForConnected(3000)) {
-                socket->write(doc.toJson());
-                socket->flush();
-            }
+            qDebug() << "Загружена сессия из файла:" << sessionID;
+            connectToServer();  // Подключаемся к серверу перед отправкой запроса
+            getUserData(sessionID);  // Проверка сессии при запуске
         } else {
-            showLoginScreen(); // Если сессии нет, показываем экран логина
+            qDebug() << "Файл сессии пуст.";
+            showLoginScreen();
         }
     } else {
-        showLoginScreen(); // Если файл сессии не найден, показываем экран логина
+        qDebug() << "Ошибка открытия файла сессии для чтения:" << file.errorString();
+        showLoginScreen();
+    }
+}
+
+void LoginScreen::getUserData(const QString &sessionID)
+{
+    // Проверяем, открыто ли соединение
+    if (!socket->isOpen()) {
+        qDebug() << "Сокет не открыт, не удается отправить запрос данных пользователя.";
+        return;
+    }
+
+    QJsonObject request;
+    request["type"] = "getUserData";
+    request["sessionID"] = sessionID;
+
+    qDebug() << "Запрос данных пользователя с сессией:" << sessionID;
+    socket->write(QJsonDocument(request).toJson());
+    socket->flush();
+}
+
+void LoginScreen::connectToServer()
+{
+    if (socket->state() == QAbstractSocket::UnconnectedState) {
+        qDebug() << "Попытка подключения к серверу...";
+        socket->connectToHost("127.0.0.1", 12345);
+        if (!socket->waitForConnected(3000)) {
+            QMessageBox::critical(this, "Ошибка", "Не удалось подключиться к серверу.");
+            qDebug() << "Не удалось подключиться к серверу.";
+        } else {
+            qDebug() << "Подключение к серверу успешно.";
+        }
+    } else {
+        qDebug() << "Сокет уже подключен.";
     }
 }
 
 void LoginScreen::showLoginScreen()
 {
-    // Показываем окно логина, если сессии нет
+    qDebug() << "Отображение экрана логина.";
     this->show();
 }
 
+void LoginScreen::openChatScreen(const QString &sessionID, const QString &userLogin)
+{
+    qDebug() << "Переход на экран чата с сессией:" << sessionID << "и логином пользователя:" << userLogin;
+    this->hide();
+    ChatScreen *chatScreen = new ChatScreen(sessionID, userLogin);
+    chatScreen->show();
+    qDebug() << "Окно чата должно быть отображено.";
+}
+
+void LoginScreen::onReadyRead()
+{
+    QByteArray response_data = socket->readAll();
+    QJsonDocument responseDoc = QJsonDocument::fromJson(response_data);
+
+    if (!responseDoc.isObject()) {
+        QMessageBox::critical(this, "Ошибка", "Неверный формат ответа от сервера.");
+        qDebug() << "Неверный формат ответа от сервера.";
+        return;
+    }
+
+    QJsonObject response = responseDoc.object();
+    QString status = response.value("status").toString();
+    QString message = response.value("message").toString();
+    QString sessionID = response.value("sessionID").toString();
+    QString login = response.value("login").toString();
+
+    qDebug() << "Получен ответ от сервера:" << response;
+
+    if (status == "success" && response.contains("login")) {
+        qDebug() << "Сессия действительна, переход на экран чата с логином:" << login;
+        saveSession(sessionID);
+        openChatScreen(sessionID, login);
+        return;
+    }
+
+    else {
+        QMessageBox::warning(this, "Ошибка", message);
+        qDebug() << "Ошибка ответа от сервера:" << message;
+    }
+}
+
+void LoginScreen::saveSession(const QString &sessionID)
+{
+    QString filePath = "session.txt";
+    QFile file(filePath);
+
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        out << sessionID;
+        file.close();
+
+        QFileInfo fileInfo(file);
+        qDebug() << "Сессия успешно сохранена в файл:" << sessionID;
+        qDebug() << "Путь к файлу сессии:" << fileInfo.absoluteFilePath();
+    } else {
+        qDebug() << "Ошибка открытия файла для записи сессии:" << file.errorString();
+        QMessageBox::critical(this, "Ошибка", "Не удалось сохранить сессию. Проверьте доступ к файлу.");
+    }
+}

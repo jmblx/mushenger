@@ -12,20 +12,32 @@ class Server : public QTcpServer
     Q_OBJECT
 public:
     explicit Server(QObject *parent = nullptr);
-    void Connect(int port);
+    void startServer(int port);
 
 private:
-    QMap<qintptr, QTcpSocket*> clients; // Контейнер для хранения сокетов клиентов
-    QJsonObject userData;               // Данные пользователей (логин и пароль)
-    QMap<QString, QString> sessionData; // Хранение сессий (sessionID -> login)
+    QMap<qintptr, QTcpSocket*> clients;           // Сокеты клиентов
+    QJsonObject userData;                         // Данные пользователей
+    QJsonObject chatData;                         // Данные чатов
+    QMap<QString, QString> sessionData;           // Хранение сессий (sessionID -> login)
 
     void loadUserData();
     void saveUserData();
+    void loadChatData();
+    void saveChatData();
+    void handleCreateChat(QTcpSocket *socket, const QJsonObject &request);
+    void handleChatRequest(QTcpSocket *socket, const QJsonObject &request);
+    void handleLoginOrRegister(QTcpSocket *socket, const QJsonObject &request);
+    void handleAvatarUpload(QTcpSocket *socket, const QJsonObject &request, const QByteArray &data);
+    void handleMessageRequest(QTcpSocket *socket, const QJsonObject &request);
+    void handleCheckUser(QTcpSocket *socket, const QJsonObject &request);
+    void handleGetUserData(QTcpSocket *socket, const QJsonObject &request);  // Новый метод
+    void handleChatListRequest(QTcpSocket *socket, const QJsonObject &request);  // Новый метод
+    void sendErrorResponse(QTcpSocket *socket, const QString &message);
 
 private slots:
-    void incomingConnection(qintptr handle) override; // Обработка нового подключения
-    void receiveData();                               // Обработка данных от клиента
-    void clientDisconnected();                        // Обработка отключения клиента
+    void incomingConnection(qintptr handle) override;
+    void receiveData();
+    void clientDisconnected();
 
 signals:
     void playerConnected();
