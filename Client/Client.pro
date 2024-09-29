@@ -13,11 +13,10 @@ SOURCES += \
 HEADERS += \
     src/AccountExitDialog/AccountExitDialog.h \
     src/Login/LoginScreen.h \
-    src/Login/ui_LoginScreen.h \
     src/Profile/ProfileScreen.h \
-    build/6_7_2_mingw_shared-Debug/build/6_7_2_mingw_shared-Debug/ui_ProfileScreen.h \
-    build/6_7_2_mingw_shared-Debug/build/6_7_2_mingw_shared-Debug/ui_LoginScreen.h \
-    build\6_7_2_mingw64_shared-Debug\ui_AccountExitDialog.h
+    ui_ProfileScreen.h \
+    ui_LoginScreen.h \
+    ui_AccountExitDialog.h
 
 FORMS += \
     src/AccountExitDialog/AccountExitDialog.ui \
@@ -30,7 +29,9 @@ RC_FILE=images/mushenger.rc
 
 TARGET = mushenger
 
-INCLUDEPATH += src/Client
+INCLUDEPATH += \
+    src/Client \
+    build/6_7_2_mingw64_shared-Debug \
 
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
