@@ -111,7 +111,7 @@ public:
 ""));
         label = new QLabel(Client);
         label->setObjectName("label");
-        label->setGeometry(QRect(0, -10, 1441, 1041));
+        label->setGeometry(QRect(0, 0, 1440, 1024));
         label->setPixmap(QPixmap(QString::fromUtf8(":/images/auth_screen.png")));
         label->raise();
         LoginInput->raise();

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ChatScreen</class>
+ <widget class="QWidget" name="ChatScreen">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1440</width>
+    <height>1024</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QListWidget" name="chatsList">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>180</y>
+     <width>401</width>
+     <height>851</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1440</width>
+     <height>1024</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../../Resources.qrc">:/images/chat_screen.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="userAvatar">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>20</y>
+     <width>90</width>
+     <height>90</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../../Resources.qrc">:/images/profile-circled.svg</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="messagesList">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>130</y>
+     <width>880</width>
+     <height>771</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>510</x>
+     <y>920</y>
+     <width>861</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <widget class="QLineEdit" name="messageInput">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>861</width>
+      <height>70</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>104</width>
+      <height>70</height>
+     </size>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>600</width>
+      <height>70</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLineEdit {
+    border: 2px solid #0D1321;     /* Цвет обводки */
+    border-radius: 10px;           /* Скругление углов */
+    padding: 10px;                 /* Отступ внутри поля */
+    font-size: 20px;               /* Размер текста для основного текста и плейсхолдера */
+    color: #0D1321;                /* Цвет основного текста */
+    background: transparent;       /* Прозрачный фон */
+}
+
+QLineEdit::placeholder {
+    color: #0D1321;                /* Цвет текста плейсхолдера */
+    background: transparent;       /* Прозрачный фон для плейсхолдера */
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>  Напишите сообщение...</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="sendButton">
+    <property name="geometry">
+     <rect>
+      <x>790</x>
+      <y>20</y>
+      <width>33</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton#sendButton {
+    background: transparent;
+    border: none;
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../../Resources.qrc">
+      <normaloff>:/images/send_message_icon.svg</normaloff>:/images/send_message_icon.svg</iconset>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="newChat">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>130</y>
+     <width>151</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton#newChat {
+    font-size: 26px;              /* Размер текста */
+    color: #000000;               /* Цвет текста — черный */
+    background-color: #FFFFFF;    /* Фоновый цвет — белый */
+    border: 2px solid #000000;    /* Черная граница (опционально) */
+    border-radius: 15px;          /* Закругление границ */
+    width: 210px;                 /* Ширина кнопки */
+    height: 50px;                 /* Высота кнопки */
+    padding: 0;                   /* Убираем отступы внутри */
+}
+</string>
+   </property>
+   <property name="text">
+    <string>Новый чат</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="chatsLabel">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>140</y>
+     <width>71</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel#chatsLabel {
+	font-size: 20px;              /* Размер текста */
+    color: #000000;               /* Цвет текста — черный */
+	font-weight: bold;
+}</string>
+   </property>
+   <property name="text">
+    <string>Чатов:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="chatCount">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>137</y>
+     <width>30</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel#chatCount {
+    font-size: 14px;              /* Размер шрифта */
+    font-weight: bold;            /* Жирный текст */
+    color: #000000;               /* Цвет текста — черный */
+    background-color: #FFFFFF;    /* Цвет фона — белый */
+    border-radius: 15px;          /* Закругление границ для круга */
+    min-width: 30px;              /* Минимальная ширина для круга */
+    min-height: 30px;             /* Минимальная высота для круга */
+    max-width: 30px;              /* Максимальная ширина для круга */
+    max-height: 30px;             /* Максимальная высота для круга */
+    padding: 0;                   /* Убираем отступы для центрирования */
+    text-align: center;           /* Центрирование текста по горизонтали */
+}
+</string>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+   <property name="scaledContents">
+    <bool>false</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="userName">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>60</y>
+     <width>171</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>-1</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel#userName {
+	    font-size: 22px;              /* Размер шрифта */            /* Жирный текст */
+    color: #000000; 
+}</string>
+   </property>
+   <property name="text">
+    <string>username</string>
+   </property>
+  </widget>
+  <zorder>label</zorder>
+  <zorder>chatsList</zorder>
+  <zorder>userAvatar</zorder>
+  <zorder>messagesList</zorder>
+  <zorder>widget</zorder>
+  <zorder>newChat</zorder>
+  <zorder>chatsLabel</zorder>
+  <zorder>chatCount</zorder>
+  <zorder>userName</zorder>
+ </widget>
+ <resources>
+  <include location="../../Resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

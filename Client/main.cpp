@@ -8,11 +8,11 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    ProfileScreen profileScreen;
-    profileScreen.show();
+    // ProfileScreen profileScreen;
+    // profileScreen.show();
 
-    // LoginScreen w;
-    // w.show();
+    LoginScreen w;
+    w.show();
 
     return a.exec();
 }
