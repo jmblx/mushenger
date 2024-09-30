@@ -3,7 +3,7 @@
 #include <QJsonDocument>
 #include <QUuid>
 #include <QFile>
-#include <QJsonArray>  // Добавить этот заголовок для QJsonArray
+#include <QJsonArray>
 #include <QJsonObject>
 
 Server::Server(QObject *parent) : QTcpServer(parent)
@@ -251,8 +251,6 @@ void Server::handleGetUserData(QTcpSocket *socket, const QJsonObject &request)
     socket->write(QJsonDocument(response).toJson());
 }
 
-
-
 void Server::handleChatListRequest(QTcpSocket *socket, const QJsonObject &request)
 {
     QString sessionID = request.value("sessionID").toString();
@@ -328,8 +326,6 @@ void Server::handleLoginOrRegister(QTcpSocket *socket, const QJsonObject &reques
 
     socket->write(QJsonDocument(response).toJson());
 }
-
-
 
 void Server::clientDisconnected()
 {

@@ -99,7 +99,7 @@
       <x>350</x>
       <y>20</y>
       <width>40</width>
-      <height>72</height>
+      <height>61</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -150,7 +150,7 @@
       <x>350</x>
       <y>20</y>
       <width>40</width>
-      <height>72</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="focusPolicy">
@@ -341,8 +341,8 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>22</width>
-     <height>22</height>
+     <width>28</width>
+     <height>28</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -386,6 +386,30 @@
     <bool>true</bool>
    </property>
   </widget>
+  <widget class="QPushButton" name="overlayButton_arrow">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>28</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::FocusPolicy::NoFocus</enum>
+   </property>
+   <property name="styleSheet">
+    <string>
+      QPushButton {
+       background: transparent;
+       border: none;
+      }
+     </string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
   <zorder>background</zorder>
   <zorder>backButton</zorder>
   <zorder>fontSizeLabel</zorder>
@@ -394,6 +418,7 @@
   <zorder>fontComboBox</zorder>
   <zorder>profilePanel</zorder>
   <zorder>mushroomMessage</zorder>
+  <zorder>overlayButton_arrow</zorder>
  </widget>
  <resources>
   <include location="../../Resources.qrc"/>

@@ -25,8 +25,7 @@
   <property name="windowTitle">
    <string>Выход из аккаунта</string>
   </property>
-
-  <!-- Задний фон диалогового окна -->
+  <layout class="QVBoxLayout" name="verticalLayout"/>
   <widget class="QLabel" name="background">
    <property name="geometry">
     <rect>
@@ -37,14 +36,12 @@
     </rect>
    </property>
    <property name="pixmap">
-    <pixmap>:/images/account_exit_dialog_screen.png</pixmap>
+    <pixmap resource="../../Resources.qrc">:/images/account_exit_dialog_screen.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
    </property>
   </widget>
-
-  <!-- Кнопка "Да" -->
   <widget class="QPushButton" name="yesButton">
    <property name="geometry">
     <rect>
@@ -53,9 +50,6 @@
      <width>181</width>
      <height>117</height>
     </rect>
-   </property>
-   <property name="text">
-    <string>Да</string>
    </property>
    <property name="styleSheet">
     <string>
@@ -67,9 +61,10 @@
      }
     </string>
    </property>
+   <property name="text">
+    <string>Да</string>
+   </property>
   </widget>
-
-  <!-- Кнопка "Нет" -->
   <widget class="QPushButton" name="noButton">
    <property name="geometry">
     <rect>
@@ -78,9 +73,6 @@
      <width>181</width>
      <height>117</height>
     </rect>
-   </property>
-   <property name="text">
-    <string>Нет</string>
    </property>
    <property name="styleSheet">
     <string>
@@ -92,13 +84,10 @@
      }
     </string>
    </property>
+   <property name="text">
+    <string>Нет</string>
+   </property>
   </widget>
-
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QWidget" name="layoutWidget" native="true"/>
-   </item>
-  </layout>
  </widget>
  <resources>
   <include location="../../Resources.qrc"/>

@@ -1,11 +1,15 @@
 #include "ChatScreen.h"
 #include "ui_ChatScreen.h"
+#include "src/Profile/ProfileScreen.h"
 #include <QInputDialog>
-#include <QMessageBox>
+#include <QMessageBox>    // Include for QMessageBox
 #include <QFileDialog>
 #include <QJsonDocument>
 #include <QBuffer>
 #include <QImage>
+#include <QJsonObject>    // Include for QJsonObject
+#include <QJsonArray>     // Include for QJsonArray
+#include <QDebug>         // Include for qDebug()
 
 ChatScreen::ChatScreen(const QString &sessionID, const QString &userLogin, QWidget *parent)
     : QWidget(parent), ui(new Ui::ChatScreen), socket(new QTcpSocket(this)), sessionID(sessionID), currentUserLogin(userLogin)
@@ -16,6 +20,7 @@ ChatScreen::ChatScreen(const QString &sessionID, const QString &userLogin, QWidg
     connect(socket, &QTcpSocket::readyRead, this, &ChatScreen::onReadyRead);
     connect(ui->messageInput, &QLineEdit::returnPressed, this, &ChatScreen::onEnterPressed);
     connect(ui->newChat, &QPushButton::clicked, this, &ChatScreen::onNewChatClicked);
+    connect(ui->avatarButton, &QPushButton::clicked, this, &ChatScreen::onAvatarClicked);
     ui->userName->setText(currentUserLogin);
 
     connectToServer();
@@ -25,7 +30,7 @@ ChatScreen::ChatScreen(const QString &sessionID, const QString &userLogin, QWidg
 ChatScreen::~ChatScreen()
 {
     delete ui;
-    delete socket;
+    // No need to delete socket; it's parented to this class
 }
 
 void ChatScreen::connectToServer()
@@ -33,6 +38,7 @@ void ChatScreen::connectToServer()
     socket->connectToHost("127.0.0.1", 12345);
     if (!socket->waitForConnected(3000)) {
         QMessageBox::critical(this, "Ошибка", "Не удалось подключиться к серверу.");
+        qApp->exit(); // Exit application if connection fails
     }
 }
 
@@ -80,43 +86,45 @@ void ChatScreen::onSendMessageClicked()
 void ChatScreen::sendRequest(const QJsonObject &request)
 {
     QJsonDocument doc(request);
-    socket->write(doc.toJson());
+    socket->write(doc.toJson(QJsonDocument::Compact) + "\n"); // Add newline for separation
     socket->flush();
 }
 
 void ChatScreen::onReadyRead()
 {
-    QByteArray responseData = socket->readAll();
-    QJsonDocument responseDoc = QJsonDocument::fromJson(responseData);
+    while (socket->canReadLine()) {
+        QByteArray responseData = socket->readLine();
+        QJsonDocument responseDoc = QJsonDocument::fromJson(responseData);
 
-    if (!responseDoc.isObject()) {
-        QMessageBox::critical(this, "Ошибка", "Неверный формат ответа от сервера.");
-        return;
-    }
-
-    QJsonObject response = responseDoc.object();
-    QString status = response.value("status").toString();
-    if (status == "success") {
-        if (response.contains("chats")) {
-            QJsonArray chats = response.value("chats").toArray();
-            ui->chatsList->clear();
-            for (const QJsonValue &chat : chats) {
-                QJsonObject chatObj = chat.toObject();
-                QListWidgetItem *item = new QListWidgetItem(chatObj.value("name").toString(), ui->chatsList);
-                item->setData(Qt::UserRole, chatObj.value("id").toString());
-                ui->chatsList->addItem(item);
-            }
-        } else if (response.contains("messages")) {
-            QJsonArray messages = response.value("messages").toArray();
-            ui->messagesList->clear();
-            for (const QJsonValue &msg : messages) {
-                QJsonObject msgObj = msg.toObject();
-                QString messageText = msgObj.value("sender").toString() + ": " + msgObj.value("text").toString();
-                ui->messagesList->addItem(new QListWidgetItem(messageText));
-            }
+        if (!responseDoc.isObject()) {
+            QMessageBox::critical(this, "Ошибка", "Неверный формат ответа от сервера.");
+            return;
         }
-    } else {
-        QMessageBox::warning(this, "Ошибка", response.value("message").toString());
+
+        QJsonObject response = responseDoc.object();
+        QString status = response.value("status").toString();
+        if (status == "success") {
+            if (response.contains("chats")) {
+                QJsonArray chats = response.value("chats").toArray();
+                ui->chatsList->clear();
+                for (const QJsonValue &chat : chats) {
+                    QJsonObject chatObj = chat.toObject();
+                    QListWidgetItem *item = new QListWidgetItem(chatObj.value("name").toString(), ui->chatsList);
+                    item->setData(Qt::UserRole, chatObj.value("id").toString());
+                    ui->chatsList->addItem(item);
+                }
+            } else if (response.contains("messages")) {
+                QJsonArray messages = response.value("messages").toArray();
+                ui->messagesList->clear();
+                for (const QJsonValue &msg : messages) {
+                    QJsonObject msgObj = msg.toObject();
+                    QString messageText = msgObj.value("sender").toString() + ": " + msgObj.value("text").toString();
+                    ui->messagesList->addItem(new QListWidgetItem(messageText));
+                }
+            }
+        } else {
+            QMessageBox::warning(this, "Ошибка", response.value("message").toString());
+        }
     }
 }
 
@@ -227,7 +235,16 @@ void ChatScreen::sendAvatarToServer(const QByteArray &avatarData, const QString 
     avatarRequest["chatName"] = chatName;
 
     QJsonDocument doc(avatarRequest);
-    socket->write(doc.toJson());
+    socket->write(doc.toJson(QJsonDocument::Compact) + "\n");
     socket->write(avatarData);
     socket->flush();
+}
+
+void ChatScreen::onAvatarClicked()
+{
+    qDebug() << "Переход на экран профиля";
+
+    ProfileScreen *profileScreen = new ProfileScreen(sessionID, currentUserLogin);
+    profileScreen->show();
+    this->hide();
 }

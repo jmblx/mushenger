@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 13.0.1, 2024-09-29T15:05:04. -->
+<!-- Written by QtCreator 13.0.1, 2024-09-30T20:37:55. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -322,11 +322,13 @@
     <value type="bool" key="PE.EnvironmentAspect.PrintOnRun">false</value>
     <value type="QString" key="PerfRecordArgsId">-e cpu-cycles --call-graph &quot;dwarf,4096&quot; -F 250</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.CustomExecutableRunConfiguration</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey"></value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:C:/Users/bob/Desktop/mushenger/Server/Server.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/bob/Desktop/mushenger/Server/Server.pro</value>
     <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
+    <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">C:/Users/bob/Desktop/mushenger/Server/build/6_7_2_mingw64_shared-Debug</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

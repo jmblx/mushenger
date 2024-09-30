@@ -41,6 +41,15 @@ void LoginScreen::onLoginButtonClicked()
 
     qDebug() << "Нажата кнопка входа с логином:" << login;
     sendLoginRequest(login, password);
+
+    connect(this, &LoginScreen::loginSuccess, this, [this](const QString &sessionID, const QString &login){
+        if (profileRequested) {
+            profileScreen = new ProfileScreen(sessionID, login);
+            profileScreen->show();
+        } else {
+            openChatScreen(sessionID, login);
+        }
+    });
 }
 
 void LoginScreen::sendLoginRequest(const QString &login, const QString &password)
@@ -70,9 +79,10 @@ void LoginScreen::loadSession()
     QFile file("session.txt");
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream in(&file);
-        QString sessionID = in.readLine();
-        if (!sessionID.isEmpty()) {
-            qDebug() << "Загружена сессия из файла:" << sessionID;
+        QString sessionIDFromFile = in.readLine();
+        if (!sessionIDFromFile.isEmpty()) {
+            qDebug() << "Загружена сессия из файла:" << sessionIDFromFile;
+            sessionID = sessionIDFromFile;  // Store in member variable
             connectToServer();
             getUserData(sessionID);
         } else {
@@ -146,19 +156,36 @@ void LoginScreen::onReadyRead()
     QJsonObject response = responseDoc.object();
     QString status = response.value("status").toString();
     QString message = response.value("message").toString();
-    QString sessionID = response.value("sessionID").toString();
-    QString login = response.value("login").toString();
-
     qDebug() << "Получен ответ от сервера:" << response;
 
-    if (status == "success" && response.contains("login")) {
-        qDebug() << "Сессия действительна, переход на экран чата с логином:" << login;
-        saveSession(sessionID);
-        openChatScreen(sessionID, login);
-        return;
-    }
+    if (status == "success") {
+        if (response.contains("sessionID")) {
+            sessionID = response.value("sessionID").toString();
+            if (sessionID.isEmpty()) {
+                qDebug() << "Ошибка: sessionID пуст.";
+            } else {
+                saveSession(sessionID);
+            }
+        }
 
-    else {
+        QString login;
+        if (response.contains("login")) {
+            login = response.value("login").toString();
+        } else if (response.contains("user")) {
+            QJsonObject userObject = response.value("user").toObject();
+            login = userObject.value("login").toString();
+        }
+
+        if (!sessionID.isEmpty() && !login.isEmpty()) {
+            qDebug() << "Сессия действительна, переход на экран чата с логином:" << login;
+            openChatScreen(sessionID, login);
+            this->close();  // Close login window after successful login
+            return;
+        } else {
+            QMessageBox::warning(this, "Ошибка", "Не удалось получить данные сессии и логина.");
+            qDebug() << "Не удалось получить данные сессии и логина.";
+        }
+    } else {
         QMessageBox::warning(this, "Ошибка", message);
         qDebug() << "Ошибка ответа от сервера:" << message;
     }
@@ -166,6 +193,11 @@ void LoginScreen::onReadyRead()
 
 void LoginScreen::saveSession(const QString &sessionID)
 {
+    if (sessionID.isEmpty()) {
+        qDebug() << "Ошибка: sessionID пуст, сохранение отменено.";
+        return;
+    }
+
     QString filePath = "session.txt";
     QFile file(filePath);
 
@@ -179,6 +211,5 @@ void LoginScreen::saveSession(const QString &sessionID)
         qDebug() << "Путь к файлу сессии:" << fileInfo.absoluteFilePath();
     } else {
         qDebug() << "Ошибка открытия файла для записи сессии:" << file.errorString();
-        QMessageBox::critical(this, "Ошибка", "Не удалось сохранить сессию. Проверьте доступ к файлу.");
     }
 }
