@@ -1,0 +1,215 @@
+/* Общие стили */
+* {
+  font-family: 'Inter', sans-serif;
+  color: #D8DCE4;
+}
+
+/* Стили для QPushButton без фона и границы */
+QPushButton#sendButton,
+QPushButton#avatarButton,
+QPushButton#themeSwitchButton,
+QPushButton#overlayButton,
+QPushButton#overlayButton_arrow,
+QPushButton#backButton,
+QPushButton#logoutButtonIcon {
+  background: transparent;
+  border: none;
+}
+
+/* Стили для QLineEdit */
+QLineEdit {
+  border: 2px solid #D8DCE4;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 20px;
+  color: #D8DCE4;
+  background: transparent;
+}
+
+QLineEdit::placeholder {
+  color: #D8DCE4;
+  background: transparent;
+}
+
+/* Стили для QPushButton#newChat */
+QPushButton#newChat {
+  font-size: 26px;
+  color: #FFFFFF;
+  background-color: #1E1E1E;
+  border: 2px solid #FFFFFF;
+  border-radius: 15px;
+  width: 210px;
+  height: 50px;
+  padding: 0;
+}
+
+/* Стили для QLabel#chatsLabel */
+QLabel#chatsLabel {
+  font-size: 20px;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
+/* Стили для QLabel#chatCount */
+QLabel#chatCount {
+  font-size: 14px;
+  font-weight: bold;
+  color: #FFFFFF;
+  background-color: #1E1E1E;
+  border-radius: 15px;
+  min-width: 30px;
+  min-height: 30px;
+  max-width: 30px;
+  max-height: 30px;
+  padding: 0;
+  text-align: center;
+}
+
+/* Стили для QLabel#userName */
+QLabel#userName {
+  font-size: 22px;
+  color: #D8DCE4;
+}
+
+/* Стили для QPushButton#LoginButton */
+QPushButton#LoginButton {
+  background-color: #C21B1B;
+  color: white;
+  font-size: 24px;
+  border-radius: 30px;
+  padding: 10px 20px;
+}
+
+QPushButton#LoginButton:hover {
+  background-color: #A51A1A;
+}
+
+/* Стили для QFrame#profilePanel */
+QFrame#profilePanel {
+  border: 2px solid #D8DCE4;
+  border-radius: 10px;
+  background-color: transparent;
+}
+
+/* Стили для QLabel#loginLabel */
+QLabel#loginLabel {
+  color: #D8DCE4;
+  font-size: 48px;
+}
+
+/* Стили для QLabel#logoutText */
+QLabel#logoutText {
+  color: #D8DCE4;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* Стили для QLabel#mushroomMessage */
+QLabel#mushroomMessage {
+  background-color: #D8DCE4;
+  border-radius: 10px;
+  color: #0D1321;
+  font-size: 33px;
+}
+
+/* Стили для QLabel#fontSizeLabel */
+QLabel#fontSizeLabel {
+  color: #D8DCE4;
+  font-size: 46px;
+}
+
+/* Стили для QSpinBox#fontSizeSpinBox */
+QSpinBox#fontSizeSpinBox {
+  color: #0D1321;
+  background-color: #E5E5E5;
+  font-size: 48px;
+  border: none;
+  padding-right: 90px;
+  padding-left: 10px;
+}
+QSpinBox#fontSizeSpinBox::up-button {
+  subcontrol-origin: padding;
+  subcontrol-position: right;
+  width: 50px;
+  height: 105px;
+  background-color: #FFFFFF;
+  border: none;
+}
+QSpinBox#fontSizeSpinBox::down-button {
+  subcontrol-origin: padding;
+  subcontrol-position: right;
+  right: 55px;
+  width: 50px;
+  height: 105px;
+  background-color: #FFFFFF;
+  border: none;
+}
+QSpinBox#fontSizeSpinBox::up-arrow {
+  image: url(:/images/light/plus_icon.svg);
+  width: 20px;
+  height: 20px;
+}
+QSpinBox#fontSizeSpinBox::down-arrow {
+  image: url(:/images/light/minus_icon.svg);
+  width: 20px;
+  height: 20px;
+}
+
+/* Стили для QLabel#fontLabel */
+QLabel#fontLabel {
+  color: #D8DCE4;
+  font-size: 48px;
+}
+
+/* Стили для QComboBox#fontComboBox */
+QComboBox#fontComboBox {
+  color: #0D1321;
+  background-color: #E5E5E5;
+  font-size: 48px;
+  padding-left: 10px;
+  padding-right: 50px;
+  border: none;
+}
+QComboBox#fontComboBox::drop-down {
+  subcontrol-origin: padding;
+  subcontrol-position: right;
+  width: 50px;
+  background-color: #FFFFFF;
+  border: none;
+}
+QComboBox#fontComboBox::down-arrow {
+  image: url(:/images/light/down_arrow_icon.svg);
+  width: 20px;
+  height: 20px;
+}
+QComboBox#fontComboBox QAbstractItemView {
+  color: #0D1321;
+  background-color: #E5E5E5;
+  font-size: 48px;
+  selection-background-color: #D3D3D3;
+}
+
+/* Стили для QPushButton#backButton */
+QPushButton#backButton {
+  border: none;
+  background: none;
+}
+QPushButton#backButton::hover {
+  background: none;
+}
+
+/* Стили для QPushButton#yesButton */
+QPushButton#yesButton {
+  background-color: #D8DCE4;
+  color: #D8DCE4;
+  font-size: 64px;
+  border-radius: 39px;
+}
+
+/* Стили для QPushButton#noButton */
+QPushButton#noButton {
+  background-color: #51AE5A;
+  color: #FFFFFF;
+  font-size: 64px;
+  border-radius: 39px;
+}

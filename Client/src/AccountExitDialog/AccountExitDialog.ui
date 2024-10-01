@@ -36,7 +36,7 @@
     </rect>
    </property>
    <property name="pixmap">
-    <pixmap resource="../../Resources.qrc">:/images/account_exit_dialog_screen.png</pixmap>
+    <pixmap>:/images/account_exit_dialog_screen.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -51,16 +51,6 @@
      <height>117</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string>
-     QPushButton {
-      background-color: #D8DCE4;
-      color: #0D1321;
-      font-size: 64px;
-      border-radius: 39px;
-     }
-    </string>
-   </property>
    <property name="text">
     <string>Да</string>
    </property>
@@ -74,23 +64,11 @@
      <height>117</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string>
-     QPushButton {
-      background-color: #51AE5A;
-      color: #FFFFFF;
-      font-size: 64px;
-      border-radius: 39px;
-     }
-    </string>
-   </property>
    <property name="text">
     <string>Нет</string>
    </property>
   </widget>
  </widget>
- <resources>
-  <include location="../../Resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

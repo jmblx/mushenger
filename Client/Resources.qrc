@@ -1,20 +1,42 @@
 <RCC>
-  <qresource prefix="/images">
-    <file alias="auth_screen.png">images/auth_screen.png</file>
-    <file alias="profile_screen.png">images/profile_screen.png</file>
-    <file alias="account_exit_dialog_screen.png">images/account_exit_dialog_screen.png</file>
-    <file alias="chat_screen.png">images/chat_screen.png</file>
+  <qresource prefix="/images/light">
+    <file alias="auth_screen.png">images/light/auth_screen.png</file>
+    <file alias="profile_screen.png">images/light/profile_screen.png</file>
+    <file alias="account_exit_dialog_screen.png">images/light/account_exit_dialog_screen.png</file>
+    <file alias="chat_screen.png">images/light/chat_screen.png</file>
 
-    <file alias="door.svg">images/door.svg</file>
-    <file alias="out_pointer.svg">images/out_pointer.svg</file>
-    <file alias="profile-circled.svg">images/profile-circled.svg</file>
-    <file alias="minus_icon.svg">images/minus_icon.svg</file>
-    <file alias="plus_icon.svg">images/plus_icon.svg</file>
-    <file alias="down_arrow_icon.svg">images/down_arrow_icon.svg</file>
+    <file alias="door.svg">images/light/door.svg</file>
+    <file alias="out_pointer.svg">images/light/out_pointer.svg</file>
+    <file alias="profile-circled.svg">images/light/profile-circled.svg</file>
+    <file alias="minus_icon.svg">images/light/minus_icon.svg</file>
+    <file alias="plus_icon.svg">images/light/plus_icon.svg</file>
+    <file alias="down_arrow_icon.svg">images/light/down_arrow_icon.svg</file>
 
-    <file alias="group_icon.png">images/group_icon.png</file>
+    <file alias="group_icon.svg">images/light/group_icon.svg</file>
 
-    <file alias="profile-circled.svg">images/profile-circled.svg</file>
-    <file alias="send_message_icon.svg">images/send_message_icon.svg</file>
+    <file alias="profile-circled.svg">images/light/profile-circled.svg</file>
+    <file alias="send_message_icon.svg">images/light/send_message_icon.svg</file>
+  </qresource>
+  <qresource prefix="/styles">
+    <file alias="light.qss">styles/light.qss</file>
+    <file alias="dark.qss">styles/dark.qss</file>
+  </qresource>
+  <qresource prefix="/images/dark">
+    <file alias="auth_screen.png">images/dark/auth_screen.png</file>
+    <file alias="profile_screen.png">images/dark/profile_screen.png</file>
+    <file alias="account_exit_dialog_screen.png">images/dark/account_exit_dialog_screen.png</file>
+    <file alias="chat_screen.png">images/dark/chat_screen.png</file>
+
+    <file alias="door.svg">images/dark/door.svg</file>
+    <file alias="out_pointer.svg">images/dark/out_pointer.svg</file>
+    <file alias="profile-circled.svg">images/dark/profile-circled.svg</file>
+    <file alias="minus_icon.svg">images/dark/minus_icon.svg</file>
+    <file alias="plus_icon.svg">images/dark/plus_icon.svg</file>
+    <file alias="down_arrow_icon.svg">images/dark/down_arrow_icon.svg</file>
+
+    <file alias="group_icon.svg">images/dark/group_icon.svg</file>
+
+    <file alias="profile-circled.svg">images/dark/profile-circled.svg</file>
+    <file alias="send_message_icon.svg">images/dark/send_message_icon.svg</file>
   </qresource>
 </RCC>

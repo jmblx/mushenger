@@ -1,4 +1,6 @@
 #include "src/Login/LoginScreen.h"
+#include "src/ThemeManager/ThemeManager.h"
+#include "src/Profile/ProfileScreen.h"
 #include <QDebug>
 #include "LoginScreen.h"
 #include "ui_LoginScreen.h"
@@ -8,6 +10,9 @@
 #include <QTextStream>
 #include "src/Chat/ChatScreen.h"
 #include <QDebug>
+#include <QSettings>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 LoginScreen::LoginScreen(QWidget *parent) :
     QWidget(parent),
@@ -18,6 +23,12 @@ LoginScreen::LoginScreen(QWidget *parent) :
 
     connect(ui->LoginButton, &QPushButton::clicked, this, &LoginScreen::onLoginButtonClicked);
     connect(socket, &QTcpSocket::readyRead, this, &LoginScreen::onReadyRead);
+    connect(ui->themeSwitchButton, &QPushButton::clicked, this, &LoginScreen::onThemeSwitchButtonClicked);
+
+    // Подключение к ThemeManager
+    connect(&ThemeManager::instance(), &ThemeManager::themeChanged, this, &LoginScreen::onThemeChanged);
+    // Применение текущей темы
+    onThemeChanged(ThemeManager::instance().currentTheme());
 
     qDebug() << "Загрузка сессии при запуске...";
     loadSession();
@@ -27,6 +38,26 @@ LoginScreen::~LoginScreen()
 {
     delete ui;
     delete socket;
+}
+
+void LoginScreen::onThemeSwitchButtonClicked()
+{
+    ThemeManager::instance().toggleTheme();
+}
+
+void LoginScreen::onThemeChanged(const QString& newTheme)
+{
+    // Обновление фонового изображения
+    QString backgroundPath = QString(":/images/%1/auth_screen.png").arg(newTheme);
+    QPixmap backgroundPixmap(backgroundPath);
+
+    if (!backgroundPixmap.isNull()) {
+        ui->background->setPixmap(backgroundPixmap);
+    } else {
+        qDebug() << "Не удалось загрузить фоновое изображение:" << backgroundPath;
+    }
+
+    // Обновление других изображений или иконок, если необходимо
 }
 
 void LoginScreen::onLoginButtonClicked()

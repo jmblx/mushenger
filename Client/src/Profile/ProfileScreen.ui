@@ -25,21 +25,6 @@
   <property name="windowTitle">
    <string>Profile Screen</string>
   </property>
-  <property name="autoFillBackground">
-   <bool>false</bool>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">
-    QFrame#profilePanel {
-      border: 2px solid black;
-      border-radius: 10px;
-      background-color: transparent;
-    }
-    * {
-      font-family: 'Inter';
-    }
-   </string>
-  </property>
   <widget class="QFrame" name="profilePanel">
    <property name="geometry">
     <rect>
@@ -65,7 +50,7 @@
      </rect>
     </property>
     <property name="pixmap">
-     <pixmap resource="../../Resources.qrc">:/images/profile-circled.svg</pixmap>
+     <pixmap>:/images/profile-circled.svg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -79,9 +64,6 @@
       <width>300</width>
       <height>131</height>
      </rect>
-    </property>
-    <property name="styleSheet">
-     <string>color: #0D1321; font-size: 48px;</string>
     </property>
     <property name="text">
      <string>{username}</string>
@@ -108,15 +90,6 @@
      </property>
      <item>
       <widget class="QPushButton" name="logoutButtonIcon">
-       <property name="styleSheet">
-        <string>
-         QPushButton {
-          border: none;
-          background: none;
-          padding: 0px;
-         }
-        </string>
-       </property>
        <property name="icon">
         <iconset>
          <normaloff>:images/door.svg</normaloff>:images/door.svg</iconset>
@@ -131,9 +104,6 @@
      </item>
      <item>
       <widget class="QLabel" name="logoutText">
-       <property name="styleSheet">
-        <string>color: #0D1321; font-size: 12px;</string>
-       </property>
        <property name="text">
         <string>Выйти</string>
        </property>
@@ -156,14 +126,6 @@
     <property name="focusPolicy">
      <enum>Qt::FocusPolicy::NoFocus</enum>
     </property>
-    <property name="styleSheet">
-     <string>
-      QPushButton {
-       background: transparent;
-       border: none;
-      }
-     </string>
-    </property>
     <property name="text">
      <string/>
     </property>
@@ -177,16 +139,6 @@
      <width>339</width>
      <height>160</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string>
-     QLabel {
-      background-color: #D8DCE4;
-      border-radius: 10px;
-      color: #0D1321;
-      font-size: 33px;
-     }
-    </string>
    </property>
    <property name="text">
     <string>{message}</string>
@@ -207,9 +159,6 @@
      <height>111</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true">color: #0D1321; font-size: 46px;</string>
-   </property>
    <property name="text">
     <string>Размер шрифта:</string>
    </property>
@@ -225,45 +174,6 @@
      <width>263</width>
      <height>105</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string>
-     QSpinBox {
-      color: #0D1321;
-      background-color: #E5E5E5;
-      font-size: 48px;
-      border: none;
-      padding-right: 90px;
-      padding-left: 10px;
-     }
-     QSpinBox::up-button {
-      subcontrol-origin: padding;
-      subcontrol-position: right;
-      width: 50px;
-      height: 105px;
-      background-color: #FFFFFF;
-      border: none;
-     }
-     QSpinBox::down-button {
-      subcontrol-origin: padding;
-      subcontrol-position: right;
-      right: 55px;
-      width: 50px;
-      height: 105px;
-      background-color: #FFFFFF;
-      border: none;
-     }
-     QSpinBox::up-arrow {
-      image: url(:/images/plus_icon.svg);
-      width: 20px;
-      height: 20px;
-     }
-     QSpinBox::down-arrow {
-      image: url(:/images/minus_icon.svg);
-      width: 20px;
-      height: 20px;
-     }
-    </string>
    </property>
    <property name="minimum">
     <number>10</number>
@@ -284,9 +194,6 @@
      <height>105</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string>color: #0D1321; font-size: 48px;</string>
-   </property>
    <property name="text">
     <string>Шрифт:</string>
    </property>
@@ -299,36 +206,6 @@
      <width>261</width>
      <height>105</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string>
-     QComboBox {
-      color: #0D1321;
-      background-color: #E5E5E5;
-      font-size: 48px;
-      padding-left: 10px;
-      padding-right: 50px;
-      border: none;
-     }
-     QComboBox::drop-down {
-      subcontrol-origin: padding;
-      subcontrol-position: right;
-      width: 50px;
-      background-color: #FFFFFF;
-      border: none;
-     }
-     QComboBox::down-arrow {
-      image: url(:/images/down_arrow_icon.svg);
-      width: 20px;
-      height: 20px;
-     }
-    QComboBox QAbstractItemView {
-      color: #0D1321;
-      background-color: #E5E5E5;
-      font-size: 48px;
-      selection-background-color: #D3D3D3;
-     }
-    </string>
    </property>
    <item>
     <property name="text">
@@ -344,17 +221,6 @@
      <width>28</width>
      <height>28</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string>
-     QPushButton {
-      border: none;
-      background: none;
-     }
-     QPushButton::hover {
-      background: none;
-     }
-    </string>
    </property>
    <property name="icon">
     <iconset>
@@ -380,7 +246,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="../../Resources.qrc">:/images/profile_screen.png</pixmap>
+    <pixmap resource="../../Resources.qrc">:/images/light/profile_screen.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -398,13 +264,21 @@
    <property name="focusPolicy">
     <enum>Qt::FocusPolicy::NoFocus</enum>
    </property>
-   <property name="styleSheet">
-    <string>
-      QPushButton {
-       background: transparent;
-       border: none;
-      }
-     </string>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="themeSwitchButton">
+   <property name="geometry">
+    <rect>
+     <x>1330</x>
+     <y>0</y>
+     <width>111</width>
+     <height>101</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::FocusPolicy::NoFocus</enum>
    </property>
    <property name="text">
     <string/>
@@ -419,6 +293,7 @@
   <zorder>profilePanel</zorder>
   <zorder>mushroomMessage</zorder>
   <zorder>overlayButton_arrow</zorder>
+  <zorder>themeSwitchButton</zorder>
  </widget>
  <resources>
   <include location="../../Resources.qrc"/>

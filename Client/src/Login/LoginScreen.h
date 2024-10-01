@@ -3,8 +3,6 @@
 
 #include <QWidget>
 #include <QTcpSocket>
-#include <QJsonObject>
-#include <QJsonDocument>
 #include "src/Profile/ProfileScreen.h"
 
 namespace Ui {
@@ -25,11 +23,13 @@ signals:
 private slots:
     void onLoginButtonClicked();
     void onReadyRead();
+    void onThemeSwitchButtonClicked();
+    void onThemeChanged(const QString& newTheme); // Слот для обновления UI при смене темы
 
 private:
     Ui::Client *ui;
     QTcpSocket *socket;
-    QString sessionID;  // Added member variable to store sessionID
+    QString sessionID;
 
     void sendLoginRequest(const QString &login, const QString &password);
     void saveSession(const QString &sessionID);
@@ -39,8 +39,8 @@ private:
     void openChatScreen(const QString &sessionID, const QString &userLogin);
     void connectToServer();
 
-    bool profileRequested = false;  // Flag for profile request
-    ProfileScreen *profileScreen = nullptr;  // Pointer to profile screen
+    bool profileRequested = false;
+    ProfileScreen *profileScreen = nullptr;
 };
 
 #endif // LOGINSCREEN_H

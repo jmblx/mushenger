@@ -41,6 +41,7 @@ public:
     QPushButton *backButton;
     QLabel *background;
     QPushButton *overlayButton_arrow;
+    QPushButton *themeSwitchButton;
 
     void setupUi(QWidget *ProfileScreen)
     {
@@ -49,17 +50,6 @@ public:
         ProfileScreen->resize(1440, 1024);
         ProfileScreen->setMinimumSize(QSize(1440, 1024));
         ProfileScreen->setMaximumSize(QSize(1440, 1024));
-        ProfileScreen->setAutoFillBackground(false);
-        ProfileScreen->setStyleSheet(QString::fromUtf8("\n"
-"    QFrame#profilePanel {\n"
-"      border: 2px solid black;\n"
-"      border-radius: 10px;\n"
-"      background-color: transparent;\n"
-"    }\n"
-"    * {\n"
-"      font-family: 'Inter';\n"
-"    }\n"
-"   "));
         profilePanel = new QFrame(ProfileScreen);
         profilePanel->setObjectName("profilePanel");
         profilePanel->setGeometry(QRect(200, 50, 408, 342));
@@ -109,7 +99,6 @@ public:
         fontSizeLabel = new QLabel(ProfileScreen);
         fontSizeLabel->setObjectName("fontSizeLabel");
         fontSizeLabel->setGeometry(QRect(770, 80, 181, 111));
-        fontSizeLabel->setStyleSheet(QString::fromUtf8("color: #0D1321; font-size: 46px;"));
         fontSizeLabel->setWordWrap(true);
         fontSizeSpinBox = new QSpinBox(ProfileScreen);
         fontSizeSpinBox->setObjectName("fontSizeSpinBox");
@@ -134,12 +123,16 @@ public:
         background = new QLabel(ProfileScreen);
         background->setObjectName("background");
         background->setGeometry(QRect(-2, -5, 1451, 1031));
-        background->setPixmap(QPixmap(QString::fromUtf8(":/images/profile_screen.png")));
+        background->setPixmap(QPixmap(QString::fromUtf8(":/images/light/profile_screen.png")));
         background->setScaledContents(true);
         overlayButton_arrow = new QPushButton(ProfileScreen);
         overlayButton_arrow->setObjectName("overlayButton_arrow");
         overlayButton_arrow->setGeometry(QRect(10, 10, 28, 28));
         overlayButton_arrow->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+        themeSwitchButton = new QPushButton(ProfileScreen);
+        themeSwitchButton->setObjectName("themeSwitchButton");
+        themeSwitchButton->setGeometry(QRect(1330, 0, 111, 101));
+        themeSwitchButton->setFocusPolicy(Qt::FocusPolicy::NoFocus);
         background->raise();
         backButton->raise();
         fontSizeLabel->raise();
@@ -149,6 +142,7 @@ public:
         profilePanel->raise();
         mushroomMessage->raise();
         overlayButton_arrow->raise();
+        themeSwitchButton->raise();
 
         retranslateUi(ProfileScreen);
 
@@ -158,120 +152,17 @@ public:
     void retranslateUi(QWidget *ProfileScreen)
     {
         ProfileScreen->setWindowTitle(QCoreApplication::translate("ProfileScreen", "Profile Screen", nullptr));
-        loginLabel->setStyleSheet(QCoreApplication::translate("ProfileScreen", "color: #0D1321; font-size: 48px;", nullptr));
         loginLabel->setText(QCoreApplication::translate("ProfileScreen", "{username}", nullptr));
-        logoutButtonIcon->setStyleSheet(QCoreApplication::translate("ProfileScreen", "\n"
-"         QPushButton {\n"
-"          border: none;\n"
-"          background: none;\n"
-"          padding: 0px;\n"
-"         }\n"
-"        ", nullptr));
-        logoutText->setStyleSheet(QCoreApplication::translate("ProfileScreen", "color: #0D1321; font-size: 12px;", nullptr));
         logoutText->setText(QCoreApplication::translate("ProfileScreen", "\320\222\321\213\320\271\321\202\320\270", nullptr));
-        overlayButton->setStyleSheet(QCoreApplication::translate("ProfileScreen", "\n"
-"      QPushButton {\n"
-"       background: transparent;\n"
-"       border: none;\n"
-"      }\n"
-"     ", nullptr));
         overlayButton->setText(QString());
-        mushroomMessage->setStyleSheet(QCoreApplication::translate("ProfileScreen", "\n"
-"     QLabel {\n"
-"      background-color: #D8DCE4;\n"
-"      border-radius: 10px;\n"
-"      color: #0D1321;\n"
-"      font-size: 33px;\n"
-"     }\n"
-"    ", nullptr));
         mushroomMessage->setText(QCoreApplication::translate("ProfileScreen", "{message}", nullptr));
         fontSizeLabel->setText(QCoreApplication::translate("ProfileScreen", "\320\240\320\260\320\267\320\274\320\265\321\200 \321\210\321\200\320\270\321\204\321\202\320\260:", nullptr));
-        fontSizeSpinBox->setStyleSheet(QCoreApplication::translate("ProfileScreen", "\n"
-"     QSpinBox {\n"
-"      color: #0D1321;\n"
-"      background-color: #E5E5E5;\n"
-"      font-size: 48px;\n"
-"      border: none;\n"
-"      padding-right: 90px;\n"
-"      padding-left: 10px;\n"
-"     }\n"
-"     QSpinBox::up-button {\n"
-"      subcontrol-origin: padding;\n"
-"      subcontrol-position: right;\n"
-"      width: 50px;\n"
-"      height: 105px;\n"
-"      background-color: #FFFFFF;\n"
-"      border: none;\n"
-"     }\n"
-"     QSpinBox::down-button {\n"
-"      subcontrol-origin: padding;\n"
-"      subcontrol-position: right;\n"
-"      right: 55px;\n"
-"      width: 50px;\n"
-"      height: 105px;\n"
-"      background-color: #FFFFFF;\n"
-"      border: none;\n"
-"     }\n"
-"     QSpinBox::up-arrow {\n"
-"      image: url(:/images/plus_icon.svg);\n"
-"      width: 20px;\n"
-"      height: 20px;\n"
-"     }\n"
-"     QSpinBox::down-arrow {\n"
-"      image: url(:/images/minus_icon.svg);\n"
-"      width: 20px;\n"
-"      height: 20px;\n"
-"     }\n"
-"    ", nullptr));
-        fontLabel->setStyleSheet(QCoreApplication::translate("ProfileScreen", "color: #0D1321; font-size: 48px;", nullptr));
         fontLabel->setText(QCoreApplication::translate("ProfileScreen", "\320\250\321\200\320\270\321\204\321\202:", nullptr));
         fontComboBox->setItemText(0, QCoreApplication::translate("ProfileScreen", "Inter", nullptr));
 
-        fontComboBox->setStyleSheet(QCoreApplication::translate("ProfileScreen", "\n"
-"     QComboBox {\n"
-"      color: #0D1321;\n"
-"      background-color: #E5E5E5;\n"
-"      font-size: 48px;\n"
-"      padding-left: 10px;\n"
-"      padding-right: 50px;\n"
-"      border: none;\n"
-"     }\n"
-"     QComboBox::drop-down {\n"
-"      subcontrol-origin: padding;\n"
-"      subcontrol-position: right;\n"
-"      width: 50px;\n"
-"      background-color: #FFFFFF;\n"
-"      border: none;\n"
-"     }\n"
-"     QComboBox::down-arrow {\n"
-"      image: url(:/images/down_arrow_icon.svg);\n"
-"      width: 20px;\n"
-"      height: 20px;\n"
-"     }\n"
-"    QComboBox QAbstractItemView {\n"
-"      color: #0D1321;\n"
-"      background-color: #E5E5E5;\n"
-"      font-size: 48px;\n"
-"      selection-background-color: #D3D3D3;\n"
-"     }\n"
-"    ", nullptr));
-        backButton->setStyleSheet(QCoreApplication::translate("ProfileScreen", "\n"
-"     QPushButton {\n"
-"      border: none;\n"
-"      background: none;\n"
-"     }\n"
-"     QPushButton::hover {\n"
-"      background: none;\n"
-"     }\n"
-"    ", nullptr));
         background->setText(QString());
-        overlayButton_arrow->setStyleSheet(QCoreApplication::translate("ProfileScreen", "\n"
-"      QPushButton {\n"
-"       background: transparent;\n"
-"       border: none;\n"
-"      }\n"
-"     ", nullptr));
         overlayButton_arrow->setText(QString());
+        themeSwitchButton->setText(QString());
     } // retranslateUi
 
 };

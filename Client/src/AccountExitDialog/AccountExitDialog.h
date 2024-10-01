@@ -15,6 +15,9 @@ public:
     explicit AccountExitDialog(QWidget *parent = nullptr);
     ~AccountExitDialog();
 
+private slots:
+    void onThemeChanged(const QString& newTheme);
+
 private:
     Ui::AccountExitDialog *ui;
 };

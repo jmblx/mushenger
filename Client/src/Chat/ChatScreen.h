@@ -4,8 +4,6 @@
 #include <QWidget>
 #include <QTcpSocket>
 #include <QListWidgetItem>
-#include <QJsonObject>    // Include for QJsonObject
-#include <QJsonArray>     // Include for QJsonArray
 
 namespace Ui {
 class ChatScreen;
@@ -30,6 +28,8 @@ private slots:
     bool checkUserExists(const QString &username);
     void sendAvatarToServer(const QByteArray &avatarData, const QString &chatName);
     void onAvatarClicked();
+    void onThemeSwitchButtonClicked();
+    void onThemeChanged(const QString& newTheme); // Слот для обновления UI при смене темы
 
 signals:
     void requestLogin();
@@ -41,7 +41,6 @@ private:
     QString currentChatID;
     QString currentUserLogin;
 
-    // Added missing method declarations
     void connectToServer();
     void sendRequest(const QJsonObject &request);
     QByteArray processAvatar(const QString &filePath);

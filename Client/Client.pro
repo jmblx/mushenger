@@ -10,12 +10,14 @@ SOURCES += \
     src/AccountExitDialog/AccountExitDialog.cpp \
     src/Login/LoginScreen.cpp \
     src/Profile/ProfileScreen.cpp \
+    src/ThemeManager/ThemeManager.cpp
 
 HEADERS += \
     src/AccountExitDialog/AccountExitDialog.h \
     src/Login/LoginScreen.h \
     src/Profile/ProfileScreen.h \
     src/Chat/ChatScreen.h \
+    src/ThemeManager/ThemeManager.h \
     ui_ProfileScreen.h \
     ui_LoginScreen.h \
     ui_AccountExitDialog.h\
@@ -29,6 +31,9 @@ FORMS += \
     src/Login/LoginScreen.ui\
 
 RESOURCES += Resources.qrc
+
+OTHER_FILES += styles/light.qss \
+    styles/dark.qss
 
 RC_FILE=images/mushenger.rc
 

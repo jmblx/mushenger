@@ -1,27 +1,39 @@
 #include "ChatScreen.h"
 #include "ui_ChatScreen.h"
+#include "src/ThemeManager/ThemeManager.h"
 #include "src/Profile/ProfileScreen.h"
 #include <QInputDialog>
-#include <QMessageBox>    // Include for QMessageBox
+#include <QMessageBox>
 #include <QFileDialog>
 #include <QJsonDocument>
 #include <QBuffer>
 #include <QImage>
-#include <QJsonObject>    // Include for QJsonObject
-#include <QJsonArray>     // Include for QJsonArray
-#include <QDebug>         // Include for qDebug()
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QDebug>
 
 ChatScreen::ChatScreen(const QString &sessionID, const QString &userLogin, QWidget *parent)
-    : QWidget(parent), ui(new Ui::ChatScreen), socket(new QTcpSocket(this)), sessionID(sessionID), currentUserLogin(userLogin)
+    : QWidget(parent),
+    ui(new Ui::ChatScreen),
+    socket(new QTcpSocket(this)),
+    sessionID(sessionID),
+    currentUserLogin(userLogin)
 {
     ui->setupUi(this);
+    ui->userName->setText(currentUserLogin);
+
     connect(ui->chatsList, &QListWidget::itemClicked, this, &ChatScreen::onChatSelected);
     connect(ui->sendButton, &QPushButton::clicked, this, &ChatScreen::onSendMessageClicked);
     connect(socket, &QTcpSocket::readyRead, this, &ChatScreen::onReadyRead);
     connect(ui->messageInput, &QLineEdit::returnPressed, this, &ChatScreen::onEnterPressed);
     connect(ui->newChat, &QPushButton::clicked, this, &ChatScreen::onNewChatClicked);
     connect(ui->avatarButton, &QPushButton::clicked, this, &ChatScreen::onAvatarClicked);
-    ui->userName->setText(currentUserLogin);
+    connect(ui->themeSwitchButton, &QPushButton::clicked, this, &ChatScreen::onThemeSwitchButtonClicked);
+
+    // Подключение к ThemeManager
+    connect(&ThemeManager::instance(), &ThemeManager::themeChanged, this, &ChatScreen::onThemeChanged);
+    // Применение текущей темы
+    onThemeChanged(ThemeManager::instance().currentTheme());
 
     connectToServer();
     loadChats();
@@ -30,7 +42,33 @@ ChatScreen::ChatScreen(const QString &sessionID, const QString &userLogin, QWidg
 ChatScreen::~ChatScreen()
 {
     delete ui;
-    // No need to delete socket; it's parented to this class
+}
+
+void ChatScreen::onThemeSwitchButtonClicked()
+{
+    ThemeManager::instance().toggleTheme();
+}
+
+void ChatScreen::onThemeChanged(const QString& newTheme)
+{
+    QString backgroundPath = QString(":/images/%1/chat_screen.png").arg(newTheme);
+    QPixmap backgroundPixmap(backgroundPath);
+    if (!backgroundPixmap.isNull()) {
+        ui->background->setPixmap(backgroundPixmap);
+    } else {
+        qDebug() << "Failed to load background image:" << backgroundPath;
+    }
+
+    QIcon sendIcon(QString(":/images/%1/send_message_icon.svg").arg(newTheme));
+    ui->sendButton->setIcon(sendIcon);
+
+    QString profileIconPath = QString(":/images/%1/profile-circled.svg").arg(newTheme);
+    QPixmap profileIcon(profileIconPath);
+    if (!profileIcon.isNull()) {
+        ui->userAvatar->setPixmap(profileIcon);
+    } else {
+        qDebug() << "Failed to load profile icon:" << profileIconPath;
+    }
 }
 
 void ChatScreen::connectToServer()

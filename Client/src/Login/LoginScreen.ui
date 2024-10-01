@@ -28,27 +28,6 @@
   <property name="windowTitle">
    <string>Client</string>
   </property>
-  <property name="autoFillBackground">
-   <bool>false</bool>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">#Client {
-    background-image: url(:/images/auth_screen.png);
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-QLineEdit {
-      border: 0.5px solid rgb(147, 150, 154);
-      border-radius: 6px;
-
-      min-width: 80px;
-	  font-family: &quot;Microsoft YaHei&quot;;
-	  font-size:11pt;
-	  font-weight: bold;
-	  color:rgb(147, 150, 154);
-  }</string>
-  </property>
   <widget class="QLineEdit" name="LoginInput">
    <property name="geometry">
     <rect>
@@ -69,22 +48,6 @@ QLineEdit {
      <width>600</width>
      <height>70</height>
     </size>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QLineEdit {
-    border: 2px solid #0D1321;     /* Цвет обводки */
-    border-radius: 10px;           /* Скругление углов */
-    padding: 10px;                 /* Отступ внутри поля */
-    font-size: 20px;               /* Размер текста для основного текста и плейсхолдера */
-    color: #0D1321;                /* Цвет основного текста */
-    background: transparent;       /* Прозрачный фон */
-}
-
-QLineEdit::placeholder {
-    color: #0D1321;                /* Цвет текста плейсхолдера */
-    background: transparent;       /* Прозрачный фон для плейсхолдера */
-}
-</string>
    </property>
    <property name="text">
     <string/>
@@ -114,22 +77,6 @@ QLineEdit::placeholder {
      <height>70</height>
     </size>
    </property>
-   <property name="styleSheet">
-    <string notr="true">QLineEdit {
-    border: 2px solid #0D1321;     /* Цвет обводки */
-    border-radius: 10px;           /* Скругление углов */
-    padding: 10px;                 /* Отступ внутри поля */
-    font-size: 20px;               /* Размер текста для основного текста и плейсхолдера */
-    color: #0D1321;                /* Цвет основного текста */
-    background: transparent;       /* Прозрачный фон */
-}
-
-QLineEdit::placeholder {
-    color: #0D1321;                /* Цвет текста плейсхолдера */
-    background: transparent;       /* Прозрачный фон для плейсхолдера */
-}
-</string>
-   </property>
    <property name="placeholderText">
     <string>Пароль</string>
    </property>
@@ -143,27 +90,11 @@ QLineEdit::placeholder {
      <height>81</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true">QPushButton {
-    background-color: #C21B1B;  /* Цвет фона */
-    color: white;        /* Цвет текста */
-    font-size: 24px;            /* Размер шрифта */
-    border-radius: 30px;        /* Закругленные углы */
-    padding: 10px 20px;         /* Внутренние отступы */
-    background: transparent;       /* Прозрачный фон */
-    background-color: #C21B1B; 
-}
-
-QPushButton:hover {
-    background-color: #A51A1A;  /* Изменение цвета при наведении */
-}
-</string>
-   </property>
    <property name="text">
     <string>Войти</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="background">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -176,13 +107,33 @@ QPushButton:hover {
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="../../Resources.qrc">:/images/auth_screen.png</pixmap>
+    <pixmap resource="../../Resources.qrc">:/images/light/auth_screen.png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
    </property>
   </widget>
-  <zorder>label</zorder>
+  <widget class="QPushButton" name="themeSwitchButton">
+   <property name="geometry">
+    <rect>
+     <x>1320</x>
+     <y>0</y>
+     <width>121</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::FocusPolicy::NoFocus</enum>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <zorder>background</zorder>
   <zorder>LoginInput</zorder>
   <zorder>PwdInput</zorder>
   <zorder>LoginButton</zorder>
+  <zorder>themeSwitchButton</zorder>
  </widget>
  <resources>
   <include location="../../Resources.qrc"/>

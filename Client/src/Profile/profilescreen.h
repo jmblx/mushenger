@@ -3,8 +3,6 @@
 
 #include <QWidget>
 #include <QTcpSocket>
-#include <QJsonObject>    // Added include for QJsonObject
-#include <QMessageBox>    // Added include for QMessageBox if used
 
 namespace Ui {
 class ProfileScreen;
@@ -13,6 +11,7 @@ class ProfileScreen;
 class ProfileScreen : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit ProfileScreen(const QString &sessionID, const QString &userLogin, QWidget *parent = nullptr);
     ~ProfileScreen();
@@ -20,6 +19,8 @@ public:
 private slots:
     void onOverlayButtonClicked();
     void onOverlayButtonArrowClicked();
+    void onThemeSwitchButtonClicked();
+    void onThemeChanged(const QString& newTheme); // Слот для обновления UI при смене темы
 
 private:
     Ui::ProfileScreen *ui;

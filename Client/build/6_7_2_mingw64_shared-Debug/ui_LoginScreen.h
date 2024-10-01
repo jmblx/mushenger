@@ -24,7 +24,8 @@ public:
     QLineEdit *LoginInput;
     QLineEdit *PwdInput;
     QPushButton *LoginButton;
-    QLabel *label;
+    QLabel *background;
+    QPushButton *themeSwitchButton;
 
     void setupUi(QWidget *Client)
     {
@@ -34,89 +35,33 @@ public:
         Client->resize(1440, 1024);
         Client->setMinimumSize(QSize(1440, 1024));
         Client->setMaximumSize(QSize(1440, 1024));
-        Client->setAutoFillBackground(false);
-        Client->setStyleSheet(QString::fromUtf8("#Client {\n"
-"    background-image: url(:/images/auth_screen.png);\n"
-"    background-repeat: no-repeat;\n"
-"    background-position: center;\n"
-"}\n"
-"\n"
-"QLineEdit {\n"
-"      border: 0.5px solid rgb(147, 150, 154);\n"
-"      border-radius: 6px;\n"
-"\n"
-"      min-width: 80px;\n"
-"	  font-family: \"Microsoft YaHei\";\n"
-"	  font-size:11pt;\n"
-"	  font-weight: bold;\n"
-"	  color:rgb(147, 150, 154);\n"
-"  }"));
         LoginInput = new QLineEdit(Client);
         LoginInput->setObjectName("LoginInput");
         LoginInput->setGeometry(QRect(720, 500, 600, 70));
         LoginInput->setMinimumSize(QSize(104, 70));
         LoginInput->setBaseSize(QSize(600, 70));
-        LoginInput->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
-"    border: 2px solid #0D1321;     /* \320\246\320\262\320\265\321\202 \320\276\320\261\320\262\320\276\320\264\320\272\320\270 */\n"
-"    border-radius: 10px;           /* \320\241\320\272\321\200\321\203\320\263\320\273\320\265\320\275\320\270\320\265 \321\203\320\263\320\273\320\276\320\262 */\n"
-"    padding: 10px;                 /* \320\236\321\202\321\201\321\202\321\203\320\277 \320\262\320\275\321\203\321\202\321\200\320\270 \320\277\320\276\320\273\321\217 */\n"
-"    font-size: 20px;               /* \320\240\320\260\320\267\320\274\320\265\321\200 \321\202\320\265\320\272\321\201\321\202\320\260 \320\264\320\273\321\217 \320\276\321\201\320\275\320\276\320\262\320\275\320\276\320\263\320\276 \321\202\320\265\320\272\321\201\321\202\320\260 \320\270 \320\277\320\273\320\265\320\271\321\201\321\205\320\276\320\273\320\264\320\265\321\200\320\260 */\n"
-"    color: #0D1321;                /* \320\246\320\262\320\265\321\202 \320\276\321\201\320\275\320\276\320\262\320\275\320\276\320\263"
-                        "\320\276 \321\202\320\265\320\272\321\201\321\202\320\260 */\n"
-"    background: transparent;       /* \320\237\321\200\320\276\320\267\321\200\320\260\321\207\320\275\321\213\320\271 \321\204\320\276\320\275 */\n"
-"}\n"
-"\n"
-"QLineEdit::placeholder {\n"
-"    color: #0D1321;                /* \320\246\320\262\320\265\321\202 \321\202\320\265\320\272\321\201\321\202\320\260 \320\277\320\273\320\265\320\271\321\201\321\205\320\276\320\273\320\264\320\265\321\200\320\260 */\n"
-"    background: transparent;       /* \320\237\321\200\320\276\320\267\321\200\320\260\321\207\320\275\321\213\320\271 \321\204\320\276\320\275 \320\264\320\273\321\217 \320\277\320\273\320\265\320\271\321\201\321\205\320\276\320\273\320\264\320\265\321\200\320\260 */\n"
-"}\n"
-""));
         PwdInput = new QLineEdit(Client);
         PwdInput->setObjectName("PwdInput");
         PwdInput->setGeometry(QRect(720, 590, 600, 70));
         PwdInput->setMinimumSize(QSize(104, 70));
         PwdInput->setBaseSize(QSize(600, 70));
-        PwdInput->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
-"    border: 2px solid #0D1321;     /* \320\246\320\262\320\265\321\202 \320\276\320\261\320\262\320\276\320\264\320\272\320\270 */\n"
-"    border-radius: 10px;           /* \320\241\320\272\321\200\321\203\320\263\320\273\320\265\320\275\320\270\320\265 \321\203\320\263\320\273\320\276\320\262 */\n"
-"    padding: 10px;                 /* \320\236\321\202\321\201\321\202\321\203\320\277 \320\262\320\275\321\203\321\202\321\200\320\270 \320\277\320\276\320\273\321\217 */\n"
-"    font-size: 20px;               /* \320\240\320\260\320\267\320\274\320\265\321\200 \321\202\320\265\320\272\321\201\321\202\320\260 \320\264\320\273\321\217 \320\276\321\201\320\275\320\276\320\262\320\275\320\276\320\263\320\276 \321\202\320\265\320\272\321\201\321\202\320\260 \320\270 \320\277\320\273\320\265\320\271\321\201\321\205\320\276\320\273\320\264\320\265\321\200\320\260 */\n"
-"    color: #0D1321;                /* \320\246\320\262\320\265\321\202 \320\276\321\201\320\275\320\276\320\262\320\275\320\276\320\263"
-                        "\320\276 \321\202\320\265\320\272\321\201\321\202\320\260 */\n"
-"    background: transparent;       /* \320\237\321\200\320\276\320\267\321\200\320\260\321\207\320\275\321\213\320\271 \321\204\320\276\320\275 */\n"
-"}\n"
-"\n"
-"QLineEdit::placeholder {\n"
-"    color: #0D1321;                /* \320\246\320\262\320\265\321\202 \321\202\320\265\320\272\321\201\321\202\320\260 \320\277\320\273\320\265\320\271\321\201\321\205\320\276\320\273\320\264\320\265\321\200\320\260 */\n"
-"    background: transparent;       /* \320\237\321\200\320\276\320\267\321\200\320\260\321\207\320\275\321\213\320\271 \321\204\320\276\320\275 \320\264\320\273\321\217 \320\277\320\273\320\265\320\271\321\201\321\205\320\276\320\273\320\264\320\265\321\200\320\260 */\n"
-"}\n"
-""));
         LoginButton = new QPushButton(Client);
         LoginButton->setObjectName("LoginButton");
         LoginButton->setGeometry(QRect(880, 730, 231, 81));
-        LoginButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"    background-color: #C21B1B;  /* \320\246\320\262\320\265\321\202 \321\204\320\276\320\275\320\260 */\n"
-"    color: white;        /* \320\246\320\262\320\265\321\202 \321\202\320\265\320\272\321\201\321\202\320\260 */\n"
-"    font-size: 24px;            /* \320\240\320\260\320\267\320\274\320\265\321\200 \321\210\321\200\320\270\321\204\321\202\320\260 */\n"
-"    border-radius: 30px;        /* \320\227\320\260\320\272\321\200\321\203\320\263\320\273\320\265\320\275\320\275\321\213\320\265 \321\203\320\263\320\273\321\213 */\n"
-"    padding: 10px 20px;         /* \320\222\320\275\321\203\321\202\321\200\320\265\320\275\320\275\320\270\320\265 \320\276\321\202\321\201\321\202\321\203\320\277\321\213 */\n"
-"    background: transparent;       /* \320\237\321\200\320\276\320\267\321\200\320\260\321\207\320\275\321\213\320\271 \321\204\320\276\320\275 */\n"
-"    background-color: #C21B1B; \n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #A51A1A;  /* \320\230\320\267\320\274\320\265\320"
-                        "\275\320\265\320\275\320\270\320\265 \321\206\320\262\320\265\321\202\320\260 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\270\320\270 */\n"
-"}\n"
-""));
-        label = new QLabel(Client);
-        label->setObjectName("label");
-        label->setGeometry(QRect(0, 0, 1440, 1024));
-        label->setPixmap(QPixmap(QString::fromUtf8(":/images/auth_screen.png")));
-        label->raise();
+        background = new QLabel(Client);
+        background->setObjectName("background");
+        background->setGeometry(QRect(0, 0, 1440, 1024));
+        background->setPixmap(QPixmap(QString::fromUtf8(":/images/light/auth_screen.png")));
+        background->setScaledContents(true);
+        themeSwitchButton = new QPushButton(Client);
+        themeSwitchButton->setObjectName("themeSwitchButton");
+        themeSwitchButton->setGeometry(QRect(1320, 0, 121, 151));
+        themeSwitchButton->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+        background->raise();
         LoginInput->raise();
         PwdInput->raise();
         LoginButton->raise();
+        themeSwitchButton->raise();
 
         retranslateUi(Client);
 
@@ -130,7 +75,8 @@ public:
         LoginInput->setPlaceholderText(QCoreApplication::translate("Client", "\320\233\320\276\320\263\320\270\320\275", nullptr));
         PwdInput->setPlaceholderText(QCoreApplication::translate("Client", "\320\237\320\260\321\200\320\276\320\273\321\214", nullptr));
         LoginButton->setText(QCoreApplication::translate("Client", "\320\222\320\276\320\271\321\202\320\270", nullptr));
-        label->setText(QString());
+        background->setText(QString());
+        themeSwitchButton->setText(QString());
     } // retranslateUi
 
 };
