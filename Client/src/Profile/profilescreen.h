@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QTcpSocket>
+#include "src/AnimatedButton/AnimatedButton.h"
 
 namespace Ui {
 class ProfileScreen;
@@ -18,15 +19,23 @@ public:
 
 private slots:
     void onOverlayButtonClicked();
-    void onOverlayButtonArrowClicked();
+    void onBackButtonClicked();
     void onThemeSwitchButtonClicked();
     void onThemeChanged(const QString& newTheme); // Слот для обновления UI при смене темы
+
+    // Слоты для hover событий overlayButton
+    void onOverlayButtonHoverEntered();
+    void onOverlayButtonHoverLeft();
 
 private:
     Ui::ProfileScreen *ui;
     QTcpSocket *socket;
     QString sessionID;
     QString currentUserLogin;
+
+    AnimatedButton *profileButton;
+    AnimatedButton *backButton;
+    AnimatedButton *overlayButton;
 
     void connectToServer();
     void loadSession();

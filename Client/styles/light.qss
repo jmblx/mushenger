@@ -8,12 +8,22 @@
 QPushButton#sendButton,
 QPushButton#avatarButton,
 QPushButton#themeSwitchButton,
+AnimatedButton#profileButton,
 QPushButton#overlayButton,
 QPushButton#overlayButton_arrow,
 QPushButton#backButton,
 QPushButton#logoutButtonIcon {
   background: transparent;
   border: none;
+}
+
+AnimatedButton {
+    background: transparent;
+    border: none;
+}
+AnimatedButton#backButton {
+  border: none;
+  background: none;
 }
 
 /* Стили для QLineEdit */
@@ -187,15 +197,6 @@ QComboBox#fontComboBox QAbstractItemView {
   background-color: #E5E5E5;
   font-size: 48px;
   selection-background-color: #D3D3D3;
-}
-
-/* Стили для QPushButton#backButton */
-QPushButton#backButton {
-  border: none;
-  background: none;
-}
-QPushButton#backButton::hover {
-  background: none;
 }
 
 /* Стили для QPushButton#yesButton */

@@ -19,6 +19,7 @@
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include "src/AnimatedButton/AnimatedButton.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -32,16 +33,16 @@ public:
     QVBoxLayout *verticalLayout;
     QPushButton *logoutButtonIcon;
     QLabel *logoutText;
-    QPushButton *overlayButton;
-    QLabel *mushroomMessage;
+    AnimatedButton *overlayButton;
+    AnimatedButton *profileButton;
     QLabel *fontSizeLabel;
     QSpinBox *fontSizeSpinBox;
     QLabel *fontLabel;
     QComboBox *fontComboBox;
-    QPushButton *backButton;
-    QLabel *background;
-    QPushButton *overlayButton_arrow;
+    AnimatedButton *backButton;
+    QLabel *mushroomMessage;
     QPushButton *themeSwitchButton;
+    QLabel *background;
 
     void setupUi(QWidget *ProfileScreen)
     {
@@ -57,12 +58,12 @@ public:
         profilePanel->setFrameShadow(QFrame::Shadow::Plain);
         profileIcon = new QLabel(profilePanel);
         profileIcon->setObjectName("profileIcon");
-        profileIcon->setGeometry(QRect(130, 40, 161, 151));
-        profileIcon->setPixmap(QPixmap(QString::fromUtf8(":/images/profile-circled.svg")));
+        profileIcon->setGeometry(QRect(130, 40, 161, 161));
+        profileIcon->setPixmap(QPixmap(QString::fromUtf8(":/images/light/profile-circled.svg")));
         profileIcon->setScaledContents(true);
         loginLabel = new QLabel(profilePanel);
         loginLabel->setObjectName("loginLabel");
-        loginLabel->setGeometry(QRect(54, 180, 300, 131));
+        loginLabel->setGeometry(QRect(54, 210, 300, 40));
         loginLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
         loginLabel->setWordWrap(true);
         logoutWidget = new QWidget(profilePanel);
@@ -74,10 +75,12 @@ public:
         verticalLayout->setContentsMargins(0, 0, 0, 0);
         logoutButtonIcon = new QPushButton(logoutWidget);
         logoutButtonIcon->setObjectName("logoutButtonIcon");
+        logoutButtonIcon->setFocusPolicy(Qt::FocusPolicy::NoFocus);
         QIcon icon;
-        icon.addFile(QString::fromUtf8(":images/door.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        icon.addFile(QString::fromUtf8(":images/light/door.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
         logoutButtonIcon->setIcon(icon);
         logoutButtonIcon->setIconSize(QSize(32, 32));
+        logoutButtonIcon->setFlat(true);
 
         verticalLayout->addWidget(logoutButtonIcon);
 
@@ -87,15 +90,15 @@ public:
 
         verticalLayout->addWidget(logoutText);
 
-        overlayButton = new QPushButton(profilePanel);
+        overlayButton = new AnimatedButton(profilePanel);
         overlayButton->setObjectName("overlayButton");
         overlayButton->setGeometry(QRect(350, 20, 40, 61));
         overlayButton->setFocusPolicy(Qt::FocusPolicy::NoFocus);
-        mushroomMessage = new QLabel(ProfileScreen);
-        mushroomMessage->setObjectName("mushroomMessage");
-        mushroomMessage->setGeometry(QRect(700, 650, 339, 160));
-        mushroomMessage->setAlignment(Qt::AlignmentFlag::AlignCenter);
-        mushroomMessage->setWordWrap(true);
+        overlayButton->setFlat(true);
+        profileButton = new AnimatedButton(profilePanel);
+        profileButton->setObjectName("profileButton");
+        profileButton->setGeometry(QRect(130, 40, 161, 161));
+        profileButton->setFlat(true);
         fontSizeLabel = new QLabel(ProfileScreen);
         fontSizeLabel->setObjectName("fontSizeLabel");
         fontSizeLabel->setGeometry(QRect(770, 80, 181, 111));
@@ -113,35 +116,37 @@ public:
         fontComboBox->addItem(QString());
         fontComboBox->setObjectName("fontComboBox");
         fontComboBox->setGeometry(QRect(1000, 220, 261, 105));
-        backButton = new QPushButton(ProfileScreen);
+        backButton = new AnimatedButton(ProfileScreen);
         backButton->setObjectName("backButton");
         backButton->setGeometry(QRect(10, 10, 28, 28));
+        backButton->setFocusPolicy(Qt::FocusPolicy::NoFocus);
         QIcon icon1;
-        icon1.addFile(QString::fromUtf8(":images/out_pointer.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        icon1.addFile(QString::fromUtf8(":images/light/out_pointer.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
         backButton->setIcon(icon1);
         backButton->setIconSize(QSize(22, 22));
-        background = new QLabel(ProfileScreen);
-        background->setObjectName("background");
-        background->setGeometry(QRect(-2, -5, 1451, 1031));
-        background->setPixmap(QPixmap(QString::fromUtf8(":/images/light/profile_screen.png")));
-        background->setScaledContents(true);
-        overlayButton_arrow = new QPushButton(ProfileScreen);
-        overlayButton_arrow->setObjectName("overlayButton_arrow");
-        overlayButton_arrow->setGeometry(QRect(10, 10, 28, 28));
-        overlayButton_arrow->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+        backButton->setFlat(true);
+        mushroomMessage = new QLabel(ProfileScreen);
+        mushroomMessage->setObjectName("mushroomMessage");
+        mushroomMessage->setGeometry(QRect(700, 650, 339, 160));
+        mushroomMessage->setAlignment(Qt::AlignmentFlag::AlignCenter);
+        mushroomMessage->setWordWrap(true);
         themeSwitchButton = new QPushButton(ProfileScreen);
         themeSwitchButton->setObjectName("themeSwitchButton");
         themeSwitchButton->setGeometry(QRect(1330, 0, 111, 101));
         themeSwitchButton->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+        background = new QLabel(ProfileScreen);
+        background->setObjectName("background");
+        background->setGeometry(QRect(0, 0, 1440, 1024));
+        background->setPixmap(QPixmap(QString::fromUtf8(":/images/light/profile_screen.png")));
+        background->setScaledContents(true);
         background->raise();
         backButton->raise();
+        profilePanel->raise();
         fontSizeLabel->raise();
         fontSizeSpinBox->raise();
         fontLabel->raise();
         fontComboBox->raise();
-        profilePanel->raise();
         mushroomMessage->raise();
-        overlayButton_arrow->raise();
         themeSwitchButton->raise();
 
         retranslateUi(ProfileScreen);
@@ -153,15 +158,16 @@ public:
     {
         ProfileScreen->setWindowTitle(QCoreApplication::translate("ProfileScreen", "Profile Screen", nullptr));
         loginLabel->setText(QCoreApplication::translate("ProfileScreen", "{username}", nullptr));
+        logoutButtonIcon->setText(QString());
         logoutText->setText(QCoreApplication::translate("ProfileScreen", "\320\222\321\213\320\271\321\202\320\270", nullptr));
         overlayButton->setText(QString());
-        mushroomMessage->setText(QCoreApplication::translate("ProfileScreen", "{message}", nullptr));
+        profileButton->setText(QString());
         fontSizeLabel->setText(QCoreApplication::translate("ProfileScreen", "\320\240\320\260\320\267\320\274\320\265\321\200 \321\210\321\200\320\270\321\204\321\202\320\260:", nullptr));
         fontLabel->setText(QCoreApplication::translate("ProfileScreen", "\320\250\321\200\320\270\321\204\321\202:", nullptr));
         fontComboBox->setItemText(0, QCoreApplication::translate("ProfileScreen", "Inter", nullptr));
 
-        background->setText(QString());
-        overlayButton_arrow->setText(QString());
+        backButton->setText(QString());
+        mushroomMessage->setText(QCoreApplication::translate("ProfileScreen", "{message}", nullptr));
         themeSwitchButton->setText(QString());
     } // retranslateUi
 

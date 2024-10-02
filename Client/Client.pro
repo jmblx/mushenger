@@ -5,15 +5,17 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
 SOURCES += \
+    src/AnimatedButton/AnimatedButton.cpp \
     src/Chat/ChatScreen.cpp \
     main.cpp \
     src/AccountExitDialog/AccountExitDialog.cpp \
     src/Login/LoginScreen.cpp \
     src/Profile/ProfileScreen.cpp \
-    src/ThemeManager/ThemeManager.cpp
+    src/ThemeManager/ThemeManager.cpp \
 
 HEADERS += \
     src/AccountExitDialog/AccountExitDialog.h \
+    src/AnimatedButton/AnimatedButton.h \
     src/Login/LoginScreen.h \
     src/Profile/ProfileScreen.h \
     src/Chat/ChatScreen.h \

@@ -6,6 +6,7 @@
     <file alias="chat_screen.png">images/light/chat_screen.png</file>
 
     <file alias="door.svg">images/light/door.svg</file>
+    <file alias="door_open.svg">images/light/door_opened.svg</file>
     <file alias="out_pointer.svg">images/light/out_pointer.svg</file>
     <file alias="profile-circled.svg">images/light/profile-circled.svg</file>
     <file alias="minus_icon.svg">images/light/minus_icon.svg</file>
@@ -28,6 +29,7 @@
     <file alias="chat_screen.png">images/dark/chat_screen.png</file>
 
     <file alias="door.svg">images/dark/door.svg</file>
+    <file alias="door_open.svg">images/dark/door_opened.svg</file>
     <file alias="out_pointer.svg">images/dark/out_pointer.svg</file>
     <file alias="profile-circled.svg">images/dark/profile-circled.svg</file>
     <file alias="minus_icon.svg">images/dark/minus_icon.svg</file>

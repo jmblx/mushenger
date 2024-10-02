@@ -10,6 +10,7 @@
 #include <QFile>
 #include <QImage>
 #include <QMessageBox>
+#include <QDebug>
 
 ProfileScreen::ProfileScreen(const QString &sessionID, const QString &userLogin, QWidget *parent) :
     QWidget(parent),
@@ -21,8 +22,37 @@ ProfileScreen::ProfileScreen(const QString &sessionID, const QString &userLogin,
     ui->setupUi(this);
     ui->loginLabel->setText(currentUserLogin);
 
+    // Приведение кнопок к AnimatedButton
+    backButton = qobject_cast<AnimatedButton*>(ui->backButton);
+    profileButton = qobject_cast<AnimatedButton*>(ui->profileButton);
+    overlayButton = qobject_cast<AnimatedButton*>(ui->overlayButton);
+
+    if (backButton) {
+        // Настройка анимации для backButton
+        backButton->setHoverAnimationProperty("iconSize", QSize(22, 22), QSize(26, 26), 200);
+    }
+
+    if (profileButton) {
+        // Настройка анимации для profileButton
+        profileButton->setHoverAnimationProperty("iconSize", QSize(161, 161), QSize(171, 171), 200);
+        // Добавление эффекта затемнения
+        profileButton->setHoverDarkenEffect(0.3, 200);
+        // Получаем текущую тему
+        QString currentTheme = ThemeManager::instance().currentTheme();
+        QString iconPath = QString(":/images/%1/plus_icon.svg").arg(currentTheme);
+        // Добавление overlay с плюсиком
+        profileButton->setupOverlayLabel(iconPath);
+    }
+
+    if (overlayButton) {
+        // Подключение сигналов hover
+        connect(overlayButton, &AnimatedButton::hoverEntered, this, &ProfileScreen::onOverlayButtonHoverEntered);
+        connect(overlayButton, &AnimatedButton::hoverLeft, this, &ProfileScreen::onOverlayButtonHoverLeft);
+    }
+
+    // Подключение сигналов и слотов
     connect(ui->overlayButton, &QPushButton::clicked, this, &ProfileScreen::onOverlayButtonClicked);
-    connect(ui->overlayButton_arrow, &QPushButton::clicked, this, &ProfileScreen::onOverlayButtonArrowClicked);
+    connect(ui->backButton, &QPushButton::clicked, this, &ProfileScreen::onBackButtonClicked);
 
     // Подключение к ThemeManager
     connect(&ThemeManager::instance(), &ThemeManager::themeChanged, this, &ProfileScreen::onThemeChanged);
@@ -69,8 +99,12 @@ void ProfileScreen::onThemeChanged(const QString& newTheme)
     } else {
         qDebug() << "Failed to load profile icon:" << profileIconPath;
     }
-}
 
+    if (profileButton) {
+        QString iconPath = QString(":/images/%1/plus_icon.svg").arg(newTheme);
+        profileButton->updateOverlayIcon(iconPath);
+    }
+}
 
 void ProfileScreen::connectToServer()
 {
@@ -78,7 +112,7 @@ void ProfileScreen::connectToServer()
         socket->connectToHost("127.0.0.1", 12345);
         if (!socket->waitForConnected(3000)) {
             qDebug() << "Ошибка: Не удалось подключиться к серверу.";
-            QMessageBox::critical(this, "Ошибка", "Не удалось подключиться к серверу."); // Added QMessageBox
+            QMessageBox::critical(this, "Ошибка", "Не удалось подключиться к серверу.");
             qApp->exit();
         } else {
             qDebug() << "Успешное подключение к серверу.";
@@ -117,11 +151,25 @@ void ProfileScreen::onOverlayButtonClicked()
     dialog.exec();
 }
 
-void ProfileScreen::onOverlayButtonArrowClicked()
+void ProfileScreen::onBackButtonClicked()
 {
     qDebug() << "Переход на экран чата с сессией:" << sessionID << " и логином:" << currentUserLogin;
 
     ChatScreen *chatScreen = new ChatScreen(sessionID, currentUserLogin);
     chatScreen->show();
     this->close();
+}
+
+void ProfileScreen::onOverlayButtonHoverEntered()
+{
+    QString currentTheme = ThemeManager::instance().currentTheme();
+    QIcon hoverIcon(QString(":/images/%1/door_open.svg").arg(currentTheme));
+    ui->logoutButtonIcon->setIcon(hoverIcon);
+}
+
+void ProfileScreen::onOverlayButtonHoverLeft()
+{
+    QString currentTheme = ThemeManager::instance().currentTheme();
+    QIcon normalIcon(QString(":/images/%1/door.svg").arg(currentTheme));
+    ui->logoutButtonIcon->setIcon(normalIcon);
 }
