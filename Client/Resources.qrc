@@ -11,6 +11,7 @@
     <file alias="profile-circled.svg">images/light/profile-circled.svg</file>
     <file alias="minus_icon.svg">images/light/minus_icon.svg</file>
     <file alias="plus_icon.svg">images/light/plus_icon.svg</file>
+    <file alias="avatar_plus_icon.svg">images/light/avatar_plus_icon.svg</file>
     <file alias="down_arrow_icon.svg">images/light/down_arrow_icon.svg</file>
 
     <file alias="group_icon.svg">images/light/group_icon.svg</file>
@@ -34,6 +35,7 @@
     <file alias="profile-circled.svg">images/dark/profile-circled.svg</file>
     <file alias="minus_icon.svg">images/dark/minus_icon.svg</file>
     <file alias="plus_icon.svg">images/dark/plus_icon.svg</file>
+    <file alias="avatar_plus_icon.svg">images/dark/avatar_plus_icon.svg</file>
     <file alias="down_arrow_icon.svg">images/dark/down_arrow_icon.svg</file>
 
     <file alias="group_icon.svg">images/dark/group_icon.svg</file>

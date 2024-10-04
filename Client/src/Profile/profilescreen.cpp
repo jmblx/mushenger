@@ -33,16 +33,20 @@ ProfileScreen::ProfileScreen(const QString &sessionID, const QString &userLogin,
     }
 
     if (profileButton) {
-        // Настройка анимации для profileButton
-        profileButton->setHoverAnimationProperty("iconSize", QSize(161, 161), QSize(171, 171), 200);
-        // Добавление эффекта затемнения
-        profileButton->setHoverDarkenEffect(0.3, 200);
-        // Получаем текущую тему
+        // Уменьшение размера иконки до половины
+        profileButton->setHoverAnimationProperty("iconSize", QSize(80, 80), QSize(85, 85), 200);
+
+        // Настройка эффекта размытия при наведении
         QString currentTheme = ThemeManager::instance().currentTheme();
-        QString iconPath = QString(":/images/%1/plus_icon.svg").arg(currentTheme);
-        // Добавление overlay с плюсиком
-        profileButton->setupOverlayLabel(iconPath);
+        if (currentTheme == "dark") {
+            profileButton->setHoverBlurEffect(QColor("#D8DCE4"), 10.0, 200);
+            profileButton->setupOverlayLabel(":/images/light/plus_icon.svg");
+        } else {
+            profileButton->setHoverBlurEffect(QColor("#0D1321"), 10.0, 200);
+            profileButton->setupOverlayLabel(":/images/dark/plus_icon.svg");
+        }
     }
+
 
     if (overlayButton) {
         // Подключение сигналов hover
@@ -101,8 +105,32 @@ void ProfileScreen::onThemeChanged(const QString& newTheme)
     }
 
     if (profileButton) {
-        QString iconPath = QString(":/images/%1/plus_icon.svg").arg(newTheme);
-        profileButton->updateOverlayIcon(iconPath);
+        // Уменьшение размера иконки до половины
+        profileButton->setHoverAnimationProperty("iconSize", QSize(80, 80), QSize(85, 85), 200);
+
+        QString currentTheme = ThemeManager::instance().currentTheme();
+        QString profilePlusIcon = QString(":/images/%1/avatar_plus_icon.svg").arg(currentTheme);
+        profileButton->setupOverlayLabel(profilePlusIcon);
+
+        if (ui->profileIcon) {
+            QGraphicsBlurEffect *blurEffect = new QGraphicsBlurEffect(ui->profileIcon);
+            blurEffect->setBlurRadius(0.0);
+            ui->profileIcon->setGraphicsEffect(blurEffect);
+
+            QPropertyAnimation *blurEnterAnimation = new QPropertyAnimation(blurEffect, "blurRadius");
+            blurEnterAnimation->setDuration(200);
+            blurEnterAnimation->setStartValue(0.0);
+            blurEnterAnimation->setEndValue(10.0);
+
+            QPropertyAnimation *blurLeaveAnimation = new QPropertyAnimation(blurEffect, "blurRadius");
+            blurLeaveAnimation->setDuration(200);
+            blurLeaveAnimation->setStartValue(10.0);
+            blurLeaveAnimation->setEndValue(0.0);
+
+            // Используем методы доступа для анимаций
+            profileButton->getHoverEnterAnimation()->addAnimation(blurEnterAnimation);
+            profileButton->getHoverLeaveAnimation()->addAnimation(blurLeaveAnimation);
+        }
     }
 }
 

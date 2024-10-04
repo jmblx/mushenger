@@ -1,3 +1,4 @@
+// AnimatedButton.h
 #ifndef ANIMATEDBUTTON_H
 #define ANIMATEDBUTTON_H
 
@@ -6,8 +7,7 @@
 #include <QParallelAnimationGroup>
 #include <QLabel>
 #include <QEnterEvent>
-#include <QGraphicsOpacityEffect>
-#include <QGraphicsColorizeEffect>
+#include <QGraphicsBlurEffect>
 
 class AnimatedButton : public QPushButton
 {
@@ -18,41 +18,34 @@ public:
 
     // Методы для настройки анимации
     void setHoverAnimationProperty(const QByteArray &propertyName, const QVariant &startValue, const QVariant &endValue, int duration = 200);
-    void setClickAnimationProperty(const QByteArray &propertyName, const QVariant &startValue, const QVariant &endValue, int duration = 100);
 
     // Методы для управления overlay
     void setupOverlayLabel(const QString &iconPath);
     void updateOverlayIcon(const QString &iconPath);
 
-    // Метод для установки эффекта затемнения при наведении
-    void setHoverDarkenEffect(qreal strength = 0.3, int duration = 200);
+    // Установка эффекта размытия
+    void setHoverBlurEffect(QColor color, qreal maxBlurRadius = 10.0, int duration = 200);
+
+    // Методы для получения анимаций
+    QParallelAnimationGroup* getHoverEnterAnimation() const { return hoverEnterAnimation; }
+    QParallelAnimationGroup* getHoverLeaveAnimation() const { return hoverLeaveAnimation; }
 
 signals:
     void hoverEntered();
     void hoverLeft();
 
 protected:
-    // Переопределение событий
     void enterEvent(QEnterEvent *event) override;
     void leaveEvent(QEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
-    // Анимационные группы для наведения и нажатия
     QParallelAnimationGroup *hoverEnterAnimation;
     QParallelAnimationGroup *hoverLeaveAnimation;
-    QParallelAnimationGroup *clickAnimation;
-    QParallelAnimationGroup *releaseAnimation;
-
     QLabel *overlayLabel;
-    QGraphicsOpacityEffect *overlayOpacityEffect;
-    QGraphicsColorizeEffect *colorizeEffect;
+    QGraphicsBlurEffect *blurEffect;
 
-    // Метод для создания анимации
     void addAnimation(QParallelAnimationGroup *group, QObject *target, const QByteArray &propertyName, const QVariant &startValue, const QVariant &endValue, int duration);
 
-    // Флаги состояния
     bool isHovered = false;
 };
 
