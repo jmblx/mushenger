@@ -36,8 +36,11 @@ namespace {
 struct qt_meta_stringdata_CLASSChatScreenENDCLASS_t {};
 constexpr auto qt_meta_stringdata_CLASSChatScreenENDCLASS = QtMocHelpers::stringData(
     "ChatScreen",
-    "onChatSelected",
+    "userCheckCompleted",
     "",
+    "username",
+    "exists",
+    "onChatSelected",
     "QListWidgetItem*",
     "item",
     "loadChats",
@@ -47,11 +50,7 @@ constexpr auto qt_meta_stringdata_CLASSChatScreenENDCLASS = QtMocHelpers::string
     "onReadyRead",
     "onEnterPressed",
     "onNewChatClicked",
-    "checkUserExists",
-    "username",
-    "sendAvatarToServer",
-    "avatarData",
-    "chatName"
+    "onUserCheckCompleted"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -69,29 +68,33 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSChatScreenENDCLASS[] = {
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags, initial metatype offsets
+       1,    2,   68,    2, 0x06,    1 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   68,    2, 0x08,    1 /* Private */,
-       5,    0,   71,    2, 0x08,    3 /* Private */,
-       6,    1,   72,    2, 0x08,    4 /* Private */,
-       8,    0,   75,    2, 0x08,    6 /* Private */,
-       9,    0,   76,    2, 0x08,    7 /* Private */,
-      10,    0,   77,    2, 0x08,    8 /* Private */,
-      11,    0,   78,    2, 0x08,    9 /* Private */,
-      12,    1,   79,    2, 0x08,   10 /* Private */,
-      14,    2,   82,    2, 0x08,   12 /* Private */,
+       5,    1,   73,    2, 0x08,    4 /* Private */,
+       8,    0,   76,    2, 0x08,    6 /* Private */,
+       9,    1,   77,    2, 0x08,    7 /* Private */,
+      11,    0,   80,    2, 0x08,    9 /* Private */,
+      12,    0,   81,    2, 0x08,   10 /* Private */,
+      13,    0,   82,    2, 0x08,   11 /* Private */,
+      14,    0,   83,    2, 0x08,   12 /* Private */,
+      15,    2,   84,    2, 0x08,   13 /* Private */,
+
+ // signals: parameters
+    QMetaType::Void, QMetaType::QString, QMetaType::Bool,    3,    4,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 3,    4,
+    QMetaType::Void, 0x80000000 | 6,    7,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,    7,
-    QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,   10,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Bool, QMetaType::QString,   13,
-    QMetaType::Void, QMetaType::QByteArray, QMetaType::QString,   15,   16,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString, QMetaType::Bool,    3,    4,
 
        0        // eod
 };
@@ -105,6 +108,10 @@ Q_CONSTINIT const QMetaObject ChatScreen::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSChatScreenENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<ChatScreen, std::true_type>,
+        // method 'userCheckCompleted'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
+        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
         // method 'onChatSelected'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<QListWidgetItem *, std::false_type>,
@@ -121,13 +128,10 @@ Q_CONSTINIT const QMetaObject ChatScreen::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onNewChatClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'checkUserExists'
-        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
-        // method 'sendAvatarToServer'
+        // method 'onUserCheckCompleted'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QByteArray &, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>
+        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
+        QtPrivate::TypeAndForceComplete<bool, std::false_type>
     >,
     nullptr
 } };
@@ -138,17 +142,25 @@ void ChatScreen::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<ChatScreen *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->onChatSelected((*reinterpret_cast< std::add_pointer_t<QListWidgetItem*>>(_a[1]))); break;
-        case 1: _t->loadChats(); break;
-        case 2: _t->loadMessages((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 3: _t->onSendMessageClicked(); break;
-        case 4: _t->onReadyRead(); break;
-        case 5: _t->onEnterPressed(); break;
-        case 6: _t->onNewChatClicked(); break;
-        case 7: { bool _r = _t->checkUserExists((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])));
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 8: _t->sendAvatarToServer((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
+        case 0: _t->userCheckCompleted((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[2]))); break;
+        case 1: _t->onChatSelected((*reinterpret_cast< std::add_pointer_t<QListWidgetItem*>>(_a[1]))); break;
+        case 2: _t->loadChats(); break;
+        case 3: _t->loadMessages((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 4: _t->onSendMessageClicked(); break;
+        case 5: _t->onReadyRead(); break;
+        case 6: _t->onEnterPressed(); break;
+        case 7: _t->onNewChatClicked(); break;
+        case 8: _t->onUserCheckCompleted((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[2]))); break;
         default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (ChatScreen::*)(const QString & , bool );
+            if (_t _q_method = &ChatScreen::userCheckCompleted; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 0;
+                return;
+            }
         }
     }
 }
@@ -181,5 +193,12 @@ int ChatScreen::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         _id -= 9;
     }
     return _id;
+}
+
+// SIGNAL 0
+void ChatScreen::userCheckCompleted(const QString & _t1, bool _t2)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 QT_WARNING_POP

@@ -127,6 +127,11 @@ private:
 
 int main(int argc, char *argv[])
 {
+    QDir dir;
+    if (!dir.exists("chat_avs")) {
+        dir.mkpath("chat_avs");
+        qDebug() << "Created directory chat_avs for storing chat avatars.";
+    }
     QCoreApplication a(argc, argv);
 
     Server server;

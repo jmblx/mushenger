@@ -1,19 +1,8 @@
 <RCC>
   <qresource prefix="/images">
     <file alias="auth_screen.png">images/auth_screen.png</file>
-    <file alias="profile_screen.png">images/profile_screen.png</file>
-    <file alias="account_exit_dialog_screen.png">images/account_exit_dialog_screen.png</file>
-    <file alias="chat_screen.png">images/chat_screen.png</file>
-
-    <file alias="door.svg">images/door.svg</file>
-    <file alias="out_pointer.svg">images/out_pointer.svg</file>
-    <file alias="profile-circled.svg">images/profile-circled.svg</file>
-    <file alias="minus_icon.svg">images/minus_icon.svg</file>
-    <file alias="plus_icon.svg">images/plus_icon.svg</file>
-    <file alias="down_arrow_icon.svg">images/down_arrow_icon.svg</file>
-
     <file alias="group_icon.png">images/group_icon.png</file>
-
+    <file alias="chat_screen.png">images/chat_screen.png</file>
     <file alias="profile-circled.svg">images/profile-circled.svg</file>
     <file alias="send_message_icon.svg">images/send_message_icon.svg</file>
   </qresource>

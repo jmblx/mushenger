@@ -1,0 +1,11 @@
+debug/mushenger_res.o
+debug/ChatScreen.o
+debug/main.o
+debug/AccountExitDialog.o
+debug/LoginScreen.o
+debug/ProfileScreen.o
+debug/qrc_Resources.o
+debug/moc_AccountExitDialog.o
+debug/moc_LoginScreen.o
+debug/moc_ProfileScreen.o
+debug/moc_ChatScreen.o

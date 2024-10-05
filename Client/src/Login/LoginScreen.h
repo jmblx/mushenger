@@ -25,6 +25,7 @@ private slots:
 private:
     Ui::Client *ui;
     QTcpSocket *socket;
+    QByteArray buffer;
 
     void sendLoginRequest(const QString &login, const QString &password);
     void saveSession(const QString &sessionID);
