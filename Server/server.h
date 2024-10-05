@@ -1,47 +1,72 @@
+// server.h
+
 #ifndef SERVER_H
 #define SERVER_H
 
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
-#include <QMap>
+#include <QHash>
+#include <QString>
 #include <QJsonObject>
+#include <QDir>
+#include <QFile>
+#include <QImage>
+
+enum class ClientState {
+    Idle,
+    ExpectingAvatar
+};
 
 class Server : public QTcpServer
 {
     Q_OBJECT
+
 public:
     explicit Server(QObject *parent = nullptr);
     void startServer(int port);
 
-private:
-    QMap<qintptr, QTcpSocket*> clients;           // Сокеты клиентов
-    QJsonObject userData;                         // Данные пользователей
-    QJsonObject chatData;                         // Данные чатов
-    QMap<QString, QString> sessionData;           // Хранение сессий (sessionID -> login)
-
-    void loadUserData();
-    void saveUserData();
-    void loadChatData();
-    void saveChatData();
-    void handleCreateChat(QTcpSocket *socket, const QJsonObject &request);
-    void handleChatRequest(QTcpSocket *socket, const QJsonObject &request);
-    void handleLoginOrRegister(QTcpSocket *socket, const QJsonObject &request);
-    void handleAvatarUpload(QTcpSocket *socket, const QJsonObject &request, const QByteArray &data);
-    void handleMessageRequest(QTcpSocket *socket, const QJsonObject &request);
-    void handleCheckUser(QTcpSocket *socket, const QJsonObject &request);
-    void handleGetUserData(QTcpSocket *socket, const QJsonObject &request);
-    void handleChatListRequest(QTcpSocket *socket, const QJsonObject &request);
-    void sendErrorResponse(QTcpSocket *socket, const QString &message);
+protected:
+    void incomingConnection(qintptr socketDescriptor) override;
 
 private slots:
-    void incomingConnection(qintptr handle) override;
     void receiveData();
-    void clientDisconnected();
+    void clientDisconnected(); // Новый слот для обработки отключений
 
-signals:
-    void playerConnected();
-    void getMessage();
+private:
+    void loadChatData();
+    void loadUserData();
+    QImage image;
+
+    // Обработка различных типов запросов
+    void handleCreateChat(QTcpSocket *socket, const QJsonObject &request);
+    void handleUploadAvatar(QTcpSocket *socket, const QJsonObject &request);
+    void handleCheckUser(QTcpSocket *socket, const QJsonObject &request);
+    void handleMessageRequest(QTcpSocket *socket, const QJsonObject &request);
+    void handleSyncMessages(QTcpSocket *socket, const QJsonObject &request);
+    void handleLoginOrRegister(QTcpSocket *socket, const QJsonObject &request);
+    void handleGetUserData(QTcpSocket *socket, const QJsonObject &request);
+    void handleChatListRequest(QTcpSocket *socket, const QJsonObject &request);
+    void handleGetAvatar(QTcpSocket *socket, const QJsonObject &request);
+    void handleLoadMessages(QTcpSocket *socket, const QJsonObject &request);
+
+    void sendErrorResponse(QTcpSocket *socket, const QString &message);
+    void saveChatData();
+    void saveUserData();
+
+    // Хранение состояний клиентов
+    QHash<qintptr, ClientState> clientStates;
+    QHash<qintptr, QString> clientPendingChatName;
+    QHash<qintptr, QString> clientPendingChatID; // Для хранения chatID при загрузке аватара
+
+    // Хранение данных чатов и пользователей
+    QHash<QString, QJsonObject> chatData;
+    QHash<QString, QJsonObject> userData;
+    QHash<QString, QString> sessionData; // sessionID -> username
+    QMap<QString, QTcpSocket*> onlineClients; // username -> socket
+
+    // Буферы для хранения неполных данных от клиентов
+    QHash<qintptr, QByteArray> clientBuffers;
 };
 
 #endif // SERVER_H

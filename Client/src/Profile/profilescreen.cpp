@@ -183,7 +183,7 @@ void ProfileScreen::onBackButtonClicked()
 {
     qDebug() << "Переход на экран чата с сессией:" << sessionID << " и логином:" << currentUserLogin;
 
-    ChatScreen *chatScreen = new ChatScreen(sessionID, currentUserLogin);
+    ChatScreen *chatScreen = new ChatScreen(sessionID, currentUserLogin, socket);
     chatScreen->show();
     this->close();
 }

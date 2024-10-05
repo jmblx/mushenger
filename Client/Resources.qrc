@@ -15,8 +15,6 @@
     <file alias="down_arrow_icon.svg">images/light/down_arrow_icon.svg</file>
 
     <file alias="group_icon.svg">images/light/group_icon.svg</file>
-
-    <file alias="profile-circled.svg">images/light/profile-circled.svg</file>
     <file alias="send_message_icon.svg">images/light/send_message_icon.svg</file>
   </qresource>
   <qresource prefix="/styles">
@@ -39,8 +37,6 @@
     <file alias="down_arrow_icon.svg">images/dark/down_arrow_icon.svg</file>
 
     <file alias="group_icon.svg">images/dark/group_icon.svg</file>
-
-    <file alias="profile-circled.svg">images/dark/profile-circled.svg</file>
     <file alias="send_message_icon.svg">images/dark/send_message_icon.svg</file>
-  </qresource>
+   </qresource>
 </RCC>

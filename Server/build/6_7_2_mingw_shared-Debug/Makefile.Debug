@@ -123,12 +123,19 @@ compiler_moc_header_clean:
 debug/moc_server.cpp: ../../server.h \
 		debug/moc_predefs.h \
 		C:/msys64/mingw64/share/qt6/bin/moc.exe
-	C:\msys64\mingw64\share\qt6\bin\moc.exe $(DEFINES) --include D:/vs/c++/qt/mushenger/Server/build/6_7_2_mingw_shared-Debug/debug/moc_predefs.h -IC:/msys64/mingw64/share/qt6/mkspecs/win32-g++ -ID:/vs/c++/qt/mushenger/Server -IC:/msys64/mingw64/include/qt6 -IC:/msys64/mingw64/include/qt6/QtWidgets -IC:/msys64/mingw64/include/qt6/QtGui -IC:/msys64/mingw64/include/qt6/QtNetwork -IC:/msys64/mingw64/include/qt6/QtCore -I. -IC:/msys64/mingw64/include/c++/14.2.0 -IC:/msys64/mingw64/include/c++/14.2.0/x86_64-w64-mingw32 -IC:/msys64/mingw64/include/c++/14.2.0/backward -IC:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include -IC:/msys64/mingw64/include -IC:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include-fixed ..\..\server.h -o debug\moc_server.cpp
+	C:\msys64\mingw64\share\qt6\bin\moc.exe $(DEFINES) --include D:/vs/c++/qt/testby/mushenger/Server/build/6_7_2_mingw_shared-Debug/debug/moc_predefs.h -IC:/msys64/mingw64/share/qt6/mkspecs/win32-g++ -ID:/vs/c++/qt/testby/mushenger/Server -IC:/msys64/mingw64/include/qt6 -IC:/msys64/mingw64/include/qt6/QtWidgets -IC:/msys64/mingw64/include/qt6/QtGui -IC:/msys64/mingw64/include/qt6/QtNetwork -IC:/msys64/mingw64/include/qt6/QtCore -I. -IC:/msys64/mingw64/include/c++/14.2.0 -IC:/msys64/mingw64/include/c++/14.2.0/x86_64-w64-mingw32 -IC:/msys64/mingw64/include/c++/14.2.0/backward -IC:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include -IC:/msys64/mingw64/include -IC:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include-fixed ..\..\server.h -o debug\moc_server.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
-compiler_moc_source_make_all:
+compiler_moc_source_make_all: debug/main.moc
 compiler_moc_source_clean:
+	-$(DEL_FILE) debug\main.moc
+debug/main.moc: ../../main.cpp \
+		../../server.h \
+		debug/moc_predefs.h \
+		C:/msys64/mingw64/share/qt6/bin/moc.exe
+	C:\msys64\mingw64\share\qt6\bin\moc.exe $(DEFINES) --include D:/vs/c++/qt/testby/mushenger/Server/build/6_7_2_mingw_shared-Debug/debug/moc_predefs.h -IC:/msys64/mingw64/share/qt6/mkspecs/win32-g++ -ID:/vs/c++/qt/testby/mushenger/Server -IC:/msys64/mingw64/include/qt6 -IC:/msys64/mingw64/include/qt6/QtWidgets -IC:/msys64/mingw64/include/qt6/QtGui -IC:/msys64/mingw64/include/qt6/QtNetwork -IC:/msys64/mingw64/include/qt6/QtCore -I. -IC:/msys64/mingw64/include/c++/14.2.0 -IC:/msys64/mingw64/include/c++/14.2.0/x86_64-w64-mingw32 -IC:/msys64/mingw64/include/c++/14.2.0/backward -IC:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include -IC:/msys64/mingw64/include -IC:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include-fixed ..\..\main.cpp -o debug\main.moc
+
 compiler_uic_make_all:
 compiler_uic_clean:
 compiler_yacc_decl_make_all:
@@ -137,13 +144,14 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_moc_source_clean 
 
 
 
 ####### Compile
 
-debug/main.o: ../../main.cpp ../../server.h
+debug/main.o: ../../main.cpp ../../server.h \
+		debug/main.moc
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\main.o ..\..\main.cpp
 
 debug/server.o: ../../server.cpp ../../server.h
