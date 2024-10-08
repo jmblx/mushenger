@@ -201,7 +201,7 @@ QPushButton#backButton::hover {
 /* Стили для QPushButton#yesButton */
 QPushButton#yesButton {
   background-color: #D8DCE4;
-  color: #D8DCE4;
+  color: #0D1321;
   font-size: 64px;
   border-radius: 39px;
 }

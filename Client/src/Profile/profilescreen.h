@@ -21,17 +21,23 @@ private slots:
     void onOverlayButtonClicked();
     void onBackButtonClicked();
     void onThemeSwitchButtonClicked();
-    void onThemeChanged(const QString& newTheme); // Слот для обновления UI при смене темы
-
-    // Слоты для hover событий overlayButton
+    void onThemeChanged(const QString& newTheme);
+    void onReadyRead();
     void onOverlayButtonHoverEntered();
     void onOverlayButtonHoverLeft();
+    void onProfileButtonClicked();
+    void updateProfileIcon(const QImage &image);
+    void onLogout();
+
+signals:
+    void sendRequestToServer(const QByteArray &request);
 
 private:
     Ui::ProfileScreen *ui;
     QTcpSocket *socket;
     QString sessionID;
     QString currentUserLogin;
+    QImage currentUserAvatar;
 
     AnimatedButton *profileButton;
     AnimatedButton *backButton;

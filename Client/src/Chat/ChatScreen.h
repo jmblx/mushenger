@@ -32,7 +32,7 @@ private slots:
     void onEnterPressed();                     // Слот для обработки нажатия Enter
     void onNewChatClicked();                   // Слот для создания нового чата
     void onUserCheckCompleted(const QString &username, bool exists);    // Слот для обработки завершения проверки пользователя
-
+    void getUserData();
     void onAvatarClicked();
     void onThemeSwitchButtonClicked();
     void onThemeChanged(const QString& newTheme); // Слот для обновления UI при смене темы
@@ -74,6 +74,7 @@ private:
     // Вспомогательные методы
     QListWidgetItem* createChatListItem(const QString &chatName, const QString &chatID); // Создание элемента списка чатов с аватаром
     void displayMessages(const QJsonArray &messages); // Отображение сообщений в интерфейсе
+    void displayUserAvatar(const QImage &avatar);
     void requestAvatar(const QString &chatID);
 
     QMap<QString, QJsonObject> localMessageCache; // Ключ: chatID, значение: объект с сообщениями и последним timestamp

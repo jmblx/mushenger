@@ -68,6 +68,9 @@
     <string>Нет</string>
    </property>
   </widget>
+  <zorder>yesButton</zorder>
+  <zorder>background</zorder>
+  <zorder>noButton</zorder>
  </widget>
  <resources/>
  <connections/>

@@ -40,8 +40,6 @@ void Server::incomingConnection(qintptr socketDescriptor)
     qDebug() << "Новый клиент подключён с дескриптором:" << socketDescriptor;
 }
 
-
-
 void Server::sendErrorResponse(QTcpSocket *socket, const QString &message)
 {
     QJsonObject response;
@@ -94,6 +92,9 @@ void Server::receiveData()
             else if (requestType == "uploadAvatar") {
                 handleUploadAvatar(clientSocket, request);
             }
+            else if (requestType == "uploadProfileAvatar") {
+                handleUploadProfileAvatar(clientSocket, request);
+            }
             else if (requestType == "checkUser") {
                 handleCheckUser(clientSocket, request);
             }
@@ -117,6 +118,9 @@ void Server::receiveData()
             }
             else if (requestType == "syncMessages") {
                 handleSyncMessages(clientSocket, request);
+            }
+            else if (requestType == "logout") {
+                handleLogout(clientSocket, request);
             }
             else {
                 sendErrorResponse(clientSocket, "Unknown request type.");
@@ -317,6 +321,7 @@ void Server::handleCheckUser(QTcpSocket *socket, const QJsonObject &request)
     QString username = request.value("username").toString();
 
     QJsonObject response;
+    response["type"] = "checkUser"; // Добавляем поле type
     response["username"] = username; // Добавляем username в ответ
 
     if (userData.contains(username)) {
@@ -332,7 +337,6 @@ void Server::handleCheckUser(QTcpSocket *socket, const QJsonObject &request)
 
     qDebug() << "Check user request for username:" << username << "- Status:" << response["status"].toString();
 }
-
 
 void Server::handleMessageRequest(QTcpSocket *socket, const QJsonObject &request)
 {
@@ -485,42 +489,6 @@ void Server::handleSyncMessages(QTcpSocket *socket, const QJsonObject &request)
     qDebug() << "Sent new messages to handle" << socket->socketDescriptor();
 }
 
-
-// Обработка запроса получения данных пользователя
-void Server::handleGetUserData(QTcpSocket *socket, const QJsonObject &request)
-{
-    QString sessionID = request.value("sessionID").toString();
-    qDebug() << "Received session ID from client:" << sessionID;
-
-    if (!sessionData.contains(sessionID)) {
-        sendErrorResponse(socket, "Invalid session.");
-        qDebug() << "Session not found:" << sessionID;
-        return;
-    }
-
-    QString login = sessionData[sessionID];
-    qDebug() << "Session found, user login:" << login;
-
-    if (!userData.contains(login)) {
-        sendErrorResponse(socket, "User not found.");
-        qDebug() << "User not found for login:" << login;
-        return;
-    }
-
-    QJsonObject userObject = userData[login];
-    QJsonObject response;
-    response["status"] = "success";
-    response["login"] = login;
-    response["user"] = userObject;
-    response["sessionID"] = sessionID;  // Возвращаем идентификатор сессии
-
-    qDebug() << "Sending user data and session for login:" << login;
-    // Пример в методе handleGetUserData:
-    socket->write(QJsonDocument(response).toJson(QJsonDocument::Compact) + "\n");
-
-    socket->flush();
-}
-
 // Обработка запроса списка чатов
 void Server::handleChatListRequest(QTcpSocket *socket, const QJsonObject &request)
 {
@@ -611,7 +579,6 @@ void Server::handleGetAvatar(QTcpSocket *clientSocket, const QJsonObject &reques
     QJsonObject response;
     response["status"] = "success";
     response["message"] = "Avatar data.";
-    response["type"] = "getAvatar";
     response["chatID"] = chatID;
     response["avatar"] = QString(avatarBase64);
 
@@ -621,7 +588,6 @@ void Server::handleGetAvatar(QTcpSocket *clientSocket, const QJsonObject &reques
     qDebug() << "Avatar sent to client for chat" << chatID;
 }
 
-// Обработка загрузки аватара
 void Server::handleUploadAvatar(QTcpSocket *socket, const QJsonObject &request)
 {
     QString chatID = request.value("chatID").toString();
@@ -685,13 +651,119 @@ void Server::handleUploadAvatar(QTcpSocket *socket, const QJsonObject &request)
     QJsonObject response;
     response["status"] = "success";
     response["message"] = "Avatar uploaded successfully.";
-    response["type"] = "uploadAvatar";
     socket->write(QJsonDocument(response).toJson(QJsonDocument::Compact) + "\n");
     socket->flush();
 
     qDebug() << "Avatar uploaded successfully for chatID" << chatID << "from handle" << socket->socketDescriptor();
 }
 
+// Обработка запроса получения данных пользователя
+void Server::handleGetUserData(QTcpSocket *socket, const QJsonObject &request)
+{
+    QString sessionID = request.value("sessionID").toString();
+    qDebug() << "Received session ID from client:" << sessionID;
+
+    if (!sessionData.contains(sessionID)) {
+        sendErrorResponse(socket, "Invalid session.");
+        qDebug() << "Session not found:" << sessionID;
+        return;
+    }
+
+    QString login = sessionData[sessionID];
+    qDebug() << "Session found, user login:" << login;
+
+    if (!userData.contains(login)) {
+        sendErrorResponse(socket, "User not found.");
+        qDebug() << "User not found for login:" << login;
+        return;
+    }
+
+    QJsonObject userObject = userData[login];
+
+    // Читаем аватарку и кодируем в Base64
+    QString avatarPath = userObject.value("avatarPath").toString();
+    QString avatarBase64;
+    if (!avatarPath.isEmpty()) {
+        QFile avatarFile(avatarPath);
+        if (avatarFile.open(QIODevice::ReadOnly)) {
+            QByteArray avatarData = avatarFile.readAll();
+            avatarBase64 = QString(avatarData.toBase64());
+            avatarFile.close();
+        }
+    }
+    userObject["avatar"] = avatarBase64;
+
+    QJsonObject response;
+    response["status"] = "success";
+    response["login"] = login;
+    response["user"] = userObject;
+    response["sessionID"] = sessionID;
+    response["type"] = "userData";
+
+    socket->write(QJsonDocument(response).toJson(QJsonDocument::Compact) + "\n");
+    socket->flush();
+}
+
+// Обработка загрузки аватара для профиля
+void Server::handleUploadProfileAvatar(QTcpSocket *socket, const QJsonObject &request)
+{
+    QString sessionID = request.value("sessionID").toString();
+    QString avatarBase64 = request.value("avatar").toString();
+
+    if (sessionID.isEmpty() || !sessionData.contains(sessionID)) {
+        sendErrorResponse(socket, "Invalid session ID.");
+        qDebug() << "Invalid session ID in uploadProfileAvatar from handle" << socket->socketDescriptor();
+        return;
+    }
+
+    QString login = sessionData[sessionID];
+
+    // Декодирование Base64
+    QByteArray avatarData = QByteArray::fromBase64(avatarBase64.toUtf8());
+
+    // Проверка корректности данных аватарки
+    QImage image;
+    if (!image.loadFromData(avatarData, "PNG")) {
+        sendErrorResponse(socket, "Invalid avatar data.");
+        qDebug() << "Invalid avatar data received for sessionID:" << sessionID;
+        return;
+    }
+
+    // Сохранение аватарки
+    QDir dir;
+    if (!dir.exists("profile_avs")) {
+        if (!dir.mkpath("profile_avs")) {
+            sendErrorResponse(socket, "Failed to create avatar directory.");
+            qDebug() << "Failed to create 'profile_avs' directory.";
+            return;
+        }
+    }
+
+    QString avatarPath = QString("profile_avs/%1.png").arg(login);
+
+    if (!image.save(avatarPath)) {
+        sendErrorResponse(socket, "Failed to save avatar.");
+        qDebug() << "Failed to save avatar for login" << login;
+        return;
+    }
+
+    // Обновление данных пользователя с путем к аватарке
+    if (userData.contains(login)) {
+        QJsonObject userObj = userData[login];
+        userObj["avatarPath"] = avatarPath;
+        userData[login] = userObj;
+        saveUserData();
+    }
+
+    // Отправка успешного ответа клиенту
+    QJsonObject response;
+    response["status"] = "success";
+    response["message"] = "Avatar uploaded successfully.";
+    socket->write(QJsonDocument(response).toJson(QJsonDocument::Compact) + "\n");
+    socket->flush();
+
+    qDebug() << "Avatar uploaded successfully for login" << login << "from handle" << socket->socketDescriptor();
+}
 
 // Метод для загрузки данных пользователей из файла
 void Server::loadUserData()
@@ -890,4 +962,35 @@ void Server::handleLoadMessages(QTcpSocket *socket, const QJsonObject &request)
     socket->flush();
 
     qDebug() << "Messages sent to user" << username << "for chat" << chatID;
+}
+
+
+void Server::handleLogout(QTcpSocket *socket, const QJsonObject &request)
+{
+    QString sessionID = request.value("sessionID").toString();
+
+    if (sessionID.isEmpty() || !sessionData.contains(sessionID)) {
+        sendErrorResponse(socket, "Invalid session.");
+        qDebug() << "Invalid session ID during logout.";
+        return;
+    }
+
+    QString login = sessionData[sessionID];
+    qDebug() << "User" << login << "logged out.";
+
+    // Удаление сессии
+    sessionData.remove(sessionID);
+
+    // Удаление клиента из списка онлайн
+    onlineClients.remove(login);
+    qDebug() << "Session removed, client logged out.";
+
+    // Отправка ответа клиенту об успешном выходе
+    QJsonObject response;
+    response["status"] = "success";
+    response["message"] = "Logout successful.";
+    socket->write(QJsonDocument(response).toJson(QJsonDocument::Compact) + "\n");
+    socket->flush();
+
+    qDebug() << "Logout response sent to client.";
 }

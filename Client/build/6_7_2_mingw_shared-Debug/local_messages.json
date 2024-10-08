@@ -3,6 +3,150 @@
         "messages": [
         ]
     },
+    "18258ad0-c22c-4d7e-ae75-e78d946833d4": {
+        "messages": [
+            {
+                "sender": "42",
+                "text": "всем привет, ребята!",
+                "timestamp": 1728205306
+            }
+        ]
+    },
+    "2dc08044-4bd7-4da2-8c93-f44c69e6fb19": {
+        "messages": [
+        ]
+    },
+    "39eb5cad-45cc-44ac-a80b-d4aad220be2c": {
+        "messages": [
+            {
+                "sender": "42",
+                "text": "123",
+                "timestamp": 1728393063
+            }
+        ]
+    },
+    "441392e0-e919-4d1a-8025-e2ba626e1409": {
+        "messages": [
+            {
+                "sender": "22",
+                "text": "что за хуйня, мужик? ",
+                "timestamp": 1728152135
+            },
+            {
+                "sender": "22",
+                "text": "ты кто? ",
+                "timestamp": 1728152140
+            },
+            {
+                "sender": "22",
+                "text": "йоу? ",
+                "timestamp": 1728152143
+            },
+            {
+                "sender": "22",
+                "text": "что за хуйня, мужик? ",
+                "timestamp": 1728152135
+            },
+            {
+                "sender": "22",
+                "text": "ты кто? ",
+                "timestamp": 1728152140
+            },
+            {
+                "sender": "22",
+                "text": "йоу? ",
+                "timestamp": 1728152143
+            },
+            {
+                "sender": "22",
+                "text": "что за хуйня, мужик? ",
+                "timestamp": 1728152135
+            },
+            {
+                "sender": "22",
+                "text": "ты кто? ",
+                "timestamp": 1728152140
+            },
+            {
+                "sender": "22",
+                "text": "йоу? ",
+                "timestamp": 1728152143
+            },
+            {
+                "sender": "42",
+                "text": "к",
+                "timestamp": 1728160274
+            }
+        ]
+    },
+    "45270f19-4569-42c1-8537-1a89ad25664f": {
+        "messages": [
+            {
+                "sender": "32",
+                "text": "52",
+                "timestamp": 1728151703
+            },
+            {
+                "sender": "32",
+                "text": "52",
+                "timestamp": 1728151703
+            },
+            {
+                "sender": "42",
+                "text": "соси",
+                "timestamp": 1728151725
+            },
+            {
+                "sender": "32",
+                "text": "52",
+                "timestamp": 1728151703
+            },
+            {
+                "sender": "42",
+                "text": "соси",
+                "timestamp": 1728151725
+            },
+            {
+                "sender": "32",
+                "text": "нет!",
+                "timestamp": 1728151881
+            }
+        ]
+    },
+    "52ec51fc-e967-481d-837e-e92473c48d33": {
+        "messages": [
+            {
+                "sender": "123",
+                "text": "привет ",
+                "timestamp": 1728394840
+            },
+            {
+                "sender": "123",
+                "text": "привет ",
+                "timestamp": 1728394840
+            },
+            {
+                "sender": "42",
+                "text": "пока",
+                "timestamp": 1728394858
+            },
+            {
+                "sender": "123",
+                "text": "привет ",
+                "timestamp": 1728394840
+            },
+            {
+                "sender": "42",
+                "text": "пока",
+                "timestamp": 1728394858
+            },
+            {
+                "sender": "123",
+                "text": "❌",
+                "timestamp": 1728394873
+            }
+        ]
+    },
     "56822f68-bdde-4f46-ba23-3b9f5ed0d71c": {
         "messages": [
             {
@@ -12,7 +156,33 @@
             }
         ]
     },
+    "703da6be-0410-4815-a754-372d454f197e": {
+        "messages": [
+        ]
+    },
+    "98abcd54-6d55-4818-b465-26c705fc6aa5": {
+        "messages": [
+        ]
+    },
+    "b7b88de0-2ba7-41dd-b5db-7469776d0198": {
+        "messages": [
+            {
+                "sender": "bob",
+                "text": "привет",
+                "timestamp": 1728208486
+            },
+            {
+                "sender": "bob",
+                "text": "привет",
+                "timestamp": 1728208486
+            }
+        ]
+    },
     "dacb3f5d-9704-4ea1-9048-2e1dd76c212f": {
+        "messages": [
+        ]
+    },
+    "ee82026c-9850-40a3-85ee-5b42321cdda3": {
         "messages": [
         ]
     },

@@ -46,6 +46,9 @@ public:
         noButton->setGeometry(QRect(502, 666, 181, 117));
         verticalLayout = new QVBoxLayout(AccountExitDialog);
         verticalLayout->setObjectName("verticalLayout");
+        yesButton->raise();
+        background->raise();
+        noButton->raise();
 
         retranslateUi(AccountExitDialog);
 

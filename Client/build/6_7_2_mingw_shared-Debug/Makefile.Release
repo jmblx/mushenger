@@ -275,7 +275,10 @@ release/main.o: ../../main.cpp ../../src/Profile/ProfileScreen.h \
 
 release/AccountExitDialog.o: ../../src/AccountExitDialog/AccountExitDialog.cpp ../../src/AccountExitDialog/AccountExitDialog.h \
 		../6_7_2_mingw64_shared-Debug/ui_AccountExitDialog.h \
-		../../src/ThemeManager/ThemeManager.h
+		../../src/ThemeManager/ThemeManager.h \
+		../../src/Login/LoginScreen.h \
+		../../src/Profile/ProfileScreen.h \
+		../../src/AnimatedButton/AnimatedButton.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\AccountExitDialog.o ..\..\src\AccountExitDialog\AccountExitDialog.cpp
 
 release/LoginScreen.o: ../../src/Login/LoginScreen.cpp ../../src/ThemeManager/ThemeManager.h \

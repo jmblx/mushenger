@@ -68,7 +68,7 @@ public:
         loginLabel->setWordWrap(true);
         logoutWidget = new QWidget(profilePanel);
         logoutWidget->setObjectName("logoutWidget");
-        logoutWidget->setGeometry(QRect(350, 20, 40, 61));
+        logoutWidget->setGeometry(QRect(350, 20, 46, 61));
         verticalLayout = new QVBoxLayout(logoutWidget);
         verticalLayout->setSpacing(5);
         verticalLayout->setObjectName("verticalLayout");

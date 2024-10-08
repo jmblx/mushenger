@@ -41,6 +41,7 @@ private:
     // Обработка различных типов запросов
     void handleCreateChat(QTcpSocket *socket, const QJsonObject &request);
     void handleUploadAvatar(QTcpSocket *socket, const QJsonObject &request);
+    void handleUploadProfileAvatar(QTcpSocket *socket, const QJsonObject &request);
     void handleCheckUser(QTcpSocket *socket, const QJsonObject &request);
     void handleMessageRequest(QTcpSocket *socket, const QJsonObject &request);
     void handleSyncMessages(QTcpSocket *socket, const QJsonObject &request);
@@ -49,6 +50,7 @@ private:
     void handleChatListRequest(QTcpSocket *socket, const QJsonObject &request);
     void handleGetAvatar(QTcpSocket *socket, const QJsonObject &request);
     void handleLoadMessages(QTcpSocket *socket, const QJsonObject &request);
+    void handleLogout(QTcpSocket *socket, const QJsonObject &request);
 
     void sendErrorResponse(QTcpSocket *socket, const QString &message);
     void saveChatData();

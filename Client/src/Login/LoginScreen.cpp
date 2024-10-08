@@ -19,6 +19,7 @@ LoginScreen::LoginScreen(QWidget *parent) :
     socket(new QTcpSocket(this))
 {
     ui->setupUi(this);
+    ui->PwdInput->setEchoMode(QLineEdit::Password);
 
     connect(ui->LoginButton, &QPushButton::clicked, this, &LoginScreen::onLoginButtonClicked);
     connect(socket, &QTcpSocket::readyRead, this, &LoginScreen::onReadyRead);
