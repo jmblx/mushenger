@@ -11,8 +11,10 @@
 #include <QImage>
 #include <QMessageBox>
 #include <QDebug>
-#include <QFileDialog> // Добавлено для работы с QFileDialog
-#include <QPainter>    // Добавлено для работы с QPainter
+#include <QFileDialog>
+#include <QPainter>
+#include <QFontDatabase>
+#include <QSettings>
 
 ProfileScreen::ProfileScreen(const QString &sessionID, const QString &userLogin, QWidget *parent) :
     QWidget(parent),
@@ -24,21 +26,34 @@ ProfileScreen::ProfileScreen(const QString &sessionID, const QString &userLogin,
     ui->setupUi(this);
     ui->loginLabel->setText(currentUserLogin);
 
-    // Приведение кнопок к AnimatedButton
+    // Load saved font family and scale from ThemeManager
+    QString savedFontFamily = ThemeManager::instance().fontFamily();
+    int savedFontScale = ThemeManager::instance().fontScale();
+
+    // Cast buttons to AnimatedButton
     backButton = qobject_cast<AnimatedButton*>(ui->backButton);
     profileButton = qobject_cast<AnimatedButton*>(ui->profileButton);
     overlayButton = qobject_cast<AnimatedButton*>(ui->overlayButton);
 
+    // Populate fontComboBox with available fonts
+    QFontDatabase fontDatabase;
+    ui->fontComboBox->addItems(fontDatabase.families());
+    ui->fontComboBox->setCurrentText(savedFontFamily);
+
+    // Set up fontSizeSpinBox
+    ui->fontSizeSpinBox->setRange(1, 200);
+    ui->fontSizeSpinBox->setValue(savedFontScale);
+
     if (backButton) {
-        // Настройка анимации для backButton
+        // Set up hover animation for backButton
         backButton->setHoverAnimationProperty("iconSize", QSize(22, 22), QSize(26, 26), 200);
     }
 
     if (profileButton) {
-        // Уменьшение размера иконки до половины
+        // Reduce icon size by half
         profileButton->setHoverAnimationProperty("iconSize", QSize(80, 80), QSize(85, 85), 200);
 
-        // Настройка эффекта размытия при наведении
+        // Set up blur effect on hover
         QString currentTheme = ThemeManager::instance().currentTheme();
         if (currentTheme == "dark") {
             profileButton->setHoverBlurEffect(QColor("#D8DCE4"), 10.0, 200);
@@ -50,12 +65,12 @@ ProfileScreen::ProfileScreen(const QString &sessionID, const QString &userLogin,
     }
 
     if (overlayButton) {
-        // Подключение сигналов hover
+        // Connect hover signals
         connect(overlayButton, &AnimatedButton::hoverEntered, this, &ProfileScreen::onOverlayButtonHoverEntered);
         connect(overlayButton, &AnimatedButton::hoverLeft, this, &ProfileScreen::onOverlayButtonHoverLeft);
     }
 
-    // Подключение сигналов и слотов
+    // Connect signals and slots
     connect(ui->overlayButton, &QPushButton::clicked, this, &ProfileScreen::onOverlayButtonClicked);
     connect(ui->backButton, &QPushButton::clicked, this, &ProfileScreen::onBackButtonClicked);
     connect(ui->profileButton, &QPushButton::clicked, this, &ProfileScreen::onProfileButtonClicked);
@@ -63,6 +78,10 @@ ProfileScreen::ProfileScreen(const QString &sessionID, const QString &userLogin,
     connect(&ThemeManager::instance(), &ThemeManager::themeChanged, this, &ProfileScreen::onThemeChanged);
     onThemeChanged(ThemeManager::instance().currentTheme());
     connect(ui->themeSwitchButton, &QPushButton::clicked, this, &ProfileScreen::onThemeSwitchButtonClicked);
+
+    // Connect fontComboBox and fontSizeSpinBox to ThemeManager
+    connect(ui->fontComboBox, &QComboBox::currentTextChanged, &ThemeManager::instance(), &ThemeManager::setFontFamily);
+    connect(ui->fontSizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), &ThemeManager::instance(), &ThemeManager::setFontScale);
 
     connectToServer();
     getUserData(sessionID);
@@ -86,14 +105,14 @@ void ProfileScreen::onReadyRead()
     QByteArray responseData = socket->readAll();
     qDebug() << "Полученные данные от сервера:" << responseData;
 
-    // Разделяем буфер на отдельные сообщения по символу '\n'
+    // Split buffer into separate messages by '\n'
     while (responseData.contains('\n')) {
         int index = responseData.indexOf('\n');
         QByteArray message = responseData.left(index).trimmed();
         responseData.remove(0, index + 1);
 
         if (message.isEmpty()) {
-            continue; // Пропускаем пустые строки
+            continue; // Skip empty lines
         }
 
         QJsonParseError parseError;
@@ -127,30 +146,30 @@ void ProfileScreen::onReadyRead()
 
 void ProfileScreen::onProfileButtonClicked()
 {
-    // Открываем диалоговое окно для выбора файла аватарки
+    // Open file dialog to select avatar image
     QString filePath = QFileDialog::getOpenFileName(this, "Выберите аватарку", "", "Images (*.png *.jpg *.bmp)");
     if (!filePath.isEmpty()) {
-        // Загружаем изображение и проверяем его
+        // Load image and check it
         QImage image(filePath);
         if (!image.isNull()) {
-            // Преобразуем изображение в байтовый массив
+            // Convert image to byte array
             QByteArray imageData;
             QBuffer buffer(&imageData);
             buffer.open(QIODevice::WriteOnly);
             image.save(&buffer, "PNG");
 
-            // Кодируем данные в Base64
+            // Encode data in Base64
             QString avatarBase64 = QString(imageData.toBase64());
 
-            // Формируем запрос на сервер
+            // Formulate request to server
             QJsonObject avatarRequest;
             avatarRequest["type"] = "uploadProfileAvatar";
             avatarRequest["sessionID"] = sessionID;
-            avatarRequest["avatar"] = avatarBase64; // Добавляем данные аватарки
+            avatarRequest["avatar"] = avatarBase64; // Add avatar data
 
-            sendRequest(avatarRequest); // Используем метод sendRequest для отправки запроса
+            sendRequest(avatarRequest); // Use sendRequest method to send request
 
-            // Обновляем иконку профиля в интерфейсе
+            // Update profile icon in UI
             updateProfileIcon(image);
         } else {
             QMessageBox::warning(this, "Ошибка", "Невозможно загрузить изображение.");
@@ -162,10 +181,10 @@ void ProfileScreen::updateProfileIcon(const QImage &image)
 {
     currentUserAvatar = image;
 
-    // Масштабируем изображение до размера 161x161 и делаем его круглым
+    // Scale image to 161x161 and make it circular
     QPixmap pixmap = QPixmap::fromImage(image.scaled(161, 161, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
 
-    // Обрезаем до круга
+    // Crop to circle
     QPixmap circularPixmap(161, 161);
     circularPixmap.fill(Qt::transparent);
 
@@ -175,7 +194,7 @@ void ProfileScreen::updateProfileIcon(const QImage &image)
     painter.setPen(Qt::NoPen);
     painter.drawEllipse(0, 0, 161, 161);
 
-    // Устанавливаем иконку в QLabel
+    // Set pixmap to QLabel
     ui->profileIcon->setPixmap(circularPixmap);
 }
 
@@ -203,7 +222,7 @@ void ProfileScreen::onThemeChanged(const QString& newTheme)
     if (!currentUserAvatar.isNull()) {
         updateProfileIcon(currentUserAvatar);
     } else {
-        // Если нет пользовательской аватарки, можно установить аватарку по умолчанию
+        // If no user avatar, set default avatar
         QString profileIconPath = QString(":/images/%1/profile-circled.svg").arg(newTheme);
         QPixmap profileIcon(profileIconPath);
         if (!profileIcon.isNull()) {
@@ -214,7 +233,7 @@ void ProfileScreen::onThemeChanged(const QString& newTheme)
     }
 
     if (profileButton) {
-        // Уменьшение размера иконки до половины
+        // Reduce icon size by half
         profileButton->setHoverAnimationProperty("iconSize", QSize(80, 80), QSize(85, 85), 200);
 
         QString currentTheme = ThemeManager::instance().currentTheme();
@@ -236,7 +255,7 @@ void ProfileScreen::onThemeChanged(const QString& newTheme)
             blurLeaveAnimation->setStartValue(10.0);
             blurLeaveAnimation->setEndValue(0.0);
 
-            // Используем методы доступа для анимаций
+            // Use accessors for animations
             profileButton->getHoverEnterAnimation()->addAnimation(blurEnterAnimation);
             profileButton->getHoverLeaveAnimation()->addAnimation(blurLeaveAnimation);
         }
@@ -294,7 +313,7 @@ void ProfileScreen::onBackButtonClicked()
 {
     qDebug() << "Переход на экран чата с сессией:" << sessionID << " и логином:" << currentUserLogin;
 
-    // disconnect(socket, &QTcpSocket::readyRead, this, &ProfileScreen::onReadyRead);
+    // Disconnect socket signals if necessary
 
     ChatScreen *chatScreen = new ChatScreen(sessionID, currentUserLogin, socket);
     chatScreen->show();

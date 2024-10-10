@@ -1,6 +1,6 @@
 /* Общие стили */
 * {
-  font-family: 'Inter', sans-serif;
+  font-family: {font-family}, sans-serif;
   color: #D8DCE4;
 }
 
@@ -21,7 +21,7 @@ QLineEdit {
   border: 2px solid #D8DCE4;
   border-radius: 10px;
   padding: 10px;
-  font-size: 20px;
+  font-size: {font-size-medium1}px;
   color: #D8DCE4;
   background: transparent;
 }
@@ -33,7 +33,7 @@ QLineEdit::placeholder {
 
 /* Стили для QPushButton#newChat */
 QPushButton#newChat {
-  font-size: 26px;
+  font-size: {font-size-medium2}px;
   color: #FFFFFF;
   background-color: #1E1E1E;
   border: 2px solid #FFFFFF;
@@ -45,14 +45,14 @@ QPushButton#newChat {
 
 /* Стили для QLabel#chatsLabel */
 QLabel#chatsLabel {
-  font-size: 20px;
+  font-size: {font-size-medium1}px;
   color: #FFFFFF;
   font-weight: bold;
 }
 
 /* Стили для QLabel#chatCount */
 QLabel#chatCount {
-  font-size: 14px;
+  font-size: {font-size-small}px;
   font-weight: bold;
   color: #FFFFFF;
   background-color: #1E1E1E;
@@ -67,7 +67,7 @@ QLabel#chatCount {
 
 /* Стили для QLabel#userName */
 QLabel#userName {
-  font-size: 22px;
+  font-size: {font-size-medium1}px;
   color: #D8DCE4;
 }
 
@@ -75,7 +75,7 @@ QLabel#userName {
 QPushButton#LoginButton {
   background-color: #C21B1B;
   color: white;
-  font-size: 24px;
+  font-size: {font-size-medium2}px;
   border-radius: 30px;
   padding: 10px 20px;
 }
@@ -94,13 +94,13 @@ QFrame#profilePanel {
 /* Стили для QLabel#loginLabel */
 QLabel#loginLabel {
   color: #D8DCE4;
-  font-size: 48px;
+  font-size: {font-size-xl}px;
 }
 
 /* Стили для QLabel#logoutText */
 QLabel#logoutText {
   color: #D8DCE4;
-  font-size: 12px;
+  font-size: {font-size-small}px;
   text-align: center;
 }
 
@@ -109,20 +109,20 @@ QLabel#mushroomMessage {
   background-color: #D8DCE4;
   border-radius: 10px;
   color: #0D1321;
-  font-size: 33px;
+  font-size: {font-size-large1}px;
 }
 
 /* Стили для QLabel#fontSizeLabel */
 QLabel#fontSizeLabel {
   color: #D8DCE4;
-  font-size: 46px;
+  font-size: {font-size-large2}px;
 }
 
 /* Стили для QSpinBox#fontSizeSpinBox */
 QSpinBox#fontSizeSpinBox {
   color: #0D1321;
   background-color: #E5E5E5;
-  font-size: 48px;
+  font-size: {font-size-xl}px;
   border: none;
   padding-right: 90px;
   padding-left: 10px;
@@ -158,14 +158,14 @@ QSpinBox#fontSizeSpinBox::down-arrow {
 /* Стили для QLabel#fontLabel */
 QLabel#fontLabel {
   color: #D8DCE4;
-  font-size: 48px;
+  font-size: {font-size-xl}px;
 }
 
 /* Стили для QComboBox#fontComboBox */
 QComboBox#fontComboBox {
   color: #0D1321;
   background-color: #E5E5E5;
-  font-size: 48px;
+  font-size: {font-size-xl}px;
   padding-left: 10px;
   padding-right: 50px;
   border: none;
@@ -185,7 +185,7 @@ QComboBox#fontComboBox::down-arrow {
 QComboBox#fontComboBox QAbstractItemView {
   color: #0D1321;
   background-color: #E5E5E5;
-  font-size: 48px;
+  font-size: {font-size-xl}px;
   selection-background-color: #D3D3D3;
 }
 
@@ -202,7 +202,7 @@ QPushButton#backButton::hover {
 QPushButton#yesButton {
   background-color: #D8DCE4;
   color: #0D1321;
-  font-size: 64px;
+  font-size: {font-size-xxl}px;
   border-radius: 39px;
 }
 
@@ -210,6 +210,6 @@ QPushButton#yesButton {
 QPushButton#noButton {
   background-color: #51AE5A;
   color: #FFFFFF;
-  font-size: 64px;
+  font-size: {font-size-xxl}px;
   border-radius: 39px;
 }
