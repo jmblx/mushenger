@@ -6,6 +6,8 @@
 #include <QFileInfo>
 #include <QTextStream>
 #include "src/Chat/ChatScreen.h"
+#include <QJsonDocument>
+#include <QJsonObject>
 
 LoginScreen::LoginScreen(QWidget *parent) :
     QWidget(parent),
@@ -132,7 +134,6 @@ void LoginScreen::openChatScreen(const QString &sessionID, const QString &userLo
     // Отключаем обработку readyRead в LoginScreen
     disconnect(socket, &QTcpSocket::readyRead, this, &LoginScreen::onReadyRead);
 }
-
 
 void LoginScreen::saveSession(const QString &sessionID)
 {

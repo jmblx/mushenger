@@ -5,5 +5,6 @@
     <file alias="chat_screen.png">images/chat_screen.png</file>
     <file alias="profile-circled.svg">images/profile-circled.svg</file>
     <file alias="send_message_icon.svg">images/send_message_icon.svg</file>
+    <file alias="gear.svg">images/gear.svg</file>
   </qresource>
 </RCC>

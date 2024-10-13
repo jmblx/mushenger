@@ -2,10 +2,14 @@ release/mushenger_res.o
 release/ChatScreen.o
 release/main.o
 release/AccountExitDialog.o
+release/MessageWidget.o
+release/chatitemdelegate.o
 release/LoginScreen.o
 release/ProfileScreen.o
 release/qrc_Resources.o
 release/moc_AccountExitDialog.o
+release/moc_MessageWidget.o
+release/moc_chatitemdelegate.o
 release/moc_LoginScreen.o
 release/moc_ProfileScreen.o
 release/moc_ChatScreen.o

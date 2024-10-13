@@ -8,11 +8,15 @@ SOURCES += \
     src/Chat/ChatScreen.cpp \
     main.cpp \
     src/AccountExitDialog/AccountExitDialog.cpp \
+    src/Chat/MessageWidget.cpp \
+    src/Chat/chatitemdelegate.cpp \
     src/Login/LoginScreen.cpp \
     src/Profile/ProfileScreen.cpp \
 
 HEADERS += \
     src/AccountExitDialog/AccountExitDialog.h \
+    src/Chat/MessageWidget.h \
+    src/Chat/chatitemdelegate.h \
     src/Login/LoginScreen.h \
     src/Profile/ProfileScreen.h \
     src/Chat/ChatScreen.h \
