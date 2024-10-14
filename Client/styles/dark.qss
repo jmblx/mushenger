@@ -4,6 +4,71 @@
   color: #D8DCE4;
 }
 
+QInputDialog QLineEdit {
+    border-radius: 10px;
+    padding: 10px;
+    font-size: {font-size-medium1}px;
+    color: #D8DCE4;
+    background-color: #0D1321;
+}
+QInputDialog QLabel {
+    color: #FFFFFF;
+    font-size: {font-size-medium1}px;
+}
+QInputDialog QPushButton {
+    background-color: #D8DCE4;
+    color: #0D1321;
+    padding: 5px 10px;
+}
+QInputDialog QPushButton:hover {
+    background-color: #51AE5A;
+    color: white;
+}
+
+QMessageBox {
+    background-color: #0D1321;
+    color: #D8DCE4;
+}
+QMessageBox QLabel {
+    color: #D8DCE4;
+    font-size: {font-size-medium1}px;
+}
+QMessageBox QPushButton {
+    background-color: #D8DCE4;
+    color: #0D1321;
+    border-radius: 10px;
+    padding: 5px 10px;
+}
+QMessageBox QPushButton:hover {
+    background-color: #51AE5A;
+    color: white;
+}
+
+/* Стили для QListWidget#chatsList */
+QListWidget#chatsList {
+    background-color: transparent;
+    border: none;
+    color: #D8DCE4;
+    font-size: {font-size-medium1}px;
+    font-family: {font-family}, sans-serif;
+}
+QListWidget#chatsList::item:hover {
+    background-color: rgba(216, 220, 228, 0.1);
+}
+QListWidget#chatsList::item:selected {
+    background-color: rgba(216, 220, 228, 0.1);
+    color: #D8DCE4;
+}
+
+/* Стили для QListWidget#messagesList */
+QListWidget#messagesList {
+    background-color: transparent;
+    border: none;
+    color: #D8DCE4;
+    font-size: {font-size-medium1}px;
+    font-family: {font-family}, sans-serif;
+}
+
 /* Стили для QPushButton без фона и границы */
 QPushButton#sendButton,
 QPushButton#avatarButton,
@@ -35,12 +100,15 @@ QLineEdit::placeholder {
 QPushButton#newChat {
   font-size: {font-size-medium2}px;
   color: #FFFFFF;
-  background-color: #1E1E1E;
+  background-color: transparent;
   border: 2px solid #FFFFFF;
   border-radius: 15px;
   width: 210px;
   height: 50px;
   padding: 0;
+}
+QPushButton#newChat:hover {
+    background-color: rgba(216, 220, 228, 0.1);
 }
 
 /* Стили для QLabel#chatsLabel */
@@ -118,8 +186,8 @@ QLabel#fontSizeLabel {
   font-size: {font-size-large2}px;
 }
 
-/* Стили для QSpinBox#fontSizeSpinBox */
-QSpinBox#fontSizeSpinBox {
+/* Стили для AnimatedSpinBox#fontSizeSpinBox */
+AnimatedSpinBox#fontSizeSpinBox {
   color: #0D1321;
   background-color: #E5E5E5;
   font-size: {font-size-xl}px;
@@ -127,7 +195,7 @@ QSpinBox#fontSizeSpinBox {
   padding-right: 90px;
   padding-left: 10px;
 }
-QSpinBox#fontSizeSpinBox::up-button {
+AnimatedSpinBox#fontSizeSpinBox::up-button {
   subcontrol-origin: padding;
   subcontrol-position: right;
   width: 50px;
@@ -135,7 +203,7 @@ QSpinBox#fontSizeSpinBox::up-button {
   background-color: #FFFFFF;
   border: none;
 }
-QSpinBox#fontSizeSpinBox::down-button {
+AnimatedSpinBox#fontSizeSpinBox::down-button {
   subcontrol-origin: padding;
   subcontrol-position: right;
   right: 55px;
@@ -144,12 +212,12 @@ QSpinBox#fontSizeSpinBox::down-button {
   background-color: #FFFFFF;
   border: none;
 }
-QSpinBox#fontSizeSpinBox::up-arrow {
+AnimatedSpinBox#fontSizeSpinBox::up-arrow {
   image: url(:/images/light/plus_icon.svg);
   width: 20px;
   height: 20px;
 }
-QSpinBox#fontSizeSpinBox::down-arrow {
+AnimatedSpinBox#fontSizeSpinBox::down-arrow {
   image: url(:/images/light/minus_icon.svg);
   width: 20px;
   height: 20px;
@@ -161,8 +229,8 @@ QLabel#fontLabel {
   font-size: {font-size-xl}px;
 }
 
-/* Стили для QComboBox#fontComboBox */
-QComboBox#fontComboBox {
+/* Стили для AnimatedComboBox#fontComboBox */
+AnimatedComboBox#fontComboBox {
   color: #0D1321;
   background-color: #E5E5E5;
   font-size: {font-size-xl}px;
@@ -170,19 +238,18 @@ QComboBox#fontComboBox {
   padding-right: 50px;
   border: none;
 }
-QComboBox#fontComboBox::drop-down {
+AnimatedComboBox#fontComboBox::drop-down {
   subcontrol-origin: padding;
   subcontrol-position: right;
   width: 50px;
   background-color: #FFFFFF;
   border: none;
 }
-QComboBox#fontComboBox::down-arrow {
-  image: url(:/images/light/down_arrow_icon.svg);
+AnimatedComboBox#fontComboBox::down-arrow {
   width: 20px;
   height: 20px;
 }
-QComboBox#fontComboBox QAbstractItemView {
+AnimatedComboBox#fontComboBox QAbstractItemView {
   color: #0D1321;
   background-color: #E5E5E5;
   font-size: {font-size-xl}px;

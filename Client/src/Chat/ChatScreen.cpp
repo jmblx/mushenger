@@ -55,6 +55,26 @@ void ChatScreen::getUserData()
     sendRequest(request);
 }
 
+void ChatScreen::displayUserAvatar(const QImage &avatar)
+{
+    currentUserAvatar = avatar;
+
+    // Преобразуем изображение в нужный размер и делаем его круглым
+    QImage scaledImage = avatar.scaled(90, 90, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+    QPixmap pixmap = QPixmap::fromImage(scaledImage);
+
+    QPixmap circularPixmap(90, 90);
+    circularPixmap.fill(Qt::transparent);
+
+    QPainter painter(&circularPixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setBrush(QBrush(pixmap));
+    painter.setPen(Qt::NoPen);
+    painter.drawEllipse(0, 0, 90, 90);
+
+    // Устанавливаем аватарку в QLabel или QPushButton
+    ui->userAvatar->setPixmap(circularPixmap);
+}
 
 void ChatScreen::onAvatarClicked()
 {
@@ -64,6 +84,26 @@ void ChatScreen::onAvatarClicked()
     profileScreen->show();
     this->hide();
 }
+
+void ChatScreen::updateUserAvatar(const QImage &image)
+{
+    currentUserAvatar = image;
+
+    QImage scaledImage = image.scaled(90, 90, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+    QPixmap pixmap = QPixmap::fromImage(scaledImage);
+
+    QPixmap circularPixmap(90, 90);
+    circularPixmap.fill(Qt::transparent);
+
+    QPainter painter(&circularPixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setBrush(QBrush(pixmap));
+    painter.setPen(Qt::NoPen);
+    painter.drawEllipse(0, 0, 90, 90);
+
+    ui->userAvatar->setPixmap(circularPixmap);
+}
+
 
 void ChatScreen::onThemeSwitchButtonClicked()
 {
@@ -83,19 +123,23 @@ void ChatScreen::onThemeChanged(const QString& newTheme)
     QIcon sendIcon(QString(":/images/%1/send_message_icon.svg").arg(newTheme));
     ui->sendButton->setIcon(sendIcon);
 
-    QString profileIconPath = QString(":/images/%1/profile-circled.svg").arg(newTheme);
-    QPixmap profileIcon(profileIconPath);
-    if (!profileIcon.isNull()) {
-        ui->userAvatar->setPixmap(profileIcon);
+    if (!currentUserAvatar.isNull()) {
+        displayUserAvatar(currentUserAvatar);
     } else {
-        qDebug() << "Failed to load profile icon:" << profileIconPath;
+        QString defaultAvatarPath = QString(":/images/%1/profile-circled.svg").arg(newTheme);
+        QPixmap defaultAvatar(defaultAvatarPath);
+        if (!defaultAvatar.isNull()) {
+            ui->userAvatar->setPixmap(defaultAvatar);
+        } else {
+            qDebug() << "Failed to load default avatar image:" << defaultAvatarPath;
+        }
     }
 }
 
 void ChatScreen::sendRequest(const QJsonObject &request)
 {
     QJsonDocument doc(request);
-    QByteArray jsonData = doc.toJson(QJsonDocument::Compact) + "\n"; // Компактный формат JSON
+    QByteArray jsonData = doc.toJson(QJsonDocument::Compact) + "\n";
     qDebug() << "Отправка запроса на сервер:" << jsonData;
 
     socket->write(jsonData);
@@ -373,26 +417,6 @@ void ChatScreen::displayMessages(const QJsonArray &messages)
         QString formattedMessage = sender + ": " + text;
         ui->messagesList->addItem(new QListWidgetItem(formattedMessage));
     }
-}
-
-void ChatScreen::displayUserAvatar(const QImage &avatar)
-{
-    // Преобразуем изображение в нужный размер и делаем его круглым
-    QImage scaledImage = avatar.scaled(90, 90, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-
-    QPixmap pixmap = QPixmap::fromImage(scaledImage);
-
-    QPixmap circularPixmap(90, 90);
-    circularPixmap.fill(Qt::transparent);
-
-    QPainter painter(&circularPixmap);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setBrush(QBrush(pixmap));
-    painter.setPen(Qt::NoPen);
-    painter.drawEllipse(0, 0, 90, 90);
-
-    // Устанавливаем аватарку в кнопку
-    ui->userAvatar->setPixmap(circularPixmap);
 }
 
 void ChatScreen::onReadyRead()

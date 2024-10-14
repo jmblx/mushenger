@@ -1,4 +1,3 @@
-// AnimatedButton.h
 #ifndef ANIMATEDBUTTON_H
 #define ANIMATEDBUTTON_H
 
@@ -12,6 +11,7 @@
 class AnimatedButton : public QPushButton
 {
     Q_OBJECT
+    Q_PROPERTY(QSize iconSize READ iconSize WRITE setIconSize)
 
 public:
     explicit AnimatedButton(QWidget *parent = nullptr);
@@ -29,6 +29,10 @@ public:
     // Методы для получения анимаций
     QParallelAnimationGroup* getHoverEnterAnimation() const { return hoverEnterAnimation; }
     QParallelAnimationGroup* getHoverLeaveAnimation() const { return hoverLeaveAnimation; }
+
+    // Объявите методы iconSize и setIconSize
+    QSize iconSize() const;
+    void setIconSize(const QSize &size);
 
 signals:
     void hoverEntered();

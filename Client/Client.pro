@@ -6,6 +6,8 @@ CONFIG += c++17
 
 SOURCES += \
     src/AnimatedButton/AnimatedButton.cpp \
+    src/AnimatedComboBox/AnimatedComboBox.cpp \
+    src/AnimatedSpinBox/AnimatedSpinBox.cpp \
     src/Chat/ChatScreen.cpp \
     main.cpp \
     src/AccountExitDialog/AccountExitDialog.cpp \
@@ -16,6 +18,8 @@ SOURCES += \
 HEADERS += \
     src/AccountExitDialog/AccountExitDialog.h \
     src/AnimatedButton/AnimatedButton.h \
+    src/AnimatedComboBox/AnimatedComboBox.h \
+    src/AnimatedSpinBox/AnimatedSpinBox.h \
     src/Login/LoginScreen.h \
     src/Profile/ProfileScreen.h \
     src/Chat/ChatScreen.h \

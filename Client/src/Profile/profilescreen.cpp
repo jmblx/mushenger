@@ -1,6 +1,8 @@
 #include "ProfileScreen.h"
 #include "ui_ProfileScreen.h"
 #include "src/AccountExitDialog/AccountExitDialog.h"
+#include "src/AnimatedComboBox/AnimatedComboBox.h"
+#include "src/AnimatedSpinBox/AnimatedSpinBox.h"
 #include "src/ThemeManager/ThemeManager.h"
 #include "src/Chat/ChatScreen.h"
 #include "src/Login/LoginScreen.h"
@@ -30,11 +32,6 @@ ProfileScreen::ProfileScreen(const QString &sessionID, const QString &userLogin,
     QString savedFontFamily = ThemeManager::instance().fontFamily();
     int savedFontScale = ThemeManager::instance().fontScale();
 
-    // Cast buttons to AnimatedButton
-    backButton = qobject_cast<AnimatedButton*>(ui->backButton);
-    profileButton = qobject_cast<AnimatedButton*>(ui->profileButton);
-    overlayButton = qobject_cast<AnimatedButton*>(ui->overlayButton);
-
     // Populate fontComboBox with available fonts
     QFontDatabase fontDatabase;
     ui->fontComboBox->addItems(fontDatabase.families());
@@ -43,6 +40,13 @@ ProfileScreen::ProfileScreen(const QString &sessionID, const QString &userLogin,
     // Set up fontSizeSpinBox
     ui->fontSizeSpinBox->setRange(1, 200);
     ui->fontSizeSpinBox->setValue(savedFontScale);
+
+    // Теперь, благодаря кастомным виджетам, анимации уже встроены
+
+    // Cast buttons to AnimatedButton
+    backButton = qobject_cast<AnimatedButton*>(ui->backButton);
+    profileButton = qobject_cast<AnimatedButton*>(ui->profileButton);
+    overlayButton = qobject_cast<AnimatedButton*>(ui->overlayButton);
 
     if (backButton) {
         // Set up hover animation for backButton

@@ -175,7 +175,7 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QSpinBox" name="fontSizeSpinBox">
+  <widget class="AnimatedSpinBox" name="fontSizeSpinBox" native="true">
    <property name="geometry">
     <rect>
      <x>1000</x>
@@ -184,13 +184,13 @@
      <height>105</height>
     </rect>
    </property>
-   <property name="minimum">
+   <property name="minimum" stdset="0">
     <number>10</number>
    </property>
-   <property name="maximum">
+   <property name="maximum" stdset="0">
     <number>200</number>
    </property>
-   <property name="value">
+   <property name="value" stdset="0">
     <number>128</number>
    </property>
   </widget>
@@ -207,7 +207,7 @@
     <string>Шрифт:</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="fontComboBox">
+  <widget class="AnimatedComboBox" name="fontComboBox" native="true">
    <property name="geometry">
     <rect>
      <x>1000</x>
@@ -216,11 +216,6 @@
      <height>105</height>
     </rect>
    </property>
-   <item>
-    <property name="text">
-     <string>Inter</string>
-    </property>
-   </item>
   </widget>
   <widget class="AnimatedButton" name="backButton">
    <property name="geometry">
@@ -317,6 +312,16 @@
    <class>AnimatedButton</class>
    <extends>QPushButton</extends>
    <header>src/AnimatedButton/AnimatedButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AnimatedSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>src/AnimatedSpinBox/AnimatedSpinBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AnimatedComboBox</class>
+   <extends>QComboBox</extends>
+   <header>src/AnimatedComboBox/AnimatedComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources>

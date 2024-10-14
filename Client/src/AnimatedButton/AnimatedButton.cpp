@@ -1,9 +1,9 @@
-// AnimatedButton.cpp
 #include "AnimatedButton.h"
 #include <QEvent>
 #include <QEnterEvent>
 #include <QGraphicsBlurEffect>
 #include <QDebug>
+#include <QEasingCurve>
 
 AnimatedButton::AnimatedButton(QWidget *parent) : QPushButton(parent)
 {
@@ -15,6 +15,17 @@ AnimatedButton::AnimatedButton(QWidget *parent) : QPushButton(parent)
     blurEffect = new QGraphicsBlurEffect(this);
     blurEffect->setBlurRadius(0.0); // Начальная интенсивность размытия
     this->setGraphicsEffect(blurEffect);
+}
+
+QSize AnimatedButton::iconSize() const
+{
+    return QPushButton::iconSize();
+}
+
+void AnimatedButton::setIconSize(const QSize &size)
+{
+    QPushButton::setIconSize(size);
+    update();
 }
 
 void AnimatedButton::setHoverAnimationProperty(const QByteArray &propertyName, const QVariant &startValue, const QVariant &endValue, int duration)
@@ -29,6 +40,7 @@ void AnimatedButton::addAnimation(QParallelAnimationGroup *group, QObject *targe
     animation->setDuration(duration);
     animation->setStartValue(startValue);
     animation->setEndValue(endValue);
+    animation->setEasingCurve(QEasingCurve::OutQuad); // Добавление кривой сглаживания
     group->addAnimation(animation);
 }
 
@@ -60,10 +72,10 @@ void AnimatedButton::updateOverlayIcon(const QString &iconPath)
 
 void AnimatedButton::setHoverBlurEffect(QColor color, qreal maxBlurRadius, int duration)
 {
-    // Если эффект размытия ещё не был создан
+    // Убедитесь, что эффект размытия применяется к overlayLabel, если он существует
     if (!blurEffect) {
         blurEffect = new QGraphicsBlurEffect(this);
-        overlayLabel->setGraphicsEffect(blurEffect);  // Применяем эффект размытия только к overlayLabel (иконка профиля)
+        this->setGraphicsEffect(blurEffect);  // Применяем эффект к кнопке
     }
 
     // Создаём анимацию для свойства blurRadius у blurEffect
@@ -71,6 +83,7 @@ void AnimatedButton::setHoverBlurEffect(QColor color, qreal maxBlurRadius, int d
     blurAnimation->setDuration(duration);
     blurAnimation->setStartValue(0.0);  // Начальное значение размытия
     blurAnimation->setEndValue(maxBlurRadius);  // Конечное значение размытия
+    blurAnimation->setEasingCurve(QEasingCurve::OutQuad); // Добавление кривой сглаживания
 
     // Добавляем анимацию в группу для входа курсора
     hoverEnterAnimation->addAnimation(blurAnimation);
@@ -80,6 +93,7 @@ void AnimatedButton::setHoverBlurEffect(QColor color, qreal maxBlurRadius, int d
     blurLeaveAnimation->setDuration(duration);
     blurLeaveAnimation->setStartValue(maxBlurRadius);
     blurLeaveAnimation->setEndValue(0.0);
+    blurLeaveAnimation->setEasingCurve(QEasingCurve::InQuad); // Добавление кривой сглаживания
 
     hoverLeaveAnimation->addAnimation(blurLeaveAnimation);
 }

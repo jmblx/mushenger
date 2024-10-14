@@ -1,5 +1,7 @@
 debug/mushenger_res.o
 debug/AnimatedButton.o
+debug/AnimatedComboBox.o
+debug/AnimatedSpinBox.o
 debug/ChatScreen.o
 debug/main.o
 debug/AccountExitDialog.o
@@ -9,6 +11,8 @@ debug/ThemeManager.o
 debug/qrc_Resources.o
 debug/moc_AccountExitDialog.o
 debug/moc_AnimatedButton.o
+debug/moc_AnimatedComboBox.o
+debug/moc_AnimatedSpinBox.o
 debug/moc_LoginScreen.o
 debug/moc_ProfileScreen.o
 debug/moc_ChatScreen.o

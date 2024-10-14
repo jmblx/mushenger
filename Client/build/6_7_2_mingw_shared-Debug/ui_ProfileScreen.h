@@ -12,14 +12,14 @@
 #include <QtCore/QVariant>
 #include <QtGui/QIcon>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QComboBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "src/AnimatedButton/AnimatedButton.h"
+#include "src/AnimatedComboBox/AnimatedComboBox.h"
+#include "src/AnimatedSpinBox/AnimatedSpinBox.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -36,9 +36,9 @@ public:
     AnimatedButton *overlayButton;
     AnimatedButton *profileButton;
     QLabel *fontSizeLabel;
-    QSpinBox *fontSizeSpinBox;
+    AnimatedSpinBox *fontSizeSpinBox;
     QLabel *fontLabel;
-    QComboBox *fontComboBox;
+    AnimatedComboBox *fontComboBox;
     AnimatedButton *backButton;
     QLabel *mushroomMessage;
     QPushButton *themeSwitchButton;
@@ -103,17 +103,16 @@ public:
         fontSizeLabel->setObjectName("fontSizeLabel");
         fontSizeLabel->setGeometry(QRect(770, 80, 181, 111));
         fontSizeLabel->setWordWrap(true);
-        fontSizeSpinBox = new QSpinBox(ProfileScreen);
+        fontSizeSpinBox = new AnimatedSpinBox(ProfileScreen);
         fontSizeSpinBox->setObjectName("fontSizeSpinBox");
         fontSizeSpinBox->setGeometry(QRect(1000, 80, 263, 105));
-        fontSizeSpinBox->setMinimum(10);
-        fontSizeSpinBox->setMaximum(200);
-        fontSizeSpinBox->setValue(128);
+        fontSizeSpinBox->setProperty("minimum", QVariant(10));
+        fontSizeSpinBox->setProperty("maximum", QVariant(200));
+        fontSizeSpinBox->setProperty("value", QVariant(128));
         fontLabel = new QLabel(ProfileScreen);
         fontLabel->setObjectName("fontLabel");
         fontLabel->setGeometry(QRect(770, 240, 171, 105));
-        fontComboBox = new QComboBox(ProfileScreen);
-        fontComboBox->addItem(QString());
+        fontComboBox = new AnimatedComboBox(ProfileScreen);
         fontComboBox->setObjectName("fontComboBox");
         fontComboBox->setGeometry(QRect(1000, 220, 261, 105));
         backButton = new AnimatedButton(ProfileScreen);
@@ -164,8 +163,6 @@ public:
         profileButton->setText(QString());
         fontSizeLabel->setText(QCoreApplication::translate("ProfileScreen", "\320\240\320\260\320\267\320\274\320\265\321\200 \321\210\321\200\320\270\321\204\321\202\320\260:", nullptr));
         fontLabel->setText(QCoreApplication::translate("ProfileScreen", "\320\250\321\200\320\270\321\204\321\202:", nullptr));
-        fontComboBox->setItemText(0, QCoreApplication::translate("ProfileScreen", "Inter", nullptr));
-
         backButton->setText(QString());
         mushroomMessage->setText(QCoreApplication::translate("ProfileScreen", "{message}", nullptr));
         themeSwitchButton->setText(QString());

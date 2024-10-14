@@ -1,5 +1,7 @@
 release/mushenger_res.o
 release/AnimatedButton.o
+release/AnimatedComboBox.o
+release/AnimatedSpinBox.o
 release/ChatScreen.o
 release/main.o
 release/AccountExitDialog.o
@@ -9,6 +11,8 @@ release/ThemeManager.o
 release/qrc_Resources.o
 release/moc_AccountExitDialog.o
 release/moc_AnimatedButton.o
+release/moc_AnimatedComboBox.o
+release/moc_AnimatedSpinBox.o
 release/moc_LoginScreen.o
 release/moc_ProfileScreen.o
 release/moc_ChatScreen.o

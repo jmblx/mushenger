@@ -48,6 +48,7 @@ private:
     QString sessionID;           // Идентификатор сессии
     QString currentChatID;       // Идентификатор текущего чата
     QString currentUserLogin;    // Текущий логин пользователя
+    QImage currentUserAvatar;
 
     QSet<QString> validParticipants; // Множество валидных участников чата (без дубликатов)
     QByteArray avatarData;        // Данные аватара для нового чата
@@ -63,6 +64,7 @@ private:
     QString lastCheckedUsername;  // Последний проверяемый участник
 
     // Методы
+    void updateUserAvatar(const QImage &image);
     void sendRequest(const QJsonObject &request);   // Отправка JSON-запроса на сервер
     QByteArray processAvatar(const QString &filePath); // Обработка аватарного изображения
     void checkUserExists(const QString &username);   // Асинхронная проверка существования пользователя
