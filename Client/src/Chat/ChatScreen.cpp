@@ -398,7 +398,7 @@ QListWidgetItem* ChatScreen::createChatListItem(const QString &chatName, const Q
 {
     QListWidgetItem *item = new QListWidgetItem(chatName, ui->chatsList);
     item->setData(Qt::UserRole, chatID);
-    item->setIcon(QIcon(":/images/default_avatar.png")); // Установите иконку по умолчанию
+    item->setIcon(QIcon(":/images/profile-circled.svg")); // Установите иконку по умолчанию
     return item;
 }
 

@@ -319,6 +319,16 @@
                 "sender": "22",
                 "text": "вфывфывфы",
                 "timestamp": 1728766319
+            },
+            {
+                "sender": "22",
+                "text": "asdasdasdas",
+                "timestamp": 1728927996
+            },
+            {
+                "sender": "22",
+                "text": "dasdas",
+                "timestamp": 1728927998
             }
         ],
         "name": "bobbi bob",
@@ -337,17 +347,6 @@
         "participants": [
             "22",
             "1"
-        ]
-    },
-    "b6608400-1483-4d6f-b955-dc2bc3db5d63": {
-        "admin": "22",
-        "avatarPath": "",
-        "id": "b6608400-1483-4d6f-b955-dc2bc3db5d63",
-        "messages": [
-        ],
-        "name": "ya sozdal)",
-        "participants": [
-            "22"
         ]
     },
     "b6fa2622-d834-4981-a581-9236c1aea76c": {

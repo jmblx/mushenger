@@ -71,9 +71,9 @@
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
-     <x>510</x>
+     <x>474</x>
      <y>920</y>
-     <width>861</width>
+     <width>850</width>
      <height>71</height>
     </rect>
    </property>
@@ -82,7 +82,7 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>861</width>
+      <width>850</width>
       <height>70</height>
      </rect>
     </property>
@@ -119,33 +119,6 @@ QLineEdit::placeholder {
     </property>
     <property name="placeholderText">
      <string>  Напишите сообщение...</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="sendButton">
-    <property name="geometry">
-     <rect>
-      <x>790</x>
-      <y>20</y>
-      <width>33</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton#sendButton {
-    background: transparent;
-    border: none;
-}
-</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset resource="../../Resources.qrc">
-      <normaloff>:/images/send_message_icon.svg</normaloff>:/images/send_message_icon.svg</iconset>
     </property>
    </widget>
   </widget>
@@ -254,6 +227,39 @@ QLineEdit::placeholder {
     <string>username</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="sendButton">
+   <property name="geometry">
+    <rect>
+     <x>1350</x>
+     <y>940</y>
+     <width>33</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton#sendButton {
+    background: transparent;
+    border: none;
+}
+</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Resources.qrc">
+     <normaloff>:/images/send_message_icon.svg</normaloff>:/images/send_message_icon.svg</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+  </widget>
   <zorder>label</zorder>
   <zorder>chatsList</zorder>
   <zorder>userAvatar</zorder>
@@ -263,6 +269,7 @@ QLineEdit::placeholder {
   <zorder>chatsLabel</zorder>
   <zorder>chatCount</zorder>
   <zorder>userName</zorder>
+  <zorder>sendButton</zorder>
  </widget>
  <resources>
   <include location="../../Resources.qrc"/>

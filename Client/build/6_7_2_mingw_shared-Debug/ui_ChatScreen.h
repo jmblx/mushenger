@@ -29,11 +29,11 @@ public:
     QListWidget *messagesList;
     QWidget *widget;
     QLineEdit *messageInput;
-    QPushButton *sendButton;
     QPushButton *newChat;
     QLabel *chatsLabel;
     QLabel *chatCount;
     QLabel *userName;
+    QPushButton *sendButton;
 
     void setupUi(QWidget *ChatScreen)
     {
@@ -57,10 +57,10 @@ public:
         messagesList->setGeometry(QRect(460, 130, 880, 771));
         widget = new QWidget(ChatScreen);
         widget->setObjectName("widget");
-        widget->setGeometry(QRect(510, 920, 861, 71));
+        widget->setGeometry(QRect(474, 920, 850, 71));
         messageInput = new QLineEdit(widget);
         messageInput->setObjectName("messageInput");
-        messageInput->setGeometry(QRect(0, 0, 861, 70));
+        messageInput->setGeometry(QRect(0, 0, 850, 70));
         messageInput->setMinimumSize(QSize(104, 70));
         messageInput->setBaseSize(QSize(600, 70));
         messageInput->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
@@ -78,18 +78,6 @@ public:
 "    background: transparent;       /* \320\237\321\200\320\276\320\267\321\200\320\260\321\207\320\275\321\213\320\271 \321\204\320\276\320\275 \320\264\320\273\321\217 \320\277\320\273\320\265\320\271\321\201\321\205\320\276\320\273\320\264\320\265\321\200\320\260 */\n"
 "}\n"
 ""));
-        sendButton = new QPushButton(widget);
-        sendButton->setObjectName("sendButton");
-        sendButton->setGeometry(QRect(790, 20, 33, 27));
-        sendButton->setAutoFillBackground(false);
-        sendButton->setStyleSheet(QString::fromUtf8("QPushButton#sendButton {\n"
-"    background: transparent;\n"
-"    border: none;\n"
-"}\n"
-""));
-        QIcon icon;
-        icon.addFile(QString::fromUtf8(":/images/send_message_icon.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        sendButton->setIcon(icon);
         newChat = new QPushButton(ChatScreen);
         newChat->setObjectName("newChat");
         newChat->setGeometry(QRect(250, 130, 151, 41));
@@ -143,6 +131,19 @@ public:
 "	    font-size: 22px;              /* \320\240\320\260\320\267\320\274\320\265\321\200 \321\210\321\200\320\270\321\204\321\202\320\260 */            /* \320\226\320\270\321\200\320\275\321\213\320\271 \321\202\320\265\320\272\321\201\321\202 */\n"
 "    color: #000000; \n"
 "}"));
+        sendButton = new QPushButton(ChatScreen);
+        sendButton->setObjectName("sendButton");
+        sendButton->setGeometry(QRect(1350, 940, 33, 27));
+        sendButton->setAutoFillBackground(false);
+        sendButton->setStyleSheet(QString::fromUtf8("QPushButton#sendButton {\n"
+"    background: transparent;\n"
+"    border: none;\n"
+"}\n"
+""));
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/images/send_message_icon.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        sendButton->setIcon(icon);
+        sendButton->setIconSize(QSize(24, 24));
         label->raise();
         chatsList->raise();
         userAvatar->raise();
@@ -152,6 +153,7 @@ public:
         chatsLabel->raise();
         chatCount->raise();
         userName->raise();
+        sendButton->raise();
 
         retranslateUi(ChatScreen);
 
@@ -165,11 +167,11 @@ public:
         userAvatar->setText(QString());
         messageInput->setText(QString());
         messageInput->setPlaceholderText(QCoreApplication::translate("ChatScreen", "  \320\235\320\260\320\277\320\270\321\210\320\270\321\202\320\265 \321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265...", nullptr));
-        sendButton->setText(QString());
         newChat->setText(QCoreApplication::translate("ChatScreen", "\320\235\320\276\320\262\321\213\320\271 \321\207\320\260\321\202", nullptr));
         chatsLabel->setText(QCoreApplication::translate("ChatScreen", "\320\247\320\260\321\202\320\276\320\262:", nullptr));
         chatCount->setText(QCoreApplication::translate("ChatScreen", "0", nullptr));
         userName->setText(QCoreApplication::translate("ChatScreen", "username", nullptr));
+        sendButton->setText(QString());
     } // retranslateUi
 
 };
