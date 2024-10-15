@@ -16,11 +16,14 @@
 
     <file alias="group_icon.svg">images/light/group_icon.svg</file>
     <file alias="send_message_icon.svg">images/light/send_message_icon.svg</file>
+    <file alias="gear.svg">images/light/gear.svg</file>
   </qresource>
+
   <qresource prefix="/styles">
     <file alias="light.qss">styles/light.qss</file>
     <file alias="dark.qss">styles/dark.qss</file>
   </qresource>
+
   <qresource prefix="/images/dark">
     <file alias="auth_screen.png">images/dark/auth_screen.png</file>
     <file alias="profile_screen.png">images/dark/profile_screen.png</file>
@@ -38,5 +41,6 @@
 
     <file alias="group_icon.svg">images/dark/group_icon.svg</file>
     <file alias="send_message_icon.svg">images/dark/send_message_icon.svg</file>
+    <file alias="gear.svg">images/dark/gear.svg</file>
    </qresource>
 </RCC>

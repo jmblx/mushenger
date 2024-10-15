@@ -10,6 +10,7 @@
 #include <QMap>
 #include <QImage>
 #include <QListWidgetItem>
+#include "chatitemdelegate.h"
 
 namespace Ui {
 class ChatScreen;
@@ -24,6 +25,8 @@ public:
     ~ChatScreen();
 
 private slots:
+    void onChatDeleted(const QString &chatID);  // Слот для обработки удаления чата
+    void onChatRenamed(const QString &chatID, const QString &newName);
     void onChatSelected(QListWidgetItem *item); // Слот для обработки выбора чата
     void loadChats();                          // Загрузка чатов с сервера
     void loadMessages(const QString &chatID);  // Загрузка сообщений для выбранного чата
@@ -36,11 +39,24 @@ private slots:
     void onAvatarClicked();
     void onThemeSwitchButtonClicked();
     void onThemeChanged(const QString& newTheme); // Слот для обновления UI при смене темы
+    void onGearIconClicked(const QModelIndex &index);
 
 signals:
     void userCheckCompleted(const QString &username, bool exists);
 
 private:
+    bool avatarSelected = false;  // Добавим в класс ChatScreen
+
+    ChatItemDelegate *chatItemDelegate;  // Добавляем переменную для делегата чатов
+
+    void deleteChat(const QString &chatID);     // Функция для отправки запроса на удаление чата
+    void renameChat(const QString &chatID, const QString &newName);
+    void updateChatListIcons();
+    QMap<QString, QString> chatAdmins;
+    void updateChatCount();
+    QJsonObject avatarSyncData;
+    void loadAvatarSyncData();
+    void saveAvatarSyncData();
     Ui::ChatScreen *ui;
     QString pendingChatID;
     void sendUploadAvatarRequest();
@@ -57,7 +73,8 @@ private:
     QByteArray pendingAvatarData; // Данные аватара, ожидающие отправки
     QString pendingChatName;      // Название чата, для которого ожидается загрузка аватара
 
-    QMap<QString, QImage> chatAvatars; // Сопоставление chatID с изображениями аватаров
+    QMap<QString, QImage> chatAvatars;
+    QMap<QString, QStringList> chatParticipants;
 
     QByteArray buffer;            // Буфер для поступающих данных
 
@@ -67,7 +84,8 @@ private:
     void updateUserAvatar(const QImage &image);
     void sendRequest(const QJsonObject &request);   // Отправка JSON-запроса на сервер
     QByteArray processAvatar(const QString &filePath); // Обработка аватарного изображения
-    void checkUserExists(const QString &username);   // Асинхронная проверка существования пользователя
+    void checkUserExists(const QString &username);
+
     void addParticipant();                           // Добавление участника в чат
     void createChat();                               // Создание чата после проверки всех участников
     void fetchChatAvatar(const QString &chatID);     // Запрос аватара для чата
@@ -84,7 +102,11 @@ private:
     // Новые методы
     void loadLocalCache();
     void saveLocalCache();
-    void syncMessagesWithServer();    // Запрос аватара для чата
+    void syncMessagesWithServer();
+    void addMessageToCache(const QString &sender, const QString &text);
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
 };
 
 #endif // CHATSCREEN_H

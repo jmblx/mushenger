@@ -8,10 +8,9 @@
 #include <QFileInfo>
 #include <QTextStream>
 #include "src/Chat/ChatScreen.h"
-#include <QDebug>
 #include <QSettings>
-#include <QJsonObject>
 #include <QJsonDocument>
+#include <QJsonObject>
 
 LoginScreen::LoginScreen(QWidget *parent) :
     QWidget(parent),

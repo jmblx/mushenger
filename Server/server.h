@@ -34,6 +34,15 @@ private slots:
     void clientDisconnected(); // Новый слот для обработки отключений
 
 private:
+    // Набор chatID чатов, ожидающих загрузки аватаров
+    QSet<QString> pendingAvatarChats;
+    void notifyNewChat(const QString &chatID, const QString &chatName, const QSet<QString> &participants, const QString &excludeUser = QString());
+
+    bool isUserAdmin(const QString &chatID, const QString &username);  // Проверка прав администратора
+
+    void handleDeleteChat(QTcpSocket *socket, const QJsonObject &request);  // Обработка запроса на удаление чата
+    void handleRenameChat(QTcpSocket *socket, const QJsonObject &request);  // Обработка запроса на переименование чата
+
     void loadChatData();
     void loadUserData();
     QImage image;
@@ -51,6 +60,8 @@ private:
     void handleGetAvatar(QTcpSocket *socket, const QJsonObject &request);
     void handleLoadMessages(QTcpSocket *socket, const QJsonObject &request);
     void handleLogout(QTcpSocket *socket, const QJsonObject &request);
+
+    void handleGetUserAvatars(QTcpSocket *socket, const QJsonObject &request);
 
     void sendErrorResponse(QTcpSocket *socket, const QString &message);
     void saveChatData();

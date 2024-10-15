@@ -11,6 +11,8 @@ SOURCES += \
     src/Chat/ChatScreen.cpp \
     main.cpp \
     src/AccountExitDialog/AccountExitDialog.cpp \
+    src/Chat/MessageWidget.cpp \
+    src/Chat/chatitemdelegate.cpp \
     src/Login/LoginScreen.cpp \
     src/Profile/ProfileScreen.cpp \
     src/ThemeManager/ThemeManager.cpp \
@@ -20,6 +22,8 @@ HEADERS += \
     src/AnimatedButton/AnimatedButton.h \
     src/AnimatedComboBox/AnimatedComboBox.h \
     src/AnimatedSpinBox/AnimatedSpinBox.h \
+    src/Chat/MessageWidget.h \
+    src/Chat/chatitemdelegate.h \
     src/Login/LoginScreen.h \
     src/Profile/ProfileScreen.h \
     src/Chat/ChatScreen.h \
@@ -47,7 +51,7 @@ TARGET = mushenger
 
 INCLUDEPATH += \
     src/Client \
-    build/6_7_2_mingw64_shared-Debug \
+    build/6_7_2_mingw_shared-Debug \
 
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
