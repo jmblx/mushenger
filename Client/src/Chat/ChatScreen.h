@@ -40,11 +40,11 @@ private slots:
     void onThemeSwitchButtonClicked();
     void onThemeChanged(const QString& newTheme); // Слот для обновления UI при смене темы
     void onGearIconClicked(const QModelIndex &index);
-
 signals:
     void userCheckCompleted(const QString &username, bool exists);
 
 private:
+    QMap<QString, QPixmap> userAvatars;
     bool avatarSelected = false;  // Добавим в класс ChatScreen
 
     ChatItemDelegate *chatItemDelegate;  // Добавляем переменную для делегата чатов

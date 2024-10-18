@@ -50,13 +50,6 @@ ChatScreen::ChatScreen(const QString &sessionID, const QString &userLogin, QTcpS
     ui->chatsList->setViewMode(QListView::ListMode); // Убедитесь, что используется ListMode
     ui->chatsList->setSpacing(10);
 
-    // Проверка и создание папки user_avs
-    QDir dir;
-    if (!dir.exists("user_avs")) {
-        if (!dir.mkpath("user_avs")) {
-            qDebug() << "Не удалось создать папку 'user_avs' на клиенте.";
-        }
-    }
     loadChats();
 
     ui->messagesList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -116,7 +109,7 @@ void ChatScreen::onAvatarClicked()
 {
     qDebug() << "Переход на экран профиля";
 
-    ProfileScreen *profileScreen = new ProfileScreen(sessionID, currentUserLogin);
+    ProfileScreen *profileScreen = new ProfileScreen(sessionID, currentUserLogin, socket);
     profileScreen->show();
     this->hide();
 }
@@ -170,6 +163,18 @@ void ChatScreen::onThemeChanged(const QString& newTheme)
             qDebug() << "Failed to load default avatar image:" << defaultAvatarPath;
         }
     }
+
+    for(int i = 0; i < ui->chatsList->count(); ++i) {
+        QListWidgetItem *item = ui->chatsList->item(i);
+        QString chatID = item->data(Qt::UserRole).toString();
+        if(chatAvatars.contains(chatID)) {
+            item->setIcon(QIcon(QPixmap::fromImage(chatAvatars[chatID])));
+        }
+        else {
+            QString defaultAvatarPath = QString(":/images/%1/profile-circled.svg").arg(newTheme);
+            item->setIcon(QIcon(defaultAvatarPath));
+        }
+    }
 }
 
 void ChatScreen::sendRequest(const QJsonObject &request)
@@ -206,7 +211,7 @@ void ChatScreen::onChatSelected(QListWidgetItem *item)
     QString chatID = item->data(Qt::UserRole).toString();
     currentChatID = chatID;
 
-    qDebug() << "Выбран чат с ID:" << chatID;
+    qDebug() << "Selected chat with ID:" << chatID;
 
     // Загрузка сообщений из локального кэша
     if (localMessageCache.contains(chatID)) {
@@ -218,12 +223,10 @@ void ChatScreen::onChatSelected(QListWidgetItem *item)
     // Получение списка участников чата
     QStringList participants = chatParticipants.value(chatID);
 
-    // Подготовка списка пользователей и их последних дат обновления аватарок
+    // Подготовка списка пользователей и их последних обновлений аватарок, исключая текущего пользователя
     QJsonObject usersToSync;
     for (const QString &user : participants) {
-        // Удалите или измените это условие, чтобы не пропускать текущего пользователя
-        // if (user == currentUserLogin) continue; // Опционально пропустить текущего пользователя
-
+        if (user == currentUserLogin) continue; // Исключаем себя
         qint64 lastSync = 0;
         if (avatarSyncData.contains(user)) {
             lastSync = avatarSyncData[user].toInt();
@@ -236,7 +239,7 @@ void ChatScreen::onChatSelected(QListWidgetItem *item)
     request["type"] = "getUserAvatars";
     request["users"] = usersToSync;
     sendRequest(request);
-    qDebug() << "Отправлен запрос getUserAvatars для пользователей:" << usersToSync.keys();
+    qDebug() << "Sent getUserAvatars request for users:" << usersToSync.keys();
 
     // Загрузка новых сообщений с сервера
     loadMessages(chatID);
@@ -263,25 +266,37 @@ void ChatScreen::onSendMessageClicked()
     sendRequest(request);
     ui->messageInput->clear();
 
-    // Получение текущего времени в UTC
+    // Get current UTC timestamp
     qint64 currentTimestamp = QDateTime::currentDateTimeUtc().toSecsSinceEpoch();
 
-    // Путь к аватарке текущего пользователя
-    QString avatarPath = QString("user_avs/%1.png").arg(currentUserLogin);
+    // Get avatar pixmap for current user
+    QPixmap avatarPixmap;
+    if (!currentUserAvatar.isNull()) {
+        avatarPixmap = QPixmap::fromImage(currentUserAvatar);
+    } else {
+        // Use default avatar
+        QString defaultAvatarPath = QString(":/images/%1/profile-circled.svg").arg(ThemeManager::instance().currentTheme());
+        avatarPixmap = QPixmap(defaultAvatarPath);
+    }
 
-    // Создаём MessageWidget для отправленного сообщения с timestamp
-    MessageWidget *msgWidget = new MessageWidget(currentUserLogin, messageText, avatarPath, false, true, currentTimestamp, this);
+    bool isDefaultAvatar = false;
+    if (currentUserAvatar.isNull()) {
+        isDefaultAvatar = true;
+    }
+
+    // Create MessageWidget for the sent message with timestamp
+    MessageWidget *msgWidget = new MessageWidget(currentUserLogin, messageText, avatarPixmap, false, true, currentTimestamp, isDefaultAvatar, this);
 
     QListWidgetItem *item = new QListWidgetItem(ui->messagesList);
     item->setSizeHint(msgWidget->sizeHint());
     ui->messagesList->addItem(item);
     ui->messagesList->setItemWidget(item, msgWidget);
 
-    // Прокрутите список вниз
+    // Scroll down
     ui->messagesList->scrollToBottom();
-    qDebug() << "Добавлено сообщение отправителя в UI как MessageWidget.";
+    qDebug() << "Added sender's message to UI as MessageWidget.";
 
-    // Добавить сообщение в локальный кэш
+    // Add message to local cache
     if (!localMessageCache.contains(currentChatID)) {
         QJsonObject chatCache;
         chatCache["messages"] = QJsonArray();
@@ -292,14 +307,13 @@ void ChatScreen::onSendMessageClicked()
     QJsonObject newMessage;
     newMessage["sender"] = currentUserLogin;
     newMessage["text"] = messageText;
-    newMessage["timestamp"] = currentTimestamp; // Используем текущий timestamp
+    newMessage["timestamp"] = currentTimestamp;
     existingMessages.append(newMessage);
     localMessageCache[currentChatID]["messages"] = existingMessages;
 
     saveLocalCache();
-    qDebug() << "Сообщение добавлено в локальный кэш и сохранено.";
+    qDebug() << "Message added to local cache and saved.";
 }
-
 
 void ChatScreen::addMessageToCache(const QString &sender, const QString &text)
 {
@@ -509,25 +523,27 @@ QListWidgetItem* ChatScreen::createChatListItem(const QString &chatName, const Q
 {
     QListWidgetItem *item = new QListWidgetItem(chatName, ui->chatsList);
     item->setData(Qt::UserRole, chatID);
-    item->setIcon(QIcon(":/images/profile-circled.svg"));
+
+    // Используем путь, зависящий от текущей темы
+    QString defaultAvatarPath = QString(":/images/%1/profile-circled.svg").arg(ThemeManager::instance().currentTheme());
+    item->setIcon(QIcon(defaultAvatarPath));
+
     return item;
 }
 
 void ChatScreen::displayMessages(const QJsonArray &messages)
 {
-    ui->messagesList->clear(); // Очищаем список сообщений перед добавлением
-    QString lastSender;
+    ui->messagesList->clear(); // Очистить список сообщений перед добавлением
 
     for (int i = 0; i < messages.size(); ++i) {
         QJsonObject msgObj = messages[i].toObject();
         QString sender = msgObj.value("sender").toString();
         QString text = msgObj.value("text").toString();
-        QString avatarPath = QString("user_avs/%1.png").arg(sender);
         qint64 timestamp = msgObj.value("timestamp").toInt();
 
         bool isTransparent = false;
 
-        // Проверяем, есть ли следующее сообщение и совпадает ли отправитель
+        // Проверяем, является ли следующий отправитель тем же
         if (i < messages.size() - 1) {
             QJsonObject nextMsg = messages[i + 1].toObject();
             QString nextSender = nextMsg.value("sender").toString();
@@ -538,25 +554,46 @@ void ChatScreen::displayMessages(const QJsonArray &messages)
 
         bool isCurrentUser = (sender == currentUserLogin);
 
-        // Создаём MessageWidget с учётом прозрачности аватарки и отправителя
-        MessageWidget *msgWidget = new MessageWidget(sender, text, avatarPath, isTransparent, isCurrentUser, timestamp, this);
+        // Получаем аватарку для отправителя
+        QPixmap avatarPixmap;
+        bool isDefaultAvatar = false;
 
-        // Создаём QListWidgetItem и устанавливаем ему размер
+        if (isCurrentUser) {
+            // Используем только currentUserAvatar для себя
+            if (!currentUserAvatar.isNull()) {
+                avatarPixmap = QPixmap::fromImage(currentUserAvatar);
+            } else {
+                // Используем дефолтную аватарку
+                QString defaultAvatarPath = QString(":/images/%1/profile-circled.svg").arg(ThemeManager::instance().currentTheme());
+                avatarPixmap = QPixmap(defaultAvatarPath);
+                isDefaultAvatar = true;
+            }
+        } else {
+            // Для других пользователей используем userAvatars
+            if (userAvatars.contains(sender)) {
+                avatarPixmap = userAvatars[sender];
+            } else {
+                // Используем дефолтную аватарку
+                QString defaultAvatarPath = QString(":/images/%1/profile-circled.svg").arg(ThemeManager::instance().currentTheme());
+                avatarPixmap = QPixmap(defaultAvatarPath);
+                isDefaultAvatar = true;
+            }
+        }
+
+        // Создаём MessageWidget с аватаркой и информацией об отправителе
+        MessageWidget *msgWidget = new MessageWidget(sender, text, avatarPixmap, isTransparent, isCurrentUser, timestamp, isDefaultAvatar, this);
+
+        // Создаём элемент списка и устанавливаем размер
         QListWidgetItem *item = new QListWidgetItem(ui->messagesList);
         item->setSizeHint(msgWidget->sizeHint());
 
-        // Добавляем элемент в список и устанавливаем для него виджет
+        // Добавляем элемент в список и устанавливаем виджет
         ui->messagesList->addItem(item);
         ui->messagesList->setItemWidget(item, msgWidget);
-
-        lastSender = sender;
     }
 
-    ui->messagesList->scrollToBottom(); // Прокрутить вниз после добавления сообщений
+    ui->messagesList->scrollToBottom(); // Прокрутка вниз после добавления сообщений
 }
-
-
-
 
 void ChatScreen::resizeEvent(QResizeEvent *event)
 {
@@ -582,14 +619,13 @@ void ChatScreen::onReadyRead()
 
     buffer.append(responseData);
 
-    // Разделяем буфер на отдельные сообщения по символу '\n'
     while (buffer.contains('\n')) {
         int index = buffer.indexOf('\n');
         QByteArray message = buffer.left(index).trimmed();
         buffer.remove(0, index + 1);
 
         if (message.isEmpty()) {
-            continue; // Пропускаем пустые строки
+            continue;
         }
 
         QJsonParseError parseError;
@@ -598,7 +634,7 @@ void ChatScreen::onReadyRead()
         if (parseError.error != QJsonParseError::NoError) {
             qDebug() << "Ошибка парсинга JSON:" << parseError.errorString();
             qDebug() << "Некорректный JSON:" << message;
-            continue; // Продолжаем обработку следующих сообщений
+            continue;
         }
 
         QJsonObject response = responseDoc.object();
@@ -612,8 +648,37 @@ void ChatScreen::onReadyRead()
             QString responseType = response.value("type").toString();
             qDebug() << "Тип ответа:" << responseType;
 
-            if (responseType == "newMessages") {
-                // Обработка newMessages
+            if (responseType == "avatars") {
+                QJsonObject avatars = response.value("avatars").toObject();
+                qDebug() << "Получены аватарки:" << avatars;
+
+                for (auto it = avatars.begin(); it != avatars.end(); ++it) {
+                    QString username = it.key();
+                    QJsonObject avatarInfo = it.value().toObject();
+                    qint64 serverLastUpdate = avatarInfo.value("avatarLastUpdated").toInt();
+                    QString avatarBase64 = avatarInfo.value("avatar").toString();
+
+                    QByteArray avatarBytes = QByteArray::fromBase64(avatarBase64.toUtf8());
+                    QImage avatarImage;
+                    if (avatarImage.loadFromData(avatarBytes)) {
+                        QPixmap avatarPixmap = QPixmap::fromImage(avatarImage);
+                        userAvatars.insert(username, avatarPixmap);
+                        avatarSyncData.insert(username, serverLastUpdate);
+                        qDebug() << "Аватарка обновлена для пользователя:" << username;
+                    } else {
+                        qDebug() << "Не удалось декодировать аватарку для пользователя:" << username;
+                    }
+                }
+                saveAvatarSyncData();
+
+                if (!currentChatID.isEmpty()) {
+                    QJsonArray messages = localMessageCache[currentChatID].value("messages").toArray();
+                    ui->messagesList->clear();
+                    displayMessages(messages);
+                }
+                qDebug() << "Локальный кэш сохранён после обработки avatars.";
+            }
+            else if (responseType == "newMessages") {
                 QJsonObject newMessages = response.value("newMessages").toObject();
                 qDebug() << "Получены newMessages:" << newMessages;
 
@@ -637,13 +702,11 @@ void ChatScreen::onReadyRead()
                             if (chatID == currentChatID) {
                                 QString sender = msgObj.value("sender").toString();
                                 QString text = msgObj.value("text").toString();
-                                QString avatarPath = QString("user_avs/%1.png").arg(sender);
                                 qint64 timestamp = msgObj.value("timestamp").toInt();
 
                                 bool isCurrentUser = (sender == currentUserLogin);
                                 bool isTransparent = false;
 
-                                // Проверяем, есть ли предыдущие сообщения от того же отправителя
                                 if (ui->messagesList->count() > 0) {
                                     QListWidgetItem *lastItem = ui->messagesList->item(ui->messagesList->count() - 1);
                                     MessageWidget *lastWidget = qobject_cast<MessageWidget*>(ui->messagesList->itemWidget(lastItem));
@@ -652,15 +715,35 @@ void ChatScreen::onReadyRead()
                                     }
                                 }
 
-                                // Создаём MessageWidget с учётом прозрачности аватарки и отправителя
-                                MessageWidget *msgWidget = new MessageWidget(sender, text, avatarPath, isTransparent, isCurrentUser, timestamp, this);
+                                QPixmap avatarPixmap;
+                                if (isCurrentUser) {
+                                    if (!currentUserAvatar.isNull()) {
+                                        avatarPixmap = QPixmap::fromImage(currentUserAvatar);
+                                    } else {
+                                        QString defaultAvatarPath = QString(":/images/%1/profile-circled.svg").arg(ThemeManager::instance().currentTheme());
+                                        avatarPixmap = QPixmap(defaultAvatarPath);
+                                    }
+                                } else {
+                                    if (userAvatars.contains(sender)) {
+                                        avatarPixmap = userAvatars[sender];
+                                    } else {
+                                        QString defaultAvatarPath = QString(":/images/%1/profile-circled.svg").arg(ThemeManager::instance().currentTheme());
+                                        avatarPixmap = QPixmap(defaultAvatarPath);
+                                    }
+                                }
+
+                                bool isDefaultAvatar = false;
+                                if (!isCurrentUser && !userAvatars.contains(sender)) {
+                                    isDefaultAvatar = true;
+                                }
+
+                                MessageWidget *msgWidget = new MessageWidget(sender, text, avatarPixmap, isTransparent, isCurrentUser, timestamp, isDefaultAvatar, this);
 
                                 QListWidgetItem *item = new QListWidgetItem(ui->messagesList);
                                 item->setSizeHint(msgWidget->sizeHint());
                                 ui->messagesList->addItem(item);
                                 ui->messagesList->setItemWidget(item, msgWidget);
 
-                                // Прокрутите список вниз
                                 ui->messagesList->scrollToBottom();
                                 qDebug() << "Добавлено новое сообщение в UI как MessageWidget.";
                             }
@@ -671,7 +754,6 @@ void ChatScreen::onReadyRead()
                     }
                     saveAvatarSyncData();
 
-                    // Перезагрузка сообщений с учётом обновлённых аватарок
                     if (!currentChatID.isEmpty()) {
                         QJsonArray messages = localMessageCache[currentChatID].value("messages").toArray();
                         ui->messagesList->clear();
@@ -681,12 +763,11 @@ void ChatScreen::onReadyRead()
                 }
             }
             else if (responseType == "chatList") {
-                // Обработка списка чатов
                 QJsonArray chats = response.value("chats").toArray();
                 ui->chatsList->clear();
                 chatAvatars.clear();
-                chatParticipants.clear(); // Очистка предыдущих данных
-                chatAdmins.clear(); // Очистка информации об администраторах
+                chatParticipants.clear();
+                chatAdmins.clear();
 
                 qDebug() << "Получен список чатов, количество:" << chats.size();
 
@@ -694,44 +775,46 @@ void ChatScreen::onReadyRead()
                     QJsonObject chatObj = chatVal.toObject();
                     QString chatID = chatObj.value("id").toString();
                     QString chatName = chatObj.value("name").toString();
-                    QString adminLogin = chatObj.value("admin").toString(); // Получаем администратора
+                    QString adminLogin = chatObj.value("admin").toString();
 
                     qDebug() << "Обрабатывается чат:" << chatName << "ID:" << chatID << "Admin:" << adminLogin;
 
                     QListWidgetItem *item = createChatListItem(chatName, chatID);
                     ui->chatsList->addItem(item);
 
-                    // Сохранение администратора чата только если текущий пользователь является админом
                     if (adminLogin == currentUserLogin) {
                         chatAdmins.insert(chatID, adminLogin);
                         qDebug() << "Текущий пользователь является администратором чата:" << chatID;
                     }
 
-                    // Сохранение списка участников чата
                     QJsonArray participantsArray = chatObj.value("participants").toArray();
                     QStringList participantsList;
 
                     qDebug() << "Участники для чата" << chatID << ":";
                     for (const QJsonValue &participantVal : participantsArray) {
-                        qDebug() << participantVal.toString(); // Печатаем каждого участника
+                        qDebug() << participantVal.toString();
                         participantsList << participantVal.toString();
                     }
 
-                    // **Убедитесь, что текущий пользователь добавлен как участник**
                     if (!participantsList.contains(currentUserLogin)) {
                         participantsList.append(currentUserLogin);
-                        // Также обновите `userData` на сервере, чтобы включить текущего пользователя в чат
-                        // Это может потребовать дополнительных серверных изменений
                     }
 
                     chatParticipants.insert(chatID, participantsList);
 
-                    // Запрос аватара для этого чата, если он есть
+                    // **Добавление новых участников в avatarSyncData с avatarLastUpdate = 0**
+                    for (const QString &participant : participantsList) {
+                        if (participant != currentUserLogin && !avatarSyncData.contains(participant)) {
+                            avatarSyncData.insert(participant, 0); // Устанавливаем 0 для новых участников
+                        }
+                    }
+
+                    saveAvatarSyncData(); // Сохраняем обновления
+
                     if (!chatObj.value("avatarPath").toString().isEmpty()) {
                         fetchChatAvatar(chatID);
                     }
 
-                    // Инициализация локального кэша для нового чата, если он еще не существует
                     if (!localMessageCache.contains(chatID)) {
                         QJsonObject newChatCache;
                         newChatCache["messages"] = QJsonArray();
@@ -740,73 +823,53 @@ void ChatScreen::onReadyRead()
                     }
                 }
 
-                // Передать список администраторов в делегат
                 chatItemDelegate->setAdminChats(chatAdmins);
                 qDebug() << "Передача списка администраторов в делегат";
 
                 updateChatCount();
 
-                // Сохранение обновлённого локального кэша
                 saveLocalCache();
                 qDebug() << "Локальный кэш сохранён после обработки chatList.";
 
-                // Инициируем синхронизацию сообщений
                 syncMessagesWithServer();
                 qDebug() << "Инициирована синхронизация сообщений после получения списка чатов.";
-
-                // Обновим отображение шестерёнок для администраторов
-                // Это уже обрабатывается делегатом, поэтому можно убрать или оставить при необходимости
-                // updateChatListIcons();
             }
-
-
             else if (responseType == "chatDeleted") {
                 QString chatID = response.value("chatID").toString();
-                onChatDeleted(chatID);  // Удалить чат из UI
+                onChatDeleted(chatID);
             }
-
-            // Обработка переименования чата
             else if (responseType == "chatRenamed") {
                 QString chatID = response.value("chatID").toString();
                 QString newName = response.value("newName").toString();
-                onChatRenamed(chatID, newName);  // Обновить название чата в UI
+                onChatRenamed(chatID, newName);
             }
             else if (responseType == "createChat") {
                 if (response.contains("chatID")) {
                     QString chatID = response["chatID"].toString();
-                    pendingChatID = chatID; // Сохраняем chatID
+                    pendingChatID = chatID;
                     qDebug() << "Получен chatID нового чата:" << chatID;
                 }
 
                 if (avatarSelected && !pendingChatID.isEmpty()) {
                     qDebug() << "Отправляем запрос uploadAvatar для chatID:" << pendingChatID;
-                    sendUploadAvatarRequest(); // Отправляем JSON-запрос uploadAvatar
+                    sendUploadAvatarRequest();
                 }
-                loadChats(); // Обновляем список чатов
+                loadChats();
                 updateChatCount();
             }
-
-
-
             else if (responseType == "newChat") {
                 qDebug() << "Получено сообщение о новом чате, обновляем список чатов.";
-
                 loadChats();
             }
-
             else if (responseType == "loadMessages") {
-                // Обработка ответа на загрузку сообщений
                 if (response.contains("messages")) {
                     QJsonArray messages = response.value("messages").toArray();
                     qDebug() << "Получены сообщения для чата:" << currentChatID << ", количество:" << messages.size();
 
-                    // Очистка текущего списка сообщений
                     ui->messagesList->clear();
 
-                    // Отображение полученных сообщений
                     displayMessages(messages);
 
-                    // Обновление локального кэша
                     if (!localMessageCache.contains(currentChatID)) {
                         QJsonObject chatCache;
                         chatCache["messages"] = QJsonArray();
@@ -828,7 +891,6 @@ void ChatScreen::onReadyRead()
                 }
             }
             else if (responseType == "userData") {
-                // Обработка данных пользователя
                 QJsonObject userObj = response["user"].toObject();
                 QString avatarBase64 = userObj.value("avatar").toString();
 
@@ -844,30 +906,26 @@ void ChatScreen::onReadyRead()
                 }
             }
             else if (responseType == "checkUser") {
-                // Обработка ответа на checkUser запрос
                 QString username = response["username"].toString();
-                bool exists = (status == "success"); // Используем поле 'status' для определения
+                bool exists = (status == "success");
                 emit userCheckCompleted(username, exists);
             }
             else {
                 qDebug() << "Неизвестный тип ответа:" << responseType;
-                // Добавьте обработку других типов сообщений при необходимости
             }
         }
         else if (messageText == "Chat created successfully.") {
-            // Обработка успешного создания чата
             if (response.contains("chatID")) {
                 QString chatID = response["chatID"].toString();
-                pendingChatID = chatID; // Сохраняем chatID
+                pendingChatID = chatID;
             }
 
             if (!pendingAvatarData.isEmpty() && !pendingChatID.isEmpty()) {
-                sendUploadAvatarRequest(); // Отправляем JSON-запрос uploadAvatar
+                sendUploadAvatarRequest();
             }
-            loadChats(); // Обновляем список чатов
+            loadChats();
         }
         else if (messageText == "Ready to receive avatar data.") {
-            // Теперь отправляем бинарные данные аватара
             if (!pendingAvatarData.isEmpty() && !pendingChatID.isEmpty()) {
                 socket->write(pendingAvatarData);
                 socket->flush();
@@ -880,17 +938,15 @@ void ChatScreen::onReadyRead()
                     QMessageBox::information(this, "Успех", "Аватар успешно загружен.");
                 }
 
-                // Очистка данных после отправки
                 pendingAvatarData.clear();
                 pendingChatID.clear();
             }
         }
         else if (messageText == "Avatar uploaded successfully.") {
             QMessageBox::information(this, "Успех", "Аватар чата успешно загружен.");
-            loadChats(); // Обновляем список чатов для отображения нового аватара
+            loadChats();
         }
         else if (messageText == "Avatar data.") {
-            // Обработка получения аватара
             QString chatID = response["chatID"].toString();
             QString avatarBase64 = response["avatar"].toString();
             QByteArray avatarBytes = QByteArray::fromBase64(avatarBase64.toUtf8());
@@ -899,13 +955,11 @@ void ChatScreen::onReadyRead()
             displayChatAvatar(chatID, avatarImage);
         }
         else if (response.contains("username")) {
-            // Обработка ответа на checkUser запрос
             QString username = response["username"].toString();
             bool exists = (messageText == "User exists.");
             emit userCheckCompleted(username, exists);
         }
         else if (response.contains("avatars")) {
-            // Обработка полученных аватарок
             QJsonObject avatars = response.value("avatars").toObject();
             for (auto it = avatars.begin(); it != avatars.end(); ++it) {
                 QString username = it.key();
@@ -913,37 +967,19 @@ void ChatScreen::onReadyRead()
                 qint64 serverLastUpdate = avatarInfo.value("avatarLastUpdated").toInt();
                 QString avatarBase64 = avatarInfo.value("avatar").toString();
 
-                // Декодирование и сохранение аватарки
                 QByteArray avatarBytes = QByteArray::fromBase64(avatarBase64.toUtf8());
                 QImage avatarImage;
                 avatarImage.loadFromData(avatarBytes);
+                QPixmap avatarPixmap = QPixmap::fromImage(avatarImage);
 
-                // Убедитесь, что папка user_avs существует
-                QDir dir;
-                if (!dir.exists("user_avs")) {
-                    if (!dir.mkpath("user_avs")) {
-                        qDebug() << "Не удалось создать папку 'user_avs'.";
-                        continue;
-                    }
-                }
+                userAvatars.insert(username, avatarPixmap);
+                qDebug() << "Loaded avatar into memory for user:" << username;
 
-                QString avatarPath = QString("user_avs/%1.png").arg(username);
-                if (avatarImage.save(avatarPath, "PNG")) {
-                    qDebug() << "Сохранена аватарка пользователя:" << username;
-
-                    // Обновление данных синхронизации
-                    avatarSyncData.insert(username, serverLastUpdate);
-                }
-                else {
-                    qDebug() << "Не удалось сохранить аватарку для пользователя:" << username;
-                }
+                avatarSyncData.insert(username, serverLastUpdate);
             }
 
-            // Сохранение обновлённого файла синхронизации
             saveAvatarSyncData();
 
-            // Обновление отображения аватарок в интерфейсе
-            // Например, перерисовка сообщений
             if (!currentChatID.isEmpty()) {
                 loadMessages(currentChatID);
             }
@@ -1176,6 +1212,23 @@ void ChatScreen::syncMessagesWithServer()
     request["lastMessages"] = lastMessages;
     qDebug() << "Last Messages for Sync:" << lastMessages;
 
+    // **Отправка запроса на получение аватарок для участников**
+    QJsonObject avatarRequest;
+    avatarRequest["type"] = "getUserAvatars";
+    QJsonObject usersToFetch;
+
+    for (auto it = avatarSyncData.begin(); it != avatarSyncData.end(); ++it) {
+        QString username = it.key();
+        qint64 lastUpdate = it.value().toInt();
+        usersToFetch.insert(username, lastUpdate);
+    }
+
+    avatarRequest["users"] = usersToFetch;
+
+    sendRequest(avatarRequest);
+    qDebug() << "Sent getUserAvatars request to server:" << QJsonDocument(avatarRequest).toJson(QJsonDocument::Compact) + "\n";
+
+    // **Отправка запроса на синхронизацию сообщений**
     sendRequest(request);
     qDebug() << "Sent syncMessages request to server:" << QJsonDocument(request).toJson(QJsonDocument::Compact) + "\n";
 }

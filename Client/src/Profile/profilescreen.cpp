@@ -17,47 +17,46 @@
 #include <QPainter>
 #include <QFontDatabase>
 #include <QSettings>
+#include <QJsonObject>
 
-ProfileScreen::ProfileScreen(const QString &sessionID, const QString &userLogin, QWidget *parent) :
+ProfileScreen::ProfileScreen(const QString &sessionID, const QString &userLogin, QTcpSocket *existingSocket, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ProfileScreen),
-    socket(new QTcpSocket(this)),
+    socket(existingSocket),
     sessionID(sessionID),
     currentUserLogin(userLogin)
 {
     ui->setupUi(this);
     ui->loginLabel->setText(currentUserLogin);
 
-    // Load saved font family and scale from ThemeManager
+    // Загружаем сохраненные настройки шрифта из ThemeManager
     QString savedFontFamily = ThemeManager::instance().fontFamily();
     int savedFontScale = ThemeManager::instance().fontScale();
 
-    // Populate fontComboBox with available fonts
+    // Заполняем fontComboBox доступными шрифтами
     QFontDatabase fontDatabase;
     ui->fontComboBox->addItems(fontDatabase.families());
     ui->fontComboBox->setCurrentText(savedFontFamily);
 
-    // Set up fontSizeSpinBox
+    // Настраиваем fontSizeSpinBox
     ui->fontSizeSpinBox->setRange(1, 200);
     ui->fontSizeSpinBox->setValue(savedFontScale);
 
-    // Теперь, благодаря кастомным виджетам, анимации уже встроены
-
-    // Cast buttons to AnimatedButton
+    // Приводим кнопки к типу AnimatedButton
     backButton = qobject_cast<AnimatedButton*>(ui->backButton);
     profileButton = qobject_cast<AnimatedButton*>(ui->profileButton);
     overlayButton = qobject_cast<AnimatedButton*>(ui->overlayButton);
 
     if (backButton) {
-        // Set up hover animation for backButton
+        // Настраиваем анимацию при наведении для backButton
         backButton->setHoverAnimationProperty("iconSize", QSize(22, 22), QSize(26, 26), 200);
     }
 
     if (profileButton) {
-        // Reduce icon size by half
+        // Настраиваем анимацию при наведении для profileButton
         profileButton->setHoverAnimationProperty("iconSize", QSize(80, 80), QSize(85, 85), 200);
 
-        // Set up blur effect on hover
+        // Настраиваем эффект размытия при наведении
         QString currentTheme = ThemeManager::instance().currentTheme();
         if (currentTheme == "dark") {
             profileButton->setHoverBlurEffect(QColor("#D8DCE4"), 10.0, 200);
@@ -69,12 +68,12 @@ ProfileScreen::ProfileScreen(const QString &sessionID, const QString &userLogin,
     }
 
     if (overlayButton) {
-        // Connect hover signals
+        // Подключаем сигналы наведения для overlayButton
         connect(overlayButton, &AnimatedButton::hoverEntered, this, &ProfileScreen::onOverlayButtonHoverEntered);
         connect(overlayButton, &AnimatedButton::hoverLeft, this, &ProfileScreen::onOverlayButtonHoverLeft);
     }
 
-    // Connect signals and slots
+    // Подключаем сигналы и слоты
     connect(ui->overlayButton, &QPushButton::clicked, this, &ProfileScreen::onOverlayButtonClicked);
     connect(ui->backButton, &QPushButton::clicked, this, &ProfileScreen::onBackButtonClicked);
     connect(ui->profileButton, &QPushButton::clicked, this, &ProfileScreen::onProfileButtonClicked);
@@ -83,17 +82,76 @@ ProfileScreen::ProfileScreen(const QString &sessionID, const QString &userLogin,
     onThemeChanged(ThemeManager::instance().currentTheme());
     connect(ui->themeSwitchButton, &QPushButton::clicked, this, &ProfileScreen::onThemeSwitchButtonClicked);
 
-    // Connect fontComboBox and fontSizeSpinBox to ThemeManager
+    // Подключаем fontComboBox и fontSizeSpinBox к ThemeManager
     connect(ui->fontComboBox, &QComboBox::currentTextChanged, &ThemeManager::instance(), &ThemeManager::setFontFamily);
     connect(ui->fontSizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), &ThemeManager::instance(), &ThemeManager::setFontScale);
 
-    connectToServer();
-    getUserData(sessionID);
+    // Отключаем все существующие подключения readyRead
+    QObject::disconnect(socket, nullptr, nullptr, nullptr);
+
+    // Подключаем сигнал readyRead
+    connect(socket, &QTcpSocket::readyRead, this, &ProfileScreen::onReadyRead);
+
+    loadAvatarSyncData();
+    getUserData();
 }
 
 ProfileScreen::~ProfileScreen()
 {
     delete ui;
+}
+
+void ProfileScreen::loadAvatarSyncData()
+{
+    QFile file("avatar_sync.json"); // Используем тот же файл, что и в ChatScreen
+    if (file.exists()) {
+        if (file.open(QIODevice::ReadOnly)) {
+            QByteArray jsonData = file.readAll();
+            QJsonDocument doc = QJsonDocument::fromJson(jsonData);
+            if (doc.isObject()) {
+                avatarSyncData = doc.object();
+                qDebug() << "Данные синхронизации аватаров загружены.";
+            } else {
+                qDebug() << "Ошибка парсинга avatar_sync.json.";
+            }
+            file.close();
+        } else {
+            qDebug() << "Не удалось открыть avatar_sync.json для чтения.";
+        }
+    } else {
+        qDebug() << "Файл avatar_sync.json не найден. Начинаем с пустых данных синхронизации.";
+        avatarSyncData = QJsonObject();
+    }
+}
+
+void ProfileScreen::saveAvatarSyncData()
+{
+    QFile file("avatar_sync.json"); // Используем тот же файл, что и в ChatScreen
+    if (file.open(QIODevice::WriteOnly)) {
+        QJsonDocument doc(avatarSyncData);
+        file.write(doc.toJson());
+        file.close();
+        qDebug() << "Данные синхронизации аватаров сохранены.";
+    } else {
+        qDebug() << "Не удалось сохранить avatar_sync.json.";
+    }
+}
+
+void ProfileScreen::getUserData()
+{
+    QJsonObject request;
+    request["type"] = "getUserData";
+    request["sessionID"] = sessionID;
+
+    // Получаем время последней синхронизации аватара
+    qint64 lastSync = 0;
+    if (avatarSyncData.contains(currentUserLogin)) {
+        lastSync = avatarSyncData[currentUserLogin].toInt();
+    }
+    request["avatarLastUpdate"] = lastSync;
+
+    sendRequest(request);
+    qDebug() << "Запрос на получение данных пользователя отправлен.";
 }
 
 void ProfileScreen::onLogout()
@@ -109,14 +167,16 @@ void ProfileScreen::onReadyRead()
     QByteArray responseData = socket->readAll();
     qDebug() << "Полученные данные от сервера:" << responseData;
 
-    // Split buffer into separate messages by '\n'
-    while (responseData.contains('\n')) {
-        int index = responseData.indexOf('\n');
-        QByteArray message = responseData.left(index).trimmed();
-        responseData.remove(0, index + 1);
+    buffer.append(responseData);
+
+    // Разделяем буфер на отдельные сообщения по символу '\n'
+    while (buffer.contains('\n')) {
+        int index = buffer.indexOf('\n');
+        QByteArray message = buffer.left(index).trimmed();
+        buffer.remove(0, index + 1);
 
         if (message.isEmpty()) {
-            continue; // Skip empty lines
+            continue; // Пропускаем пустые строки
         }
 
         QJsonParseError parseError;
@@ -124,71 +184,107 @@ void ProfileScreen::onReadyRead()
 
         if (parseError.error != QJsonParseError::NoError) {
             qDebug() << "Ошибка парсинга JSON:" << parseError.errorString();
-            continue;
+            qDebug() << "Некорректный JSON:" << message;
+            continue; // Продолжаем обработку следующих сообщений
         }
 
         QJsonObject response = responseDoc.object();
         QString status = response.value("status").toString();
+        QString messageText = response.value("message").toString();
 
-        if (status == "success" && response.contains("user")) {
-            QJsonObject userObj = response["user"].toObject();
-            QString avatarBase64 = userObj.value("avatar").toString();
+        qDebug() << "Статус ответа:" << status << ", сообщение:" << messageText;
+        if (response.contains("type")) {
+            QString responseType = response.value("type").toString();
+            qDebug() << "Тип ответа:" << responseType;
 
-            if (!avatarBase64.isEmpty()) {
-                QByteArray avatarData = QByteArray::fromBase64(avatarBase64.toUtf8());
-                QImage avatarImage;
-                avatarImage.loadFromData(avatarData);
-                currentUserAvatar = avatarImage;
-                updateProfileIcon(avatarImage);
+            if (responseType == "userData") {
+                // Обработка данных пользователя
+                QJsonObject userObj = response["user"].toObject();
+                QString avatarBase64 = userObj.value("avatar").toString();
+                qint64 serverLastUpdate = userObj.value("avatarLastUpdated").toInt();
+
+                if (!avatarBase64.isEmpty()) {
+                    QByteArray avatarData = QByteArray::fromBase64(avatarBase64.toUtf8());
+                    QImage avatarImage;
+                    avatarImage.loadFromData(avatarData);
+                    displayUserAvatar(avatarImage);
+                    qDebug() << "Аватар пользователя успешно загружен и отображен.";
+
+                    // Обновляем данные синхронизации
+                    avatarSyncData[currentUserLogin] = serverLastUpdate;
+                    saveAvatarSyncData();
+                } else {
+                    qDebug() << "Аватар пользователя отсутствует. Устанавливаем аватар по умолчанию.";
+                    // Устанавливаем аватар по умолчанию
+                    QString defaultAvatarPath = QString(":/images/%1/profile-circled.svg").arg(ThemeManager::instance().currentTheme());
+                    QPixmap defaultAvatar(defaultAvatarPath);
+                    if (!defaultAvatar.isNull()) {
+                        ui->profileIcon->setPixmap(defaultAvatar);
+                    }
+                }
+            }
+            else if (responseType == "uploadProfileAvatar") {
+                if (messageText == "Avatar uploaded successfully.") {
+                    // Аватар успешно загружен, запрашиваем обновлённые данные пользователя
+                    getUserData();
+                    qDebug() << "Аватар успешно загружен. Запрашиваем обновлённые данные пользователя.";
+                }
+            }
+            else {
+                qDebug() << "Неизвестный тип ответа:" << responseType;
             }
         }
         else {
-            qDebug() << "Получен некорректный ответ от сервера.";
+            qDebug() << "Получено сообщение без поля 'type'.";
         }
     }
 }
 
 void ProfileScreen::onProfileButtonClicked()
 {
-    // Open file dialog to select avatar image
+    // Открываем диалоговое окно для выбора изображения
     QString filePath = QFileDialog::getOpenFileName(this, "Выберите аватарку", "", "Images (*.png *.jpg *.bmp)");
     if (!filePath.isEmpty()) {
-        // Load image and check it
+        // Загружаем изображение
         QImage image(filePath);
         if (!image.isNull()) {
-            // Convert image to byte array
+            // Масштабируем изображение до 128x128
+            QImage scaledImage = image.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+            // Конвертируем изображение в байтовый массив
             QByteArray imageData;
             QBuffer buffer(&imageData);
             buffer.open(QIODevice::WriteOnly);
-            image.save(&buffer, "PNG");
+            scaledImage.save(&buffer, "PNG");
 
-            // Encode data in Base64
+            // Кодируем данные в Base64
             QString avatarBase64 = QString(imageData.toBase64());
 
-            // Formulate request to server
+            // Формируем запрос на сервер
             QJsonObject avatarRequest;
             avatarRequest["type"] = "uploadProfileAvatar";
             avatarRequest["sessionID"] = sessionID;
-            avatarRequest["avatar"] = avatarBase64; // Add avatar data
+            avatarRequest["avatar"] = avatarBase64; // Добавляем данные аватара
 
-            sendRequest(avatarRequest); // Use sendRequest method to send request
+            sendRequest(avatarRequest); // Отправляем запрос на сервер
 
-            // Update profile icon in UI
-            updateProfileIcon(image);
+            // Немедленно обновляем аватарку в интерфейсе
+            displayUserAvatar(scaledImage);
+            qDebug() << "Аватарка обновлена в интерфейсе.";
         } else {
             QMessageBox::warning(this, "Ошибка", "Невозможно загрузить изображение.");
         }
     }
 }
 
-void ProfileScreen::updateProfileIcon(const QImage &image)
+void ProfileScreen::displayUserAvatar(const QImage &avatar)
 {
-    currentUserAvatar = image;
+    currentUserAvatar = avatar;
 
-    // Scale image to 161x161 and make it circular
-    QPixmap pixmap = QPixmap::fromImage(image.scaled(161, 161, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
+    // Масштабируем изображение и делаем его круглым
+    QImage scaledImage = avatar.scaled(161, 161, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+    QPixmap pixmap = QPixmap::fromImage(scaledImage);
 
-    // Crop to circle
     QPixmap circularPixmap(161, 161);
     circularPixmap.fill(Qt::transparent);
 
@@ -198,7 +294,7 @@ void ProfileScreen::updateProfileIcon(const QImage &image)
     painter.setPen(Qt::NoPen);
     painter.drawEllipse(0, 0, 161, 161);
 
-    // Set pixmap to QLabel
+    // Устанавливаем аватарку в QLabel
     ui->profileIcon->setPixmap(circularPixmap);
 }
 
@@ -224,20 +320,20 @@ void ProfileScreen::onThemeChanged(const QString& newTheme)
     ui->backButton->setIcon(backIcon);
 
     if (!currentUserAvatar.isNull()) {
-        updateProfileIcon(currentUserAvatar);
+        displayUserAvatar(currentUserAvatar);
     } else {
-        // If no user avatar, set default avatar
-        QString profileIconPath = QString(":/images/%1/profile-circled.svg").arg(newTheme);
-        QPixmap profileIcon(profileIconPath);
-        if (!profileIcon.isNull()) {
-            ui->profileIcon->setPixmap(profileIcon);
+        // Устанавливаем аватарку по умолчанию
+        QString defaultAvatarPath = QString(":/images/%1/profile-circled.svg").arg(newTheme);
+        QPixmap defaultAvatar(defaultAvatarPath);
+        if (!defaultAvatar.isNull()) {
+            ui->profileIcon->setPixmap(defaultAvatar);
         } else {
-            qDebug() << "Failed to load profile icon:" << profileIconPath;
+            qDebug() << "Failed to load default avatar image:" << defaultAvatarPath;
         }
     }
 
     if (profileButton) {
-        // Reduce icon size by half
+        // Настраиваем анимацию при наведении
         profileButton->setHoverAnimationProperty("iconSize", QSize(80, 80), QSize(85, 85), 200);
 
         QString currentTheme = ThemeManager::instance().currentTheme();
@@ -259,49 +355,21 @@ void ProfileScreen::onThemeChanged(const QString& newTheme)
             blurLeaveAnimation->setStartValue(10.0);
             blurLeaveAnimation->setEndValue(0.0);
 
-            // Use accessors for animations
+            // Добавляем анимации при наведении
             profileButton->getHoverEnterAnimation()->addAnimation(blurEnterAnimation);
             profileButton->getHoverLeaveAnimation()->addAnimation(blurLeaveAnimation);
         }
     }
 }
 
-void ProfileScreen::connectToServer()
-{
-    if (socket->state() == QAbstractSocket::UnconnectedState) {
-        socket->connectToHost("127.0.0.1", 12345);
-        if (!socket->waitForConnected(3000)) {
-            qDebug() << "Ошибка: Не удалось подключиться к серверу.";
-            QMessageBox::critical(this, "Ошибка", "Не удалось подключиться к серверу.");
-            qApp->exit();
-        } else {
-            qDebug() << "Успешное подключение к серверу.";
-        }
-    }
-}
-
-void ProfileScreen::getUserData(const QString &sessionID)
-{
-    QJsonObject request;
-    request["type"] = "getUserData";
-    request["sessionID"] = sessionID;
-    sendRequest(request);
-    qDebug() << "Запрос на получение данных пользователя отправлен.";
-}
-
 void ProfileScreen::sendRequest(const QJsonObject &request)
 {
     QJsonDocument doc(request);
-    socket->write(doc.toJson(QJsonDocument::Compact) + "\n");
-    socket->flush();
-    qDebug() << "Запрос отправлен на сервер:" << doc.toJson();
-}
+    QByteArray jsonData = doc.toJson(QJsonDocument::Compact) + "\n";
+    qDebug() << "Отправка запроса на сервер:" << jsonData;
 
-void ProfileScreen::showLoginScreen()
-{
-    LoginScreen *loginScreen = new LoginScreen();
-    loginScreen->show();
-    this->close();
+    socket->write(jsonData);
+    socket->flush();
 }
 
 void ProfileScreen::onOverlayButtonClicked()
@@ -317,8 +385,10 @@ void ProfileScreen::onBackButtonClicked()
 {
     qDebug() << "Переход на экран чата с сессией:" << sessionID << " и логином:" << currentUserLogin;
 
-    // Disconnect socket signals if necessary
+    // Отключаем все существующие подключения readyRead
+    QObject::disconnect(socket, nullptr, nullptr, nullptr);
 
+    // Создаем новый экземпляр ChatScreen и передаем существующий сокет
     ChatScreen *chatScreen = new ChatScreen(sessionID, currentUserLogin, socket);
     chatScreen->show();
     this->close();
