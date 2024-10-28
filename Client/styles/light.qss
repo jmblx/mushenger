@@ -1,0 +1,272 @@
+* {
+  font-family: {font-family}, sans-serif;
+  color: #0D1321;
+}
+
+QMenu {
+    color: #D8DCE4;
+    font-family: {font-family}, sans-serif;
+    font-size: {font-size-small}px;
+}
+
+QInputDialog QLineEdit {
+    border-radius: 10px;
+    padding: 10px;
+    font-size: {font-size-medium1}px;
+    color: #D8DCE4;
+    border: 2px solid #D8DCE4;
+}
+QInputDialog QLabel {
+    color: #FFFFFF;
+    font-size: {font-size-medium1}px;
+}
+QInputDialog QPushButton {
+    background-color: #D8DCE4;
+    color: #0D1321;
+    padding: 5px 10px;
+}
+QInputDialog QPushButton:hover {
+    background-color: #51AE5A;
+    color: white;
+}
+
+QMessageBox {
+    color: #D8DCE4;
+}
+QMessageBox QLabel {
+    color: #D8DCE4;
+    font-size: {font-size-medium1}px;
+}
+QMessageBox QPushButton {
+    background-color: #D8DCE4;
+    color: #0D1321;
+    border-radius: 10px;
+    padding: 5px 10px;
+}
+QMessageBox QPushButton:hover {
+    background-color: #51AE5A;
+    color: white;
+}
+QWidget#ChatScreen {
+    background-color: #FFEFE0;
+    color: #0D1321;
+}
+
+QListWidget#chatsList {
+    background-color: transparent;
+    border: none;
+    color: #0D1321;
+    font-size: {font-size-medium1}px;
+    font-family: {font-family}, sans-serif;
+}
+QListWidget#chatsList::item:hover {
+    background-color: rgba(13, 19, 33, 0.1);
+}
+QListWidget#chatsList::item:selected {
+    background-color: rgba(13, 19, 33, 0.1);
+    color: #0D1321;
+}
+
+QListWidget#messagesList {
+    background-color: transparent;
+    border: none;
+    color: #0D1321;
+    font-size: {font-size-medium1}px;
+    font-family: {font-family}, sans-serif;
+}
+
+QPushButton#sendButton,
+QPushButton#avatarButton,
+QPushButton#themeSwitchButton,
+AnimatedButton#profileButton,
+QPushButton#overlayButton,
+QPushButton#overlayButton_arrow,
+QPushButton#backButton,
+QPushButton#logoutButtonIcon {
+  background: transparent;
+  border: none;
+}
+
+AnimatedButton {
+    background: transparent;
+    border: none;
+}
+AnimatedButton#backButton {
+  border: none;
+  background: none;
+}
+
+QLineEdit {
+  border: 2px solid #0D1321;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: {font-size-medium1}px;
+  color: #0D1321;
+  background: transparent;
+}
+
+QLineEdit::placeholder {
+  color: #0D1321;
+  background: transparent;
+}
+
+QPushButton#newChat {
+  font-size: {font-size-medium2}px;
+  color: #000000;
+  background-color: transparent;
+  border: 2px solid #000000;
+  border-radius: 15px;
+  width: 210px;
+  height: 50px;
+  padding: 0;
+}
+QPushButton#newChat:hover {
+    background-color: rgba(13, 19, 33, 0.1);
+}
+
+QLabel#chatsLabel {
+  font-size: {font-size-medium1}px;
+  color: #000000;
+  font-weight: bold;
+}
+
+QLabel#chatCount {
+  font-size: {font-size-small}px;
+  font-weight: bold;
+  color: #000000;
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  min-width: 30px;
+  min-height: 30px;
+  max-width: 30px;
+  max-height: 30px;
+  padding: 0;
+  text-align: center;
+}
+
+QLabel#userName {
+  font-size: {font-size-medium1}px;
+  color: #000000;
+}
+
+QPushButton#LoginButton {
+  background-color: #C21B1B;
+  color: white;
+  font-size: {font-size-medium2}px;
+  border-radius: 30px;
+  padding: 10px 20px;
+}
+
+QPushButton#LoginButton:hover {
+  background-color: #A51A1A;
+}
+
+QFrame#profilePanel {
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: transparent;
+}
+
+QLabel#loginLabel {
+  color: #0D1321;
+  font-size: {font-size-xl}px;
+}
+
+QLabel#logoutText {
+  color: #0D1321;
+  font-size: {font-size-small}px;
+  text-align: center;
+}
+
+QLabel#mushroomMessage {
+  background-color: #D8DCE4;
+  border-radius: 10px;
+  color: #0D1321;
+  font-size: {font-size-large1}px;
+}
+
+QLabel#fontSizeLabel {
+  color: #0D1321;
+  font-size: {font-size-large2}px;
+}
+
+AnimatedSpinBox#fontSizeSpinBox {
+  color: #0D1321;
+  background-color: #E5E5E5;
+  font-size: {font-size-xl}px;
+  border: none;
+  padding-right: 90px;
+  padding-left: 10px;
+}
+AnimatedSpinBox#fontSizeSpinBox::up-button {
+  subcontrol-origin: padding;
+  subcontrol-position: right;
+  width: 50px;
+  height: 105px;
+  background-color: #FFFFFF;
+  border: none;
+}
+AnimatedSpinBox#fontSizeSpinBox::down-button {
+  subcontrol-origin: padding;
+  subcontrol-position: right;
+  right: 55px;
+  width: 50px;
+  height: 105px;
+  background-color: #FFFFFF;
+  border: none;
+}
+AnimatedSpinBox#fontSizeSpinBox::up-arrow {
+  image: url(:/images/light/plus_icon.svg);
+  width: 20px;
+  height: 20px;
+}
+AnimatedSpinBox#fontSizeSpinBox::down-arrow {
+  image: url(:/images/light/minus_icon.svg);
+  width: 20px;
+  height: 20px;
+}
+
+QLabel#fontLabel {
+  color: #0D1321;
+  font-size: {font-size-xl}px;
+}
+
+AnimatedComboBox#fontComboBox {
+  color: #0D1321;
+  background-color: #E5E5E5;
+  font-size: {font-size-xl}px;
+  padding-left: 10px;
+  padding-right: 50px;
+  border: none;
+}
+AnimatedComboBox#fontComboBox::drop-down {
+  subcontrol-origin: padding;
+  subcontrol-position: right;
+  width: 50px;
+  background-color: #FFFFFF;
+  border: none;
+}
+AnimatedComboBox#fontComboBox::down-arrow {
+  width: 20px;
+  height: 20px;
+}
+AnimatedComboBox#fontComboBox QAbstractItemView {
+  color: #0D1321;
+  background-color: #E5E5E5;
+  font-size: {font-size-xl}px;
+  selection-background-color: #D3D3D3;
+}
+
+QPushButton#yesButton {
+  background-color: #D8DCE4;
+  color: #0D1321;
+  font-size: {font-size-xxl}px;
+  border-radius: 39px;
+}
+
+QPushButton#noButton {
+  background-color: #51AE5A;
+  color: #FFFFFF;
+  font-size: {font-size-xxl}px;
+  border-radius: 39px;
+}

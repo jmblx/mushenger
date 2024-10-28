@@ -5,6 +5,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
 SOURCES += \
+    src/AnimatedButton/AnimatedButton.cpp \
+    src/AnimatedComboBox/AnimatedComboBox.cpp \
+    src/AnimatedSpinBox/AnimatedSpinBox.cpp \
     src/Chat/ChatScreen.cpp \
     main.cpp \
     src/AccountExitDialog/AccountExitDialog.cpp \
@@ -12,14 +15,19 @@ SOURCES += \
     src/Chat/chatitemdelegate.cpp \
     src/Login/LoginScreen.cpp \
     src/Profile/ProfileScreen.cpp \
+    src/ThemeManager/ThemeManager.cpp \
 
 HEADERS += \
     src/AccountExitDialog/AccountExitDialog.h \
+    src/AnimatedButton/AnimatedButton.h \
+    src/AnimatedComboBox/AnimatedComboBox.h \
+    src/AnimatedSpinBox/AnimatedSpinBox.h \
     src/Chat/MessageWidget.h \
     src/Chat/chatitemdelegate.h \
     src/Login/LoginScreen.h \
     src/Profile/ProfileScreen.h \
     src/Chat/ChatScreen.h \
+    src/ThemeManager/ThemeManager.h \
     ui_ProfileScreen.h \
     ui_LoginScreen.h \
     ui_AccountExitDialog.h\
@@ -34,13 +42,16 @@ FORMS += \
 
 RESOURCES += Resources.qrc
 
+OTHER_FILES += styles/light.qss \
+    styles/dark.qss
+
 RC_FILE=images/mushenger.rc
 
 TARGET = mushenger
 
 INCLUDEPATH += \
     src/Client \
-    build/6_7_2_mingw64_shared-Debug \
+    build/6_7_2_mingw_shared-Debug \
 
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

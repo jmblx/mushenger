@@ -3,8 +3,7 @@
 
 #include <QWidget>
 #include <QTcpSocket>
-#include <QJsonObject>
-#include <QJsonDocument>
+#include "src/Profile/ProfileScreen.h"
 
 namespace Ui {
 class Client;
@@ -22,9 +21,13 @@ private slots:
     void onLoginButtonClicked();
     void onReadyRead();
 
+    void onThemeSwitchButtonClicked();
+    void onThemeChanged(const QString& newTheme);
+
 private:
     Ui::Client *ui;
     QTcpSocket *socket;
+    QString sessionID;
     QByteArray buffer;
 
     void sendLoginRequest(const QString &login, const QString &password);
@@ -34,6 +37,9 @@ private:
     void getUserData(const QString &sessionID);
     void openChatScreen(const QString &sessionID, const QString &userLogin);
     void connectToServer();
+
+    bool profileRequested = false;
+    ProfileScreen *profileScreen = nullptr;
 };
 
 #endif // LOGINSCREEN_H
