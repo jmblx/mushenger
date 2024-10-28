@@ -16,11 +16,9 @@ public:
     void setTheme(const QString& theme);
     void toggleTheme();
 
-    // Font scaling factor (percentage, default 100%)
     void setFontScale(int scalePercentage);
     int fontScale() const;
 
-    // Font family
     void setFontFamily(const QString& fontFamily);
     QString fontFamily() const;
 
@@ -33,11 +31,9 @@ private:
     ThemeManager();
     QString m_currentTheme;
 
-    // Font scaling
-    int m_fontScale; // percentage, e.g., 100
+    int m_fontScale;
     QString m_fontFamily;
 
-    // Base font sizes
     int baseFontSizeSmall;
     int baseFontSizeMedium1;
     int baseFontSizeMedium2;
@@ -54,10 +50,8 @@ private:
 
     void applyStyleSheet();
 
-    // Method to replace placeholders in stylesheet
     QString processStyleSheet(const QString& styleSheet);
 
-    // Adjusted font sizes according to scaling factor
     int fontSizeSmall() const;
     int fontSizeMedium1() const;
     int fontSizeMedium2() const;
@@ -66,7 +60,6 @@ private:
     int fontSizeXL() const;
     int fontSizeXXL() const;
 
-    // Caching processed stylesheets
     QHash<QString, QString> cachedStylesheets;
     void loadAndProcessStylesheets();
 };

@@ -17,15 +17,12 @@ public:
     explicit LoginScreen(QWidget *parent = nullptr);
     ~LoginScreen();
 
-// signals:
-//     void loginSuccess(const QString &sessionID, const QString &login);
-
 private slots:
     void onLoginButtonClicked();
     void onReadyRead();
 
     void onThemeSwitchButtonClicked();
-    void onThemeChanged(const QString& newTheme); // Слот для обновления UI при смене темы
+    void onThemeChanged(const QString& newTheme);
 
 private:
     Ui::Client *ui;

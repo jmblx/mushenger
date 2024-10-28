@@ -6,6 +6,7 @@
 #include "src/AnimatedButton/AnimatedButton.h"
 #include <QJsonObject>
 #include <QImage>
+#include <QLabel>
 
 namespace Ui {
 class ProfileScreen;
@@ -29,27 +30,29 @@ private slots:
     void onOverlayButtonHoverLeft();
     void onProfileButtonClicked();
     void onLogout();
-    void displayUserAvatar(const QImage &avatar); // Аналогично ChatScreen
+    void displayUserAvatar(const QImage &avatar);
 
 private:
     Ui::ProfileScreen *ui;
     QTcpSocket *socket;
     QString sessionID;
     QString currentUserLogin;
-    QImage currentUserAvatar; // Переменная для хранения аватара пользователя
+    QImage currentUserAvatar;
 
     AnimatedButton *profileButton;
     AnimatedButton *backButton;
     AnimatedButton *overlayButton;
 
-    // Данные синхронизации аватаров
     QJsonObject avatarSyncData;
     void loadAvatarSyncData();
     void saveAvatarSyncData();
 
     void sendRequest(const QJsonObject &request);
     void getUserData();
-    QByteArray buffer; // Буфер для чтения данных от сервера
+    QByteArray buffer;
+
+    QString userPassword;
+    void analyzePassword();
 };
 
 #endif // PROFILESCREEN_H

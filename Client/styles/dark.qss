@@ -1,7 +1,12 @@
-/* Общие стили */
 * {
   font-family: {font-family}, sans-serif;
   color: #D8DCE4;
+}
+
+QMenu {
+    color: #D8DCE4;
+    font-family: {font-family}, sans-serif;
+    font-size: {font-size-small}px;
 }
 
 QInputDialog QLineEdit {
@@ -9,7 +14,7 @@ QInputDialog QLineEdit {
     padding: 10px;
     font-size: {font-size-medium1}px;
     color: #D8DCE4;
-    background-color: #0D1321;
+    border: 2px solid #D8DCE4;
 }
 QInputDialog QLabel {
     color: #FFFFFF;
@@ -26,7 +31,6 @@ QInputDialog QPushButton:hover {
 }
 
 QMessageBox {
-    background-color: #0D1321;
     color: #D8DCE4;
 }
 QMessageBox QLabel {
@@ -44,7 +48,6 @@ QMessageBox QPushButton:hover {
     color: white;
 }
 
-/* Стили для QListWidget#chatsList */
 QListWidget#chatsList {
     background-color: transparent;
     border: none;
@@ -60,7 +63,6 @@ QListWidget#chatsList::item:selected {
     color: #D8DCE4;
 }
 
-/* Стили для QListWidget#messagesList */
 QListWidget#messagesList {
     background-color: transparent;
     border: none;
@@ -69,7 +71,6 @@ QListWidget#messagesList {
     font-family: {font-family}, sans-serif;
 }
 
-/* Стили для QPushButton без фона и границы */
 QPushButton#sendButton,
 QPushButton#avatarButton,
 QPushButton#themeSwitchButton,
@@ -81,7 +82,6 @@ QPushButton#logoutButtonIcon {
   border: none;
 }
 
-/* Стили для QLineEdit */
 QLineEdit {
   border: 2px solid #D8DCE4;
   border-radius: 10px;
@@ -96,7 +96,6 @@ QLineEdit::placeholder {
   background: transparent;
 }
 
-/* Стили для QPushButton#newChat */
 QPushButton#newChat {
   font-size: {font-size-medium2}px;
   color: #FFFFFF;
@@ -111,14 +110,12 @@ QPushButton#newChat:hover {
     background-color: rgba(216, 220, 228, 0.1);
 }
 
-/* Стили для QLabel#chatsLabel */
 QLabel#chatsLabel {
   font-size: {font-size-medium1}px;
   color: #FFFFFF;
   font-weight: bold;
 }
 
-/* Стили для QLabel#chatCount */
 QLabel#chatCount {
   font-size: {font-size-small}px;
   font-weight: bold;
@@ -133,13 +130,11 @@ QLabel#chatCount {
   text-align: center;
 }
 
-/* Стили для QLabel#userName */
 QLabel#userName {
   font-size: {font-size-medium1}px;
   color: #D8DCE4;
 }
 
-/* Стили для QPushButton#LoginButton */
 QPushButton#LoginButton {
   background-color: #C21B1B;
   color: white;
@@ -152,27 +147,23 @@ QPushButton#LoginButton:hover {
   background-color: #A51A1A;
 }
 
-/* Стили для QFrame#profilePanel */
 QFrame#profilePanel {
   border: 2px solid #D8DCE4;
   border-radius: 10px;
   background-color: transparent;
 }
 
-/* Стили для QLabel#loginLabel */
 QLabel#loginLabel {
   color: #D8DCE4;
   font-size: {font-size-xl}px;
 }
 
-/* Стили для QLabel#logoutText */
 QLabel#logoutText {
   color: #D8DCE4;
   font-size: {font-size-small}px;
   text-align: center;
 }
 
-/* Стили для QLabel#mushroomMessage */
 QLabel#mushroomMessage {
   background-color: #D8DCE4;
   border-radius: 10px;
@@ -180,13 +171,11 @@ QLabel#mushroomMessage {
   font-size: {font-size-large1}px;
 }
 
-/* Стили для QLabel#fontSizeLabel */
 QLabel#fontSizeLabel {
   color: #D8DCE4;
   font-size: {font-size-large2}px;
 }
 
-/* Стили для AnimatedSpinBox#fontSizeSpinBox */
 AnimatedSpinBox#fontSizeSpinBox {
   color: #0D1321;
   background-color: #E5E5E5;
@@ -223,13 +212,11 @@ AnimatedSpinBox#fontSizeSpinBox::down-arrow {
   height: 20px;
 }
 
-/* Стили для QLabel#fontLabel */
 QLabel#fontLabel {
   color: #D8DCE4;
   font-size: {font-size-xl}px;
 }
 
-/* Стили для AnimatedComboBox#fontComboBox */
 AnimatedComboBox#fontComboBox {
   color: #0D1321;
   background-color: #E5E5E5;
@@ -256,7 +243,6 @@ AnimatedComboBox#fontComboBox QAbstractItemView {
   selection-background-color: #D3D3D3;
 }
 
-/* Стили для QPushButton#backButton */
 QPushButton#backButton {
   border: none;
   background: none;
@@ -265,7 +251,6 @@ QPushButton#backButton::hover {
   background: none;
 }
 
-/* Стили для QPushButton#yesButton */
 QPushButton#yesButton {
   background-color: #D8DCE4;
   color: #0D1321;
@@ -273,7 +258,6 @@ QPushButton#yesButton {
   border-radius: 39px;
 }
 
-/* Стили для QPushButton#noButton */
 QPushButton#noButton {
   background-color: #51AE5A;
   color: #FFFFFF;

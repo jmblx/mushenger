@@ -65,9 +65,7 @@ private slots:
 
         QJsonObject response;
 
-        // Проверка наличия пользователя
         if (userData.contains(login)) {
-            // Пользователь найден, проверяем пароль
             if (userData[login] == password) {
                 response["status"] = "success";
                 response["message"] = "Login successful.";
@@ -76,14 +74,12 @@ private slots:
                 response["message"] = "Incorrect password.";
             }
         } else {
-            // Регистрация нового пользователя
             userData[login] = password;
             saveUserData();
             response["status"] = "success";
             response["message"] = "Registration successful.";
         }
 
-        // Отправка ответа клиенту
         QJsonDocument responseDoc(response);
         socket->write(responseDoc.toJson());
         socket->flush();
@@ -94,7 +90,7 @@ private:
 
     void loadUserData()
     {
-        QFile file(QDir::currentPath() + "/users.json"); // Прямой путь до текущего каталога
+        QFile file(QDir::currentPath() + "/users.json");
 
 
         if (file.open(QIODevice::ReadOnly)) {
@@ -111,7 +107,7 @@ private:
     {
         QString filePath = QDir::currentPath() + "/users.json";
         QFile file(filePath);
-        qDebug() << "Saving to file:" << filePath; // Вывод пути для проверки
+        qDebug() << "Saving to file:" << filePath;
 
         if (file.open(QIODevice::WriteOnly)) {
             QJsonDocument doc(userData);
@@ -135,7 +131,7 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     Server server;
-    server.startServer(12345); // Изменено с Connect на startServer
+    server.startServer(12345);
 
     return a.exec();
 }

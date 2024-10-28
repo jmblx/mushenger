@@ -11,8 +11,8 @@ ThemeManager& ThemeManager::instance()
 }
 
 ThemeManager::ThemeManager()
-    : m_fontScale(100) // default 100%
-    , m_fontFamily("Inter") // default font family
+    : m_fontScale(100)
+    , m_fontFamily("Inter")
     , baseFontSizeSmall(14)
     , baseFontSizeMedium1(22)
     , baseFontSizeMedium2(26)
@@ -23,13 +23,12 @@ ThemeManager::ThemeManager()
 {
     loadThemeFromSettings();
     loadFontSettings();
-    loadAndProcessStylesheets(); // Load and process stylesheets once
+    loadAndProcessStylesheets();
     applyStyleSheet();
 }
 
 void ThemeManager::loadAndProcessStylesheets()
 {
-    // Load and process stylesheets for all themes
     QStringList themes = { "light", "dark" };
     for (const QString& theme : themes) {
         QString stylePath = QString(":/styles/%1.qss").arg(theme);
@@ -38,10 +37,8 @@ void ThemeManager::loadAndProcessStylesheets()
             QString styleSheet = QString::fromUtf8(styleFile.readAll());
             styleFile.close();
 
-            // Process the stylesheet with placeholders
             QString processedStyleSheet = processStyleSheet(styleSheet);
 
-            // Cache the processed stylesheet
             cachedStylesheets.insert(theme, processedStyleSheet);
         } else {
             qDebug() << "Не удалось загрузить файл стилей:" << stylePath;
@@ -104,7 +101,7 @@ void ThemeManager::setFontFamily(const QString& fontFamily)
     if (m_fontFamily != fontFamily) {
         m_fontFamily = fontFamily;
         saveFontSettings();
-        loadAndProcessStylesheets(); // Re-process stylesheets with new font family
+        loadAndProcessStylesheets();
         applyStyleSheet();
         emit fontFamilyChanged(m_fontFamily);
     }
@@ -120,7 +117,7 @@ void ThemeManager::setFontScale(int scalePercentage)
     if (m_fontScale != scalePercentage) {
         m_fontScale = scalePercentage;
         saveFontSettings();
-        loadAndProcessStylesheets(); // Re-process stylesheets with new font scale
+        loadAndProcessStylesheets();
         applyStyleSheet();
         emit fontScaleChanged(m_fontScale);
     }
@@ -133,7 +130,6 @@ int ThemeManager::fontScale() const
 
 void ThemeManager::applyStyleSheet()
 {
-    // Apply the cached stylesheet for the current theme
     QString styleSheet = cachedStylesheets.value(m_currentTheme);
     if (!styleSheet.isEmpty()) {
         qApp->setStyleSheet(styleSheet);
@@ -146,10 +142,8 @@ QString ThemeManager::processStyleSheet(const QString& styleSheet)
 {
     QString processedStyleSheet = styleSheet;
 
-    // Replace {font-family} placeholder
     processedStyleSheet.replace("{font-family}", m_fontFamily);
 
-    // Calculate scaled font sizes
     int sizeSmall = fontSizeSmall();
     int sizeMedium1 = fontSizeMedium1();
     int sizeMedium2 = fontSizeMedium2();
@@ -158,7 +152,6 @@ QString ThemeManager::processStyleSheet(const QString& styleSheet)
     int sizeXL = fontSizeXL();
     int sizeXXL = fontSizeXXL();
 
-    // Replace font size placeholders
     processedStyleSheet.replace("{font-size-small}", QString::number(sizeSmall));
     processedStyleSheet.replace("{font-size-medium1}", QString::number(sizeMedium1));
     processedStyleSheet.replace("{font-size-medium2}", QString::number(sizeMedium2));
@@ -170,7 +163,7 @@ QString ThemeManager::processStyleSheet(const QString& styleSheet)
     return processedStyleSheet;
 }
 
-int ThemeManager::fontSizeSmall() const{ return baseFontSizeSmall * m_fontScale / 100; }
+int ThemeManager::fontSizeSmall() const { return baseFontSizeSmall * m_fontScale / 100; }
 
 int ThemeManager::fontSizeMedium1() const { return baseFontSizeMedium1 * m_fontScale / 100; }
 

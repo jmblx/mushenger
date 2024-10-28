@@ -33,19 +33,15 @@ void AccountExitDialog::onYesButtonClicked()
 {
     qDebug() << "Кнопка 'Да' нажата. Начинается процесс выхода из аккаунта с currentSessionID: " << currentSessionID;
 
-    // Блокируем кнопки, чтобы предотвратить повторные нажатия
     ui->yesButton->setEnabled(false);
     ui->noButton->setEnabled(false);
 
-    // Создание сокета и отправка запроса на сервер
     QTcpSocket *socket = new QTcpSocket(this);
     connect(socket, &QTcpSocket::connected, [this, socket]() {
-        // Формирование запроса на выход
         QJsonObject logoutRequest;
         logoutRequest["type"] = "logout";
         logoutRequest["sessionID"] = currentSessionID;
 
-        // Логирование запроса на выход
         qDebug() << "Отправка запроса на выход: " << QJsonDocument(logoutRequest).toJson(QJsonDocument::Compact);
 
         socket->write(QJsonDocument(logoutRequest).toJson(QJsonDocument::Compact) + "\n");
@@ -66,7 +62,6 @@ void AccountExitDialog::onYesButtonClicked()
             qDebug() << "Ошибка выхода из аккаунта: " << response.value("message").toString();
             QMessageBox::warning(this, "Ошибка", "Не удалось выйти из аккаунта.");
 
-            // Разблокируем кнопки
             ui->yesButton->setEnabled(true);
             ui->noButton->setEnabled(true);
         }
@@ -79,7 +74,6 @@ void AccountExitDialog::onYesButtonClicked()
         qDebug() << "Ошибка сокета при выходе из аккаунта:" << socketError;
         QMessageBox::warning(this, "Ошибка сети", "Не удалось подключиться к серверу.");
 
-        // Разблокируем кнопки
         ui->yesButton->setEnabled(true);
         ui->noButton->setEnabled(true);
 
@@ -100,18 +94,15 @@ AccountExitDialog::~AccountExitDialog()
 void AccountExitDialog::clearUserData() {
     qDebug() << "Очистка данных сессии и пользователя.";
 
-    // Очистка переменных
     currentSessionID.clear();
     userData = QJsonObject();
 
-    // Удаление файла сессии
     QString sessionFilePath = QDir::currentPath() + "/session.txt";
     if (QFile::exists(sessionFilePath)) {
         QFile::remove(sessionFilePath);
         qDebug() << "Файл сессии удалён:" << sessionFilePath;
     }
 
-    // Удаление локального кэша сообщений
     QString cacheFilePath = QDir::currentPath() + "/message_cache.json";
     if (QFile::exists(cacheFilePath)) {
         QFile::remove(cacheFilePath);
@@ -126,14 +117,12 @@ void AccountExitDialog::showLoginScreen() {
     qDebug() << "Переход на экран логина.";
     LoginScreen *loginScreen = new LoginScreen();
     loginScreen->show();
-    // Закрываем все окна приложения, кроме экрана логина
-    QApplication::exit(); // Или закройте текущее основное окно
+    QApplication::exit();
     qDebug() << "Экран логина открыт.";
 }
 
 void AccountExitDialog::onThemeChanged(const QString& newTheme)
 {
-    // Update background image
     QString backgroundPath = QString(":/images/%1/account_exit_dialog_screen.png").arg(newTheme);
     QPixmap backgroundPixmap(backgroundPath);
     if (!backgroundPixmap.isNull()) {

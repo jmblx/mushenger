@@ -24,9 +24,7 @@ LoginScreen::LoginScreen(QWidget *parent) :
     connect(socket, &QTcpSocket::readyRead, this, &LoginScreen::onReadyRead);
     connect(ui->themeSwitchButton, &QPushButton::clicked, this, &LoginScreen::onThemeSwitchButtonClicked);
 
-    // Подключение к ThemeManager
     connect(&ThemeManager::instance(), &ThemeManager::themeChanged, this, &LoginScreen::onThemeChanged);
-    // Применение текущей темы
     onThemeChanged(ThemeManager::instance().currentTheme());
 
     qDebug() << "Загрузка сессии при запуске...";
@@ -36,7 +34,6 @@ LoginScreen::LoginScreen(QWidget *parent) :
 LoginScreen::~LoginScreen()
 {
     delete ui;
-    // Сокет удаляется автоматически, так как он родительский объект
 }
 
 void LoginScreen::onThemeSwitchButtonClicked()
@@ -46,7 +43,6 @@ void LoginScreen::onThemeSwitchButtonClicked()
 
 void LoginScreen::onThemeChanged(const QString& newTheme)
 {
-    // Обновление фонового изображения
     QString backgroundPath = QString(":/images/%1/auth_screen.png").arg(newTheme);
     QPixmap backgroundPixmap(backgroundPath);
 
@@ -55,8 +51,6 @@ void LoginScreen::onThemeChanged(const QString& newTheme)
     } else {
         qDebug() << "Не удалось загрузить фоновое изображение:" << backgroundPath;
     }
-
-    // Обновление других изображений или иконок, если необходимо
 }
 
 void LoginScreen::onLoginButtonClicked()
@@ -161,7 +155,6 @@ void LoginScreen::openChatScreen(const QString &sessionID, const QString &userLo
     chatScreen->show();
     qDebug() << "Окно чата должно быть отображено.";
 
-    // Отключаем обработку readyRead в LoginScreen
     disconnect(socket, &QTcpSocket::readyRead, this, &LoginScreen::onReadyRead);
 }
 
@@ -169,7 +162,7 @@ void LoginScreen::saveSession(const QString &sessionID)
 {
     if (sessionID.isEmpty()) {
         qDebug() << "Ошибка: попытка сохранить пустую сессию!";
-        return; // Не сохраняем, если сессия пустая
+        return;
     }
 
     QString filePath = "session.txt";
@@ -194,17 +187,15 @@ void LoginScreen::onReadyRead()
     QByteArray responseData = socket->readAll();
     buffer.append(responseData);
 
-    // Обрабатываем весь буфер, пока есть символы новой строки
     while (buffer.contains('\n')) {
         int index = buffer.indexOf('\n');
-        QByteArray singleMessage = buffer.left(index).trimmed(); // Получаем одно сообщение
-        buffer.remove(0, index + 1); // Удаляем сообщение из буфера
+        QByteArray singleMessage = buffer.left(index).trimmed();
+        buffer.remove(0, index + 1);
 
         if (singleMessage.isEmpty()) {
-            continue; // Пропускаем пустые строки
+            continue;
         }
 
-        // Добавьте проверку на пустые и невалидные сообщения
         if (singleMessage.isEmpty()) {
             qDebug() << "Пустое сообщение, пропускаем.";
             continue;
@@ -213,14 +204,12 @@ void LoginScreen::onReadyRead()
         QJsonParseError parseError;
         QJsonDocument responseDoc = QJsonDocument::fromJson(singleMessage, &parseError);
 
-        // Если есть ошибка парсинга, выводим больше информации для отладки
         if (parseError.error != QJsonParseError::NoError) {
             qDebug() << "Ошибка парсинга JSON:" << parseError.errorString();
-            qDebug() << "Некорректный JSON:" << singleMessage; // Показываем полный JSON для отладки
+            qDebug() << "Некорректный JSON:" << singleMessage;
             continue;
         }
 
-        // Обработка корректного JSON
         QJsonObject response = responseDoc.object();
         QString status = response.value("status").toString();
         QString messageText = response.value("message").toString();
@@ -232,9 +221,8 @@ void LoginScreen::onReadyRead()
         if (status == "success") {
             if (!sessionID.isEmpty()) {
                 qDebug() << "Сессия действительна, переход на экран чата с логином:" << login;
-                saveSession(sessionID);  // Сохраняем сессию
+                saveSession(sessionID);
 
-                // Открываем экран чата и передаём уже подключённый сокет
                 openChatScreen(sessionID, login);
             }
         } else {
