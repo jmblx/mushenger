@@ -129,7 +129,7 @@ void LoginScreen::connectToServer()
 {
     if (socket->state() == QAbstractSocket::UnconnectedState) {
         qDebug() << "Попытка подключения к серверу...";
-        socket->connectToHost("127.0.0.1", 12345);
+        socket->connectToHost("45.153.189.75", 12345);
         if (!socket->waitForConnected(3000)) {
             QMessageBox::critical(this, "Ошибка", "Не удалось подключиться к серверу.");
             qDebug() << "Не удалось подключиться к серверу.";

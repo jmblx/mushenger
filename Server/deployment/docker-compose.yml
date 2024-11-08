@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  mushenger-server:
+    image: menoitami/mushenger-server:latest
+    container_name: mushenger-server
+    ports:
+      - "12345:12345"  # Маппинг порта сервера
+    volumes:
+      - ./data/users.json:/release-server/users.json  # Монтирование users.json как файла
+      - ./data/chats.json:/release-server/chats.json  # Монтирование chats.json как файла
+      - ./data/profile_avs:/release-server/profile_avs  # Папка с аватарами профилей
+      - ./data/chat_avs:/release-server/chat_avs        # Папка с аватарами чатов
+    command: /release-server/mushenger  # Команда для запуска сервера
+    env_file: ./.env
